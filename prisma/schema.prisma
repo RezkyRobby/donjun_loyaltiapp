@@ -1,0 +1,14 @@
+// Skema basis data Platform Loyalitas Donjun Donat.
+// Blueprint skema: PRD.md §7 (model didefinisikan pada task berikutnya).
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  runtime      = "nodejs"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+  // URL koneksi didefinisikan di prisma.config.ts (perubahan Prisma 7).
+}

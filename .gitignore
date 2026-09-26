@@ -9,6 +9,9 @@
 /build
 /dist
 
+# Prisma — client hasil generate (dibuat ulang oleh `prisma generate`)
+/src/generated/
+
 # Testing
 /coverage
 /test-results/

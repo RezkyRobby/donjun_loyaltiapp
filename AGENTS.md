@@ -171,7 +171,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 ### Fase 1 — Fondasi & Basis Data (Hari 1–5)
 
 - [x] 1. Inisialisasi Next.js 16 App Router + React 19 + TypeScript strict + Tailwind CSS 4 + ESLint + shadcn/ui sesuai Struktur Direktori
-- [ ] 2. Setup PostgreSQL + Prisma 7 + `.env.example` lengkap (PRD Lampiran C)
+- [x] 2. Setup PostgreSQL + Prisma 7 + `.env.example` lengkap (PRD Lampiran C)
 - [ ] 3. Skema Prisma lengkap PRD §7 (User, Outlet, RewardCatalog, Voucher, PointTransaction, AuditLog + seluruh enum)
 - [ ] 4. Migrasi awal + seed dasar (Super Admin via API Better-Auth, outlet contoh, katalog reward dummy)
 - [ ] 5. Better-Auth: email + kata sandi, Google OAuth, plugin username, verifikasi email, reset kata sandi, 3 role
