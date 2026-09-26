@@ -1,5 +1,6 @@
 // Skema basis data Platform Loyalitas Donjun Donat.
-// Blueprint skema: PRD.md §7 (model didefinisikan pada task berikutnya).
+// Blueprint: PRD.md §7. Perubahan model wajib disertai alasan eksplisit dan
+// dicatat pada Riwayat Revisi PRD (AGENTS.md — Definition of Done no. 1).
 
 generator client {
   provider     = "prisma-client"
@@ -11,4 +12,211 @@ generator client {
 datasource db {
   provider = "postgresql"
   // URL koneksi didefinisikan di prisma.config.ts (perubahan Prisma 7).
+}
+
+/// Peran pengguna (PRD §7.1).
+enum UserRole {
+  CUSTOMER
+  CASHIER
+  SUPER_ADMIN
+}
+
+/// Status voucher single-use (PRD §7.3).
+enum VoucherStatus {
+  ACTIVE
+  USED
+  CANCELED
+}
+
+/// Jenis transaksi poin (PRD §7.4).
+enum PointTransactionType {
+  EARN
+  REDEEM
+  ADJUST
+  REVERSAL
+}
+
+/// Metode input transaksi poin (PRD §7.4).
+enum PointTransactionMethod {
+  QR_SCAN
+  USERNAME
+  BARCODE_SCAN
+  MANUAL_CODE
+  ADMIN
+  SYSTEM
+}
+
+/// Akun pelanggan, kasir, dan super admin (PRD §7.1).
+/// Kolom inti (id, name, email, emailVerified, image, createdAt, updatedAt)
+/// mengikuti skema Better-Auth; `username` berasal dari plugin username dengan
+/// displayUsername dimatikan agar sesuai dengan blueprint PRD.
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  role          UserRole @default(CUSTOMER)
+  username      String?  @unique
+  name          String
+  phone         String?  @unique
+  image         String?
+  pointsBalance Int      @default(0)
+  outletId      String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  outlet                Outlet?            @relation(fields: [outletId], references: [id])
+  sessions              Session[]
+  accounts              Account[]
+  vouchers              Voucher[]          @relation("VoucherOwner")
+  validatedVouchers     Voucher[]          @relation("VoucherUsedByCashier")
+  pointTransactions     PointTransaction[] @relation("PointTransactionCustomer")
+  performedTransactions PointTransaction[] @relation("PointTransactionCashier")
+  auditLogs             AuditLog[]
+}
+
+/// Sesi login (tabel standar Better-Auth, PRD §7.1).
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// Kredensial kata sandi dan tautan Google OAuth (tabel standar Better-Auth, PRD §7.1).
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  idToken               String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// Token verifikasi email dan reset kata sandi (tabel standar Better-Auth, PRD §7.1).
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+/// Gerai fisik Donjun Donat (PRD §7.2).
+model Outlet {
+  id        String   @id @default(cuid())
+  name      String
+  address   String
+  phone     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users             User[]
+  vouchersUsed      Voucher[]          @relation("VoucherUsedAtOutlet")
+  pointTransactions PointTransaction[]
+}
+
+/// Katalog reward/promo yang dapat ditukar poin (PRD §7.3).
+model RewardCatalog {
+  id           String    @id @default(cuid())
+  title        String
+  description  String?
+  imageUrl     String?
+  pointsCost   Int
+  quota        Int?
+  perUserLimit Int?
+  startAt      DateTime?
+  endAt        DateTime?
+  terms        String?
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  vouchers Voucher[]
+}
+
+/// Voucher single-use hasil penukaran poin (PRD §7.3).
+model Voucher {
+  id              String        @id @default(cuid())
+  voucherCode     String        @unique
+  userId          String
+  rewardId        String
+  pointsSpent     Int
+  rewardTitle     String
+  status          VoucherStatus @default(ACTIVE)
+  claimedAt       DateTime      @default(now())
+  usedAt          DateTime?
+  usedByCashierId String?
+  usedAtOutletId  String?
+  canceledAt      DateTime?
+  cancelReason    String?
+
+  user              User               @relation("VoucherOwner", fields: [userId], references: [id])
+  reward            RewardCatalog      @relation(fields: [rewardId], references: [id])
+  usedByCashier     User?              @relation("VoucherUsedByCashier", fields: [usedByCashierId], references: [id])
+  usedAtOutlet      Outlet?            @relation("VoucherUsedAtOutlet", fields: [usedAtOutletId], references: [id])
+  pointTransactions PointTransaction[]
+
+  @@index([userId, status])
+  @@index([userId, rewardId])
+}
+
+/// Jejak audit setiap mutasi poin (PRD §7.4).
+model PointTransaction {
+  id             String                  @id @default(cuid())
+  customerId     String
+  cashierId      String?
+  type           PointTransactionType
+  amount         Int
+  method         PointTransactionMethod?
+  voucherId      String?
+  outletId       String?
+  note           String?
+  idempotencyKey String?                 @unique
+  createdAt      DateTime                @default(now())
+
+  customer User     @relation("PointTransactionCustomer", fields: [customerId], references: [id])
+  cashier  User?    @relation("PointTransactionCashier", fields: [cashierId], references: [id])
+  voucher  Voucher? @relation(fields: [voucherId], references: [id])
+  outlet   Outlet?  @relation(fields: [outletId], references: [id])
+
+  @@index([customerId, createdAt])
+}
+
+/// Rekam jejak aksi administratif dan sistem (PRD §7.4).
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id])
+
+  @@index([createdAt])
 }
