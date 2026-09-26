@@ -173,7 +173,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 1. Inisialisasi Next.js 16 App Router + React 19 + TypeScript strict + Tailwind CSS 4 + ESLint + shadcn/ui sesuai Struktur Direktori
 - [x] 2. Setup PostgreSQL + Prisma 7 + `.env.example` lengkap (PRD Lampiran C)
 - [x] 3. Skema Prisma lengkap PRD §7 (User, Outlet, RewardCatalog, Voucher, PointTransaction, AuditLog + seluruh enum)
-- [ ] 4. Migrasi awal + seed dasar (Super Admin via API Better-Auth, outlet contoh, katalog reward dummy)
+- [x] 4. Migrasi awal + seed dasar (Super Admin via API Better-Auth, outlet contoh, katalog reward dummy)
 - [ ] 5. Better-Auth: email + kata sandi, Google OAuth, plugin username, verifikasi email, reset kata sandi, 3 role
 - [ ] 6. Middleware proteksi route per role (PRD Lampiran B) + rate limiter login
 - [ ] 7. Integrasi Gmail SMTP (verifikasi, reset, undangan staf) dengan batas 5 email/akun/hari
