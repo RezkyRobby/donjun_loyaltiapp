@@ -10,7 +10,7 @@ import { sendResetPasswordEmail, sendVerificationEmail } from "@/server/email";
 // Aturan username pelanggan (PRD Lampiran A.1): diawali huruf, boleh memuat
 // huruf, angka, titik, dan garis bawah, panjang total 8–20 karakter.
 // Daftar reserved username divalidasi terpisah lewat skema Zod (Fase 1 Task 8).
-const POLA_USERNAME = /^[a-z][a-z0-9._]{6,18}[a-z0-9]$/;
+const USERNAME_PATTERN = /^[a-z][a-z0-9._]{6,18}[a-z0-9]$/;
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
@@ -71,6 +71,18 @@ export const auth = betterAuth({
       },
     },
   },
+  rateLimit: {
+    // Batas longgar sebagai jaring pengaman umum; login diperketat di bawah.
+    enabled: true,
+    window: 60,
+    max: 100,
+    customRules: {
+      // Login: maksimal 5 percobaan per 15 menit (PRD §9), berlaku juga di
+      // lingkungan pengembangan agar perilaku produksi dapat diuji.
+      "/sign-in/email": { window: 60 * 15, max: 5 },
+      "/sign-in/username": { window: 60 * 15, max: 5 },
+    },
+  },
   plugins: [
     username({
       minUsernameLength: 8,
@@ -78,7 +90,7 @@ export const auth = betterAuth({
       // Username permanen dan disimpan huruf kecil (PRD §7.1).
       immutableUsername: true,
       displayUsername: false,
-      usernameValidator: (value) => POLA_USERNAME.test(value.toLowerCase()),
+      usernameValidator: (value) => USERNAME_PATTERN.test(value.toLowerCase()),
     }),
     // Harus plugin terakhir agar cookie sesi tersimpan dari Server Action.
     nextCookies(),
