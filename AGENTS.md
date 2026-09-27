@@ -183,7 +183,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 
 - [x] 9. Shell area pelanggan + guard role + PWA manifest & service worker (cache QR + saldo terakhir)
 - [x] 10. Registrasi email + kata sandi & Google + validasi username real-time + verifikasi email
-- [ ] 11. Lupa kata sandi & reset (token 30 menit; sesi dicabut setelah ganti sandi)
+- [x] 11. Lupa kata sandi & reset (token 30 menit; sesi dicabut setelah ganti sandi)
 - [ ] 12. Dashboard: saldo poin + QR payload `DONJUN:v1:<username>` + tampilan offline
 - [ ] 13. Katalog promo: gambar, kuota tersisa, limit per pelanggan, periode, S&K, status disabled
 - [ ] 14. Penukaran poin: transaksi atomik (potong saldo kondisional + kuota + voucher + `REDEEM`)
