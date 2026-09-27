@@ -185,7 +185,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 10. Registrasi email + kata sandi & Google + validasi username real-time + verifikasi email
 - [x] 11. Lupa kata sandi & reset (token 30 menit; sesi dicabut setelah ganti sandi)
 - [x] 12. Dashboard: saldo poin + QR payload `DONJUN:v1:<username>` + tampilan offline
-- [ ] 13. Katalog promo: gambar, kuota tersisa, limit per pelanggan, periode, S&K, status disabled
+- [x] 13. Katalog promo: gambar, kuota tersisa, limit per pelanggan, periode, S&K, status disabled
 - [ ] 14. Penukaran poin: transaksi atomik (potong saldo kondisional + kuota + voucher + `REDEEM`)
 - [ ] 15. Dompet voucher: barcode Code 128 + kode alfanumerik + status ACTIVE/USED/CANCELED
 - [ ] 16. Pengaturan akun (nama/telepon/sandi) + halaman S&K & Kebijakan Privasi
