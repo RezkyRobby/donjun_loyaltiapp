@@ -1,7 +1,7 @@
 import { Gift, Info } from "lucide-react";
 import Image from "next/image";
 
-import { Button } from "@/components/ui/button";
+import { RedeemRewardButton } from "@/components/customer/redeem-reward-button";
 import { REWARD_UNAVAILABLE_REASON_LABELS } from "@/constants/labels";
 import { formatDateWita } from "@/lib/datetime";
 import { formatPoints } from "@/lib/format";
@@ -21,8 +21,7 @@ function formatPeriod(startAt: Date | null, endAt: Date | null): string {
 
 // Kartu promo pada katalog pelanggan (PRD §5.1 fitur 5). Tombol klaim otomatis
 // nonaktif beserta alasan bila poin belum cukup, kuota habis, limit per
-// pelanggan tercapai, atau di luar periode aktif. Aksi penukaran disambungkan
-// pada Task 14.
+// pelanggan tercapai, atau di luar periode aktif.
 export function RewardCard({ reward }: { reward: CatalogReward }) {
   const { availability } = reward;
   const reasonId = `alasan-${reward.id}`;
@@ -104,14 +103,11 @@ export function RewardCard({ reward }: { reward: CatalogReward }) {
           </details>
         ) : null}
 
-        <Button
-          type="button"
+        <RedeemRewardButton
+          rewardId={reward.id}
           disabled={!availability.canRedeem}
-          aria-describedby={availability.reason ? reasonId : undefined}
-          className="h-12 w-full"
-        >
-          Tukar poin
-        </Button>
+          describedById={availability.reason ? reasonId : undefined}
+        />
 
         {!availability.canRedeem && availability.reason ? (
           <p
