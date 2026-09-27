@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { username } from "better-auth/plugins";
 
+import { isReservedUsername } from "@/constants/reserved-usernames";
 import { UserRole } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import {
@@ -103,6 +104,12 @@ export const auth = betterAuth({
       // lingkungan pengembangan agar perilaku produksi dapat diuji.
       "/sign-in/email": { window: 60 * 15, max: 5 },
       "/sign-in/username": { window: 60 * 15, max: 5 },
+      // Registrasi akun: maks 5 akun/jam per IP (PRD §9). Jaring pengaman bagi
+      // endpoint Better-Auth bila dipanggil langsung, di samping pembatasan di
+      // Server Action registrasi.
+      "/sign-up/email": { window: 60 * 60, max: 5 },
+      // Cek ketersediaan username: maks 20 permintaan/menit per IP (PRD §9).
+      "/is-username-available": { window: 60, max: 20 },
     },
   },
   plugins: [
@@ -112,7 +119,17 @@ export const auth = betterAuth({
       // Username permanen dan disimpan huruf kecil (PRD §7.1).
       immutableUsername: true,
       displayUsername: false,
-      usernameValidator: (value) => USERNAME_PATTERN.test(value.toLowerCase()),
+      // Validator dijalankan server-side untuk sign-up maupun update-user,
+      // termasuk saat Google OAuth melengkapi username. Reserved words wajib
+      // ditolak di sini (PRD Lampiran A.2) agar tidak dapat dilewati dengan
+      // memanggil endpoint Better-Auth secara langsung.
+      usernameValidator: (value) => {
+        const normalized = value.toLowerCase();
+
+        return (
+          USERNAME_PATTERN.test(normalized) && !isReservedUsername(normalized)
+        );
+      },
     }),
     // Harus plugin terakhir agar cookie sesi tersimpan dari Server Action.
     nextCookies(),
