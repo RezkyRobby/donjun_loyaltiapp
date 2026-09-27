@@ -2,9 +2,10 @@
 
 import { Maximize2, WifiOff, X } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { useOnlineStatus } from "@/components/shared/use-online-status";
+import { useWakeLock } from "@/components/shared/use-wake-lock";
 import { Button } from "@/components/ui/button";
 import { buildAccountQrPayload } from "@/lib/pwa";
 
@@ -12,14 +13,6 @@ import { buildAccountQrPayload } from "@/lib/pwa";
 // memberi permukaan pindai lebih lega.
 const QR_SIZE = 240;
 const QR_SIZE_LARGE = 320;
-
-// Tipe minimal Wake Lock API agar tidak bergantung pada versi lib.dom. Sebagian
-// peramban mobile belum mendukungnya, sehingga permintaan selalu dibungkus
-// pengecekan runtime.
-type WakeLockSentinelLike = { release: () => Promise<unknown> };
-type WakeLockLike = {
-  request: (type: "screen") => Promise<WakeLockSentinelLike>;
-};
 
 // Kartu QR Code akun (PRD §5.1 fitur 4, design.md §9.1). Payload hanya
 // `DONJUN:v1:<username>`, dirender hitam di atas putih dengan quiet zone 4
@@ -31,39 +24,7 @@ export function AccountQrCard({ username }: { username: string }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isEnlarged, setIsEnlarged] = useState(false);
 
-  useEffect(() => {
-    if (!isEnlarged) return;
-
-    const wakeLock = (navigator as Navigator & { wakeLock?: WakeLockLike })
-      .wakeLock;
-    let sentinel: WakeLockSentinelLike | null = null;
-
-    async function acquire() {
-      if (!wakeLock) return;
-
-      try {
-        sentinel = await wakeLock.request("screen");
-      } catch {
-        // Peramban dapat menolak permintaan (mis. tab tidak terlihat); abaikan
-        // dengan tenang karena ini hanya pengoptimalan kenyamanan.
-      }
-    }
-
-    // Wake lock dilepas otomatis saat tab disembunyikan; ambil ulang saat tab
-    // kembali terlihat.
-    function handleVisibilityChange() {
-      if (document.visibilityState === "visible") void acquire();
-    }
-
-    void acquire();
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      void sentinel?.release().catch(() => undefined);
-      sentinel = null;
-    };
-  }, [isEnlarged]);
+  useWakeLock(isEnlarged);
 
   function openEnlarged() {
     setIsEnlarged(true);
