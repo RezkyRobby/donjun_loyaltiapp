@@ -188,7 +188,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 13. Katalog promo: gambar, kuota tersisa, limit per pelanggan, periode, S&K, status disabled
 - [x] 14. Penukaran poin: transaksi atomik (potong saldo kondisional + kuota + voucher + `REDEEM`)
 - [x] 15. Dompet voucher: barcode Code 128 + kode alfanumerik + status ACTIVE/USED/CANCELED
-- [ ] 16. Pengaturan akun (nama/telepon/sandi) + halaman S&K & Kebijakan Privasi
+- [x] 16. Pengaturan akun (nama/telepon/sandi) + halaman S&K & Kebijakan Privasi
 
 ### Fase 3 — Cashier Portal (Hari 10–13)
 
