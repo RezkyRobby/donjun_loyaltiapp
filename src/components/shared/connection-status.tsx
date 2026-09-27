@@ -1,38 +1,14 @@
 "use client";
 
 import { WifiOff } from "lucide-react";
-import { useSyncExternalStore } from "react";
 
-// Indikator status jaringan (NFR §9 PWA & Mode Offline). Berlangganan langsung
-// ke event `online`/`offline` peramban lewat useSyncExternalStore, lalu hanya
-// menampilkan banner saat koneksi terputus. Status dibawa oleh ikon dan teks,
-// bukan warna saja (design.md §11).
-function subscribeToNetworkStatus(onChange: () => void) {
-  window.addEventListener("online", onChange);
-  window.addEventListener("offline", onChange);
+import { useOnlineStatus } from "@/components/shared/use-online-status";
 
-  return () => {
-    window.removeEventListener("online", onChange);
-    window.removeEventListener("offline", onChange);
-  };
-}
-
-function getNetworkSnapshot() {
-  return navigator.onLine;
-}
-
-// Saat server/hidrasi, anggap daring agar banner tidak berkedip sebelum status
-// koneksi sebenarnya diketahui.
-function getServerSnapshot() {
-  return true;
-}
-
+// Indikator status jaringan (NFR §9 PWA & Mode Offline). Hanya menampilkan
+// banner saat koneksi terputus. Status dibawa oleh ikon dan teks, bukan warna
+// saja (design.md §11).
 export function ConnectionStatus() {
-  const isOnline = useSyncExternalStore(
-    subscribeToNetworkStatus,
-    getNetworkSnapshot,
-    getServerSnapshot,
-  );
+  const isOnline = useOnlineStatus();
 
   if (isOnline) return null;
 
