@@ -176,7 +176,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 4. Migrasi awal + seed dasar (Super Admin via API Better-Auth, outlet contoh, katalog reward dummy)
 - [x] 5. Better-Auth: email + kata sandi, Google OAuth, plugin username, verifikasi email, reset kata sandi, 3 role
 - [x] 6. Middleware proteksi route per role (PRD Lampiran B) + rate limiter login
-- [ ] 7. Integrasi Gmail SMTP (verifikasi, reset, undangan staf) dengan batas 5 email/akun/hari
+- [x] 7. Integrasi Gmail SMTP (verifikasi, reset, undangan staf) dengan batas 5 email/akun/hari
 - [ ] 8. Utilitas terpusat: skema Zod (termasuk reserved username Lampiran A), generator kode voucher `DJN-`, util waktu WITA, helper rate limit publik
 
 ### Fase 2 — Customer Portal (Hari 6–9)

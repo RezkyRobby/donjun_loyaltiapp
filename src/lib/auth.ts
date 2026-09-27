@@ -5,7 +5,11 @@ import { username } from "better-auth/plugins";
 
 import { UserRole } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
-import { sendResetPasswordEmail, sendVerificationEmail } from "@/server/email";
+import {
+  EmailQuotaError,
+  sendResetPasswordEmail,
+  sendVerificationEmail,
+} from "@/server/email";
 
 // Aturan username pelanggan (PRD Lampiran A.1): diawali huruf, boleh memuat
 // huruf, angka, titik, dan garis bawah, panjang total 8–20 karakter.
@@ -14,6 +18,24 @@ const USERNAME_PATTERN = /^[a-z][a-z0-9._]{6,18}[a-z0-9]$/;
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
+// Kegagalan pengiriman email tidak boleh menggagalkan respons autentikasi:
+// pesan sukses generik tetap ditampilkan agar email tidak dapat dienumerasi
+// (PRD §8.2), dan pembuatan akun tidak gagal hanya karena kuota email harian
+// habis (PRD §9). Panggilan kuota terperinci disiapkan bagi UI resend
+// (checkEmailQuota di Fase 2).
+async function deliverQuietly(send: () => Promise<void>): Promise<void> {
+  try {
+    await send();
+  } catch (error) {
+    if (error instanceof EmailQuotaError) {
+      console.warn(`[email] kuota terlampaui: ${error.message}`);
+      return;
+    }
+
+    console.error("[email] gagal mengirim email transaksional", error);
+  }
+}
 
 // Instans Better-Auth: email + kata sandi, Google OAuth, plugin username,
 // verifikasi email, reset kata sandi, dan tiga peran (PRD §7.1 & §8).
@@ -45,7 +67,7 @@ export const auth = betterAuth({
     // Ganti kata sandi mencabut seluruh sesi lain (PRD §8.2).
     revokeSessionsOnPasswordReset: true,
     sendResetPassword: async ({ user, url }) => {
-      await sendResetPasswordEmail({ user, url });
+      await deliverQuietly(() => sendResetPasswordEmail({ user, url }));
     },
   },
   emailVerification: {
@@ -53,7 +75,7 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
     expiresIn: 60 * 60,
     sendVerificationEmail: async ({ user, url }) => {
-      await sendVerificationEmail({ user, url });
+      await deliverQuietly(() => sendVerificationEmail({ user, url }));
     },
   },
   user: {
