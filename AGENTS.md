@@ -181,7 +181,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 
 ### Fase 2 — Customer Portal (Hari 6–9)
 
-- [ ] 9. Shell area pelanggan + guard role + PWA manifest & service worker (cache QR + saldo terakhir)
+- [x] 9. Shell area pelanggan + guard role + PWA manifest & service worker (cache QR + saldo terakhir)
 - [ ] 10. Registrasi email + kata sandi & Google + validasi username real-time + verifikasi email
 - [ ] 11. Lupa kata sandi & reset (token 30 menit; sesi dicabut setelah ganti sandi)
 - [ ] 12. Dashboard: saldo poin + QR payload `DONJUN:v1:<username>` + tampilan offline

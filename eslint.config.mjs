@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Hasil generate Prisma Client:
     "src/generated/**",
+    // Aset statis (service worker, ikon) disajikan apa adanya, bukan modul aplikasi:
+    "public/**",
   ]),
 ]);
 
