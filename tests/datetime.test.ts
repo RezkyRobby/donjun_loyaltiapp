@@ -1,0 +1,41 @@
+import { describe, expect, it } from "vitest";
+
+import {
+  formatDateWita,
+  formatDateTimeWita,
+  startOfDayWita,
+  startOfMonthWita,
+  witaDayKey,
+} from "@/lib/datetime";
+
+describe("format WITA", () => {
+  it("mengonversi instant UTC ke waktu WITA (UTC+8)", () => {
+    const instant = new Date("2026-09-27T00:30:00.000Z");
+
+    expect(formatDateTimeWita(instant)).toBe("27 September 2026 08:30");
+  });
+
+  it("memakai nama bulan Bahasa Indonesia", () => {
+    expect(formatDateWita(new Date("2026-08-17T00:00:00.000Z"))).toBe(
+      "17 Agustus 2026",
+    );
+  });
+
+  it("menghitung kunci hari menurut WITA, bukan UTC", () => {
+    expect(witaDayKey(new Date("2026-09-26T20:00:00.000Z"))).toBe("2026-09-27");
+  });
+});
+
+describe("batas waktu WITA", () => {
+  it("mengembalikan awal hari WITA sebagai instant UTC", () => {
+    expect(startOfDayWita(new Date("2026-09-26T20:00:00.000Z")).toISOString()).toBe(
+      "2026-09-26T16:00:00.000Z",
+    );
+  });
+
+  it("mengembalikan awal bulan WITA sebagai instant UTC", () => {
+    expect(
+      startOfMonthWita(new Date("2026-09-27T00:30:00.000Z")).toISOString(),
+    ).toBe("2026-08-31T16:00:00.000Z");
+  });
+});
