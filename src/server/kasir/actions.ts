@@ -2,10 +2,15 @@
 
 import { UserRole } from "@/generated/prisma/enums";
 import { accountQrPayloadSchema, parseAccountQrPayload } from "@/lib/account-qr";
+import {
+  customerSearchQuerySchema,
+  normalizeCustomerSearchQuery,
+} from "@/lib/customer-search";
 import { isUserRole } from "@/lib/rbac";
 import { getSession } from "@/server/auth/session";
 import {
   findCustomerByUsername,
+  searchCustomersByUsername,
   type CashierCustomer,
 } from "@/server/kasir/customers";
 
@@ -39,4 +44,35 @@ export async function scanCustomerQrAction(
   if (!customer) return { status: "NOT_FOUND" };
 
   return { status: "FOUND", customer };
+}
+
+export type SearchCustomersResult =
+  | { status: "OK"; customers: CashierCustomer[] }
+  | { status: "INVALID" }
+  | { status: "UNAUTHORIZED" };
+
+// Pencarian awalan username untuk input manual kasir (PRD §5.2 fitur 2).
+// Kueri dinormalkan lebih dulu, lalu divalidasi (minimal 3 karakter dan
+// charset username) sebelum menyentuh database.
+export async function searchCustomersByUsernameAction(
+  prefix: unknown,
+): Promise<SearchCustomersResult> {
+  const session = await getSession();
+  const role =
+    session && isUserRole(session.user.role) ? session.user.role : null;
+
+  if (role !== UserRole.CASHIER && role !== UserRole.SUPER_ADMIN) {
+    return { status: "UNAUTHORIZED" };
+  }
+
+  if (typeof prefix !== "string") return { status: "INVALID" };
+
+  const parsed = customerSearchQuerySchema.safeParse(
+    normalizeCustomerSearchQuery(prefix),
+  );
+  if (!parsed.success) return { status: "INVALID" };
+
+  const customers = await searchCustomersByUsername(parsed.data);
+
+  return { status: "OK", customers };
 }

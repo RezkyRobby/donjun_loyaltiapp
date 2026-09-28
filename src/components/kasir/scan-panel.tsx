@@ -1,29 +1,31 @@
 "use client";
 
-import { CircleAlert, CircleCheck, RotateCcw } from "lucide-react";
+import { CircleAlert, CircleCheck, Keyboard, RotateCcw, ScanLine } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
 import { QrScanner } from "@/components/kasir/qr-scanner";
+import { UsernameSearch } from "@/components/kasir/username-search";
 import { Button } from "@/components/ui/button";
 import { parseAccountQrPayload } from "@/lib/account-qr";
 import { scanCustomerQrAction } from "@/server/kasir/actions";
 import type { CashierCustomer } from "@/server/kasir/customers";
 
-type ScanState =
-  | { phase: "scanning" }
-  | { phase: "loading" }
-  | { phase: "found"; customer: CashierCustomer }
-  | { phase: "error"; message: string };
+type IdentityResult =
+  | { kind: "none" }
+  | { kind: "loading" }
+  | { kind: "found"; customer: CashierCustomer }
+  | { kind: "error"; message: string };
 
 const INVALID_QR_MESSAGE =
   "QR bukan milik platform Donjun Donat. Minta pelanggan menampilkan QR dari aplikasi Donjun.";
 
-// Panel identifikasi pelanggan lewat QR (PRD §8.3 langkah 3–5). Payload
-// divalidasi versinya di klien untuk umpan balik seketika, lalu diulang di
-// Server Action sebelum lookup (AGENTS.md aturan 1). Pop-up konfirmasi injeksi
-// poin ditambahkan pada Task 20.
+// Identifikasi pelanggan lewat QR atau input username manual (PRD §5.2 fitur
+// 1–2, §8.3 langkah 3–5). Payload QR divalidasi versinya di klien untuk umpan
+// balik seketika, lalu diulang di Server Action sebelum lookup (AGENTS.md
+// aturan 1). Pop-up konfirmasi injeksi poin ditambahkan pada Task 20.
 export function ScanPanel() {
-  const [state, setState] = useState<ScanState>({ phase: "scanning" });
+  const [mode, setMode] = useState<"scan" | "manual">("scan");
+  const [result, setResult] = useState<IdentityResult>({ kind: "none" });
   // Penjaga sinkron: mencegah pemrosesan ganda sebelum render ulang menandai
   // pemindai sebagai paused.
   const busyRef = useRef(false);
@@ -34,58 +36,93 @@ export function ScanPanel() {
 
     const parsed = parseAccountQrPayload(payload);
     if (!parsed.valid) {
-      setState({ phase: "error", message: INVALID_QR_MESSAGE });
+      setResult({ kind: "error", message: INVALID_QR_MESSAGE });
       return;
     }
 
-    setState({ phase: "loading" });
+    setResult({ kind: "loading" });
 
     try {
-      const result = await scanCustomerQrAction(payload);
+      const response = await scanCustomerQrAction(payload);
 
-      switch (result.status) {
+      switch (response.status) {
         case "FOUND":
-          setState({ phase: "found", customer: result.customer });
+          setResult({ kind: "found", customer: response.customer });
           return;
         case "NOT_FOUND":
-          setState({
-            phase: "error",
+          setResult({
+            kind: "error",
             message: `Username @${parsed.username} tidak ditemukan. Pastikan akun pelanggan sudah benar.`,
           });
           return;
         case "UNAUTHORIZED":
-          setState({
-            phase: "error",
+          setResult({
+            kind: "error",
             message: "Sesi Anda telah berakhir. Silakan masuk kembali.",
           });
           return;
         default:
-          setState({ phase: "error", message: INVALID_QR_MESSAGE });
+          setResult({ kind: "error", message: INVALID_QR_MESSAGE });
       }
     } catch {
-      setState({
-        phase: "error",
+      setResult({
+        kind: "error",
         message: "Terjadi kendala saat memeriksa QR. Silakan coba lagi.",
       });
     }
   }, []);
 
+  const handleSelect = useCallback((customer: CashierCustomer) => {
+    busyRef.current = true;
+    setResult({ kind: "found", customer });
+  }, []);
+
   const reset = useCallback(() => {
     busyRef.current = false;
-    setState({ phase: "scanning" });
+    setResult({ kind: "none" });
   }, []);
+
+  const isResolved = result.kind === "found" || result.kind === "error";
 
   return (
     <div className="flex flex-col gap-4">
-      {state.phase === "found" || state.phase === "error" ? null : (
-        <QrScanner
-          onDecode={handleDecode}
-          paused={state.phase === "loading"}
-        />
+      {isResolved ? null : (
+        <>
+          {mode === "scan" ? (
+            <QrScanner
+              onDecode={handleDecode}
+              paused={result.kind === "loading"}
+            />
+          ) : (
+            <UsernameSearch onSelect={handleSelect} />
+          )}
+
+          {mode === "scan" ? (
+            <Button
+              type="button"
+              variant="outline"
+              className="h-12 w-full"
+              onClick={() => setMode("manual")}
+            >
+              <Keyboard aria-hidden className="size-5" />
+              Input username manual
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-12 w-full"
+              onClick={() => setMode("scan")}
+            >
+              <ScanLine aria-hidden className="size-5" />
+              Kembali ke pemindai QR
+            </Button>
+          )}
+        </>
       )}
 
       <div aria-live="polite">
-        {state.phase === "loading" ? (
+        {result.kind === "loading" ? (
           <p className="flex items-center justify-center gap-2 rounded-card border border-border bg-card px-4 py-3 text-sm text-brand-brown-muted">
             <span
               aria-hidden
@@ -95,7 +132,7 @@ export function ScanPanel() {
           </p>
         ) : null}
 
-        {state.phase === "found" ? (
+        {result.kind === "found" ? (
           <div className="flex flex-col items-center gap-2 rounded-card border border-donut-matcha/40 bg-donut-matcha/10 p-6 text-center">
             <CircleCheck
               aria-hidden
@@ -105,12 +142,12 @@ export function ScanPanel() {
               Pelanggan ditemukan
             </h2>
             <p className="font-display text-2xl font-bold text-brand-brown-dark">
-              {state.customer.name}
+              {result.customer.name}
             </p>
             <p className="text-sm text-brand-brown-muted">
-              @{state.customer.username}
+              @{result.customer.username}
             </p>
-            {state.customer.isActive ? null : (
+            {result.customer.isActive ? null : (
               <p className="text-sm font-medium text-donut-berry-deep">
                 Akun pelanggan sedang ditangguhkan.
               </p>
@@ -122,21 +159,18 @@ export function ScanPanel() {
               onClick={reset}
             >
               <RotateCcw aria-hidden className="size-4" />
-              Scan ulang
+              Cari pelanggan lain
             </Button>
           </div>
         ) : null}
 
-        {state.phase === "error" ? (
+        {result.kind === "error" ? (
           <div className="flex flex-col items-center gap-2 rounded-card border border-donut-berry/40 bg-donut-berry/10 p-6 text-center">
-            <CircleAlert
-              aria-hidden
-              className="size-10 text-donut-berry-deep"
-            />
+            <CircleAlert aria-hidden className="size-10 text-donut-berry-deep" />
             <h2 className="font-display text-lg font-semibold text-brand-brown-dark">
-              QR tidak dapat diproses
+              Pelanggan tidak dapat diidentifikasi
             </h2>
-            <p className="text-sm text-donut-berry-deep">{state.message}</p>
+            <p className="text-sm text-donut-berry-deep">{result.message}</p>
             <Button
               type="button"
               variant="outline"
@@ -144,7 +178,7 @@ export function ScanPanel() {
               onClick={reset}
             >
               <RotateCcw aria-hidden className="size-4" />
-              Scan ulang
+              Coba lagi
             </Button>
           </div>
         ) : null}

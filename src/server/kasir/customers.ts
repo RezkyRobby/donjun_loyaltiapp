@@ -1,4 +1,8 @@
 import { UserRole } from "@/generated/prisma/enums";
+import {
+  CUSTOMER_SEARCH_LIMIT,
+  escapeLikePattern,
+} from "@/lib/customer-search";
 import { prisma } from "@/lib/prisma";
 
 // Identitas pelanggan yang boleh dilihat kasir (PRD §10: hanya nama &
@@ -36,4 +40,25 @@ export async function findCustomerByUsername(
     username: customer.username,
     isActive: customer.isActive,
   };
+}
+
+// Pencarian awalan username untuk input manual kasir (PRD §5.2 fitur 2).
+// Wildcard SQL (`%`, `_`) di dalam kueri kasir diloloskan lebih dulu agar hanya
+// cocok secara harfiah (AGENTS.md aturan 2); nilai tetap dikirim sebagai
+// parameter lewat tagged template `$queryRaw`. Kolom yang diambil hanya nama
+// dan username.
+export async function searchCustomersByUsername(
+  prefix: string,
+): Promise<CashierCustomer[]> {
+  const pattern = `${escapeLikePattern(prefix)}%`;
+
+  return prisma.$queryRaw<CashierCustomer[]>`
+    SELECT "id", "name", "username", "isActive"
+    FROM "User"
+    WHERE "role" = 'CUSTOMER'::"UserRole"
+      AND "username" IS NOT NULL
+      AND "username" ILIKE ${pattern} ESCAPE '\\'
+    ORDER BY "username" ASC
+    LIMIT ${CUSTOMER_SEARCH_LIMIT}
+  `;
 }
