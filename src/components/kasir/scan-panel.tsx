@@ -4,7 +4,7 @@ import { CircleAlert, Keyboard, RotateCcw, ScanLine } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
 import { InjectPointsDialog } from "@/components/kasir/inject-points-dialog";
-import { QrScanner } from "@/components/kasir/qr-scanner";
+import { CodeScanner } from "@/components/kasir/code-scanner";
 import { UsernameSearch } from "@/components/kasir/username-search";
 import { Button } from "@/components/ui/button";
 import { parseAccountQrPayload } from "@/lib/account-qr";
@@ -95,9 +95,10 @@ export function ScanPanel() {
       {isResolved ? null : (
         <>
           {mode === "scan" ? (
-            <QrScanner
+            <CodeScanner
               onDecode={handleDecode}
               paused={result.kind === "loading"}
+              scanMode="qr"
             />
           ) : (
             <UsernameSearch onSelect={handleSelect} />

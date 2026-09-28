@@ -7,18 +7,31 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type QrScannerProps = {
+type ScanMode = "qr" | "barcode";
+
+type CodeScannerProps = {
   onDecode: (text: string) => void;
   // Saat aktif, hasil pemindaian diabaikan agar satu kode tidak diproses
   // berulang kali (mis. ketika dialog konfirmasi sedang tampil).
   paused?: boolean;
+  // "qr" untuk QR akun pelanggan, "barcode" untuk Code 128 voucher.
+  scanMode?: ScanMode;
 };
 
-// Viewport pemindaian QR akun pelanggan (PRD §5.2 fitur 1, design.md §9.3).
-// Kamera berjalan penuh lebar, senter tersedia bila perangkat mendukung, dan
-// kegagalan kamera menampilkan panduan serta tombol coba lagi. Pustaka
-// html5-qrcode dimuat dinamis agar tidak ikut bundel server.
-export function QrScanner({ onDecode, paused = false }: QrScannerProps) {
+const ARIA_LABEL: Record<ScanMode, string> = {
+  qr: "Area pemindaian QR",
+  barcode: "Area pemindaian barcode",
+};
+
+// Viewport pemindaian kamera (PRD §5.2 fitur 1 & 4, design.md §9.3). Kamera
+// berjalan penuh lebar, senter tersedia bila perangkat mendukung, dan kegagalan
+// kamera menampilkan panduan serta tombol coba lagi. Pustaka html5-qrcode
+// dimuat dinamis agar tidak ikut bundel server.
+export function CodeScanner({
+  onDecode,
+  paused = false,
+  scanMode = "qr",
+}: CodeScannerProps) {
   const containerId = `kasir-scan-${useId().replace(/:/g, "")}`;
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const onDecodeRef = useRef(onDecode);
@@ -52,7 +65,10 @@ export function QrScanner({ onDecode, paused = false }: QrScannerProps) {
 
         scanner = new Html5Qrcode(containerId, {
           verbose: false,
-          formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+          formatsToSupport:
+            scanMode === "qr"
+              ? [Html5QrcodeSupportedFormats.QR_CODE]
+              : [Html5QrcodeSupportedFormats.CODE_128],
         });
         scannerRef.current = scanner;
 
@@ -61,6 +77,13 @@ export function QrScanner({ onDecode, paused = false }: QrScannerProps) {
           {
             fps: 10,
             qrbox: (viewfinderWidth, viewfinderHeight) => {
+              if (scanMode === "barcode") {
+                return {
+                  width: Math.floor(viewfinderWidth * 0.85),
+                  height: Math.floor(viewfinderHeight * 0.4),
+                };
+              }
+
               const edge = Math.floor(
                 Math.min(viewfinderWidth, viewfinderHeight) * 0.7,
               );
@@ -111,7 +134,7 @@ export function QrScanner({ onDecode, paused = false }: QrScannerProps) {
           });
       }
     };
-  }, [attempt, containerId]);
+  }, [attempt, containerId, scanMode]);
 
   const toggleTorch = useCallback(async () => {
     const scanner = scannerRef.current;
@@ -167,7 +190,7 @@ export function QrScanner({ onDecode, paused = false }: QrScannerProps) {
       <div
         id={containerId}
         className="[&_video]:block [&_video]:w-full"
-        aria-label="Area pemindaian QR"
+        aria-label={ARIA_LABEL[scanMode]}
       />
       {torchSupported ? (
         <Button

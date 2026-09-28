@@ -196,7 +196,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 18. Scan QR (`html5-qrcode`) dengan validasi payload versi
 - [x] 19. Input username: pencocokan prefix minimal 3 karakter, hanya nama & username yang tampil
 - [x] 20. Injeksi poin: pop-up konfirmasi + debounce + tombol disabled + idempotency key + cooldown server-side
-- [ ] 21. Validasi voucher: scan barcode + input kode manual + update kondisional atomik + notifikasi hijau/merah
+- [x] 21. Validasi voucher: scan barcode + input kode manual + update kondisional atomik + notifikasi hijau/merah
 
 ### Fase 4 — Voucher & Redemption (Hari 14–16)
 
