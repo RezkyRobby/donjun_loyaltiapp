@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Donjun Donat Loyalty - SMELL Report</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<style>
+		body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+		.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+		.report-section { border: 1px solid #222226; background: #0a0a0b; position: relative; }
+		.corner-box { position: absolute; width: 20px; height: 20px; border: 1px solid #222226; background: #000; }
+	</style>
+</head>
+<body class="bg-black text-[#fafafa]">
+	<main class="mx-auto w-full max-w-6xl px-5 py-8 md:px-10 md:py-12">
+		<header class="report-section mb-8 p-6 md:p-8">
+			<div class="corner-box left-0 top-0 -translate-x-1/2 -translate-y-1/2"></div>
+			<div class="corner-box right-0 top-0 translate-x-1/2 -translate-y-1/2"></div>
+			<div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+				<div>
+					<div class="mono mb-2 text-xs tracking-widest text-[#666]">// SMELL</div>
+					<h1 class="text-4xl font-bold tracking-tight md:text-6xl">Donjun Donat Loyalty</h1>
+					<div class="mono mt-3 text-xs text-[#666]">surface: landing page "/" &middot; src/app/(public)/page.tsx &middot; register: brand</div>
+				</div>
+				<div class="mono text-left text-xs text-[#666] md:text-right">
+					<div>COMMANDCODE REPORT</div>
+					<div class="text-[#444]">2026-09-28</div>
+				</div>
+			</div>
+		</header>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="corner-box left-0 top-0 -translate-x-1/2 -translate-y-1/2"></div>
+			<div class="corner-box right-0 top-0 translate-x-1/2 -translate-y-1/2"></div>
+			<div class="grid gap-8 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+				<div>
+					<div class="mono mb-2 text-xs tracking-widest text-[#666]">// OVERALL</div>
+					<div class="text-6xl font-bold tracking-tight md:text-7xl">10</div>
+					<div class="mt-1 text-lg text-[#666]">/ 10</div>
+					<div class="mt-4 inline-flex border border-[#34d399]/30 bg-[#34d399]/10 px-3 py-1 text-sm text-[#34d399]">CLEAN</div>
+				</div>
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">// TL;DR</div>
+					<p class="text-sm leading-6 text-[#a0a0a0]">No confirmed tells across the ten tracked odors. The page carries decisions that cannot be guessed from the product category alone: an asymmetric hero with a domain artifact (voucher barcode + points), a benefits section with a dominant feature plus a subordinate list, and motion wrapped in motion-safe:. Re-audited after /design relayout.</p>
+					<p class="mt-4 text-sm leading-6 text-[#34d399]">FIX: none required. To push past the food-category first answer (warm orange), run /design voice; visual checks at 320px/zoom still need a browser (see Verification).</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// HEURISTIC SCORES</div>
+			<div class="overflow-x-auto">
+				<table class="w-full min-w-[720px] border-collapse text-sm">
+					<thead>
+						<tr class="border-b border-[#222226] text-left mono text-xs text-[#666]">
+							<th class="py-3 pr-4 font-normal">#</th>
+							<th class="py-3 pr-4 font-normal">HEURISTIC</th>
+							<th class="py-3 pr-4 font-normal">SCORE</th>
+							<th class="py-3 font-normal">KEY FINDING</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">1</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Tech gradient</td>
+							<td class="py-4 pr-4 text-[#34d399]">1</td>
+							<td class="py-4 text-[#a0a0a0]">None. Hero glow uses brand-yellow + sky-pastel (page.tsx:227), not blue-violet/indigo-cyan.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">2</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Generic tech hue</td>
+							<td class="py-4 pr-4 text-[#34d399]">1</td>
+							<td class="py-4 text-[#a0a0a0]">None. Warm orange/yellow/brown identity from the brand palette.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">3</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Feature tile grid</td>
+							<td class="py-4 pr-4 text-[#34d399]">1</td>
+							<td class="py-4 text-[#a0a0a0]">Cleared. The benefits section is now a broken grid (dominant feature + divided subordinate list), not a uniform 2&times;2 (page.tsx:338).</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">4</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Accent rail</td>
+							<td class="py-4 pr-4 text-[#34d399]">1</td>
+							<td class="py-4 text-[#a0a0a0]">None. No colored side stripe on cards or callouts.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">5</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Unearned blur</td>
+							<td class="py-4 pr-4 text-[#34d399]">1</td>
+							<td class="py-4 text-[#a0a0a0]">backdrop-blur only on the sticky header; functional and consistent with customer-header (page.tsx:200).</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">6</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Stat monument</td>
+							<td class="py-4 pr-4 text-[#34d399]">1</td>
+							<td class="py-4 text-[#a0a0a0]">"12" sits inside the points artifact, not a decorative number cluster.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">7</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Icon topper</td>
+							<td class="py-4 pr-4 text-[#34d399]">1</td>
+							<td class="py-4 text-[#a0a0a0]">No icon above every section heading; icons sit beside or inside items.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">8</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Bounce everywhere</td>
+							<td class="py-4 pr-4 text-[#34d399]">1</td>
+							<td class="py-4 text-[#a0a0a0]">None. A single fade+slide entrance, wrapped in motion-safe:.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">9</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Default type</td>
+							<td class="py-4 pr-4 text-[#34d399]">1</td>
+							<td class="py-4 text-[#a0a0a0]">Plus Jakarta Sans + Baloo 2 are mandated by design.md §5; Baloo 2 carries the donut brand voice.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">10</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Center stack</td>
+							<td class="py-4 pr-4 text-[#34d399]">1</td>
+							<td class="py-4 text-[#a0a0a0]">Hero is a two-column asymmetric grid; only the closing CTA is centered.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="mono mt-4 text-xs text-[#555]">final score follows the inverted tell-count scale (0 tells = 10/10), not the row sum</p>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// FINDINGS</div>
+			<div class="border border-[#1f2a22] bg-[#0b120d] p-5">
+				<div class="mono mb-2 text-xs text-[#34d399]">NONE</div>
+				<h2 class="mb-2 text-lg font-semibold">No confirmed tells on this pass</h2>
+				<p class="text-sm leading-6 text-[#a0a0a0]">No odor met the evidence bar (visible pattern + reflex behind it + why it weakens this brief + the fix mode). An empty findings list is a valid result.</p>
+				<p class="mt-3 text-sm leading-6 text-[#a0a0a0]"><span class="mono text-[#666]">CONTINUITY &middot;</span> The previous report's MEDIUM finding (Feature tile grid at page.tsx:334) was fixed via /design relayout and re-assessed as absent.</p>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// SUSPICIONS (unconfirmed)</div>
+			<div class="overflow-x-auto">
+				<table class="w-full min-w-[720px] border-collapse text-sm">
+					<thead>
+						<tr class="border-b border-[#222226] text-left mono text-xs text-[#666]">
+							<th class="py-3 pr-4 font-normal">LOCATION</th>
+							<th class="py-3 pr-4 font-normal">SUSPICION</th>
+							<th class="py-3 font-normal">WHY NOT A TELL</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">design.md §3</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Warm orange is the food-domain first answer</td>
+							<td class="py-4 text-[#a0a0a0]">Values come verbatim from the brand's design source of truth; intentional brand decision, not drift. Fix lane is /design voice, not a token swap</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">page.tsx:200</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Header backdrop-blur borders on "unearned blur"</td>
+							<td class="py-4 text-[#a0a0a0]">A sticky bar legitimately needs content to pass behind it; already a pattern in the customer area</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">page.tsx:230 / :390</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Decorative donut-ring motif repeated in hero and closing CTA</td>
+							<td class="py-4 text-[#a0a0a0]">Two occurrences with a decorative role could read as repetition; currently judged as brand rhythm, not stacked wallpaper. Logged as suspicion only</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// COGNITIVE LOAD / RISK</div>
+			<div class="grid gap-6 md:grid-cols-2">
+				<div>
+					<div class="mb-3 text-xl font-semibold">CLEAN</div>
+					<ul class="space-y-3 text-sm text-[#a0a0a0]">
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Asymmetric hero with domain proof above the fold</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Benefits section has a real focal point after relayout</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Motion is reduced-motion safe</li>
+						<li><span class="mono mr-2 text-[#fbbf24]">WATCH</span>Palette is the food-domain first reflex, brand-mandated</li>
+						<li><span class="mono mr-2 text-[#fbbf24]">WATCH</span>Visual checks (320px, zoom, focus, contrast) not verified - no browser</li>
+						<li><span class="mono mr-2 text-[#ef4444]">FAIL</span>None</li>
+					</ul>
+				</div>
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">// NEXT MODES</div>
+					<div class="flex flex-wrap gap-2">
+						<span class="border border-[#333] px-3 py-1 text-sm text-[#a0a0a0]">/design voice</span>
+						<span class="border border-[#333] px-3 py-1 text-sm text-[#a0a0a0]">/design checkup</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// WHAT'S WORKING</div>
+			<div class="grid gap-4 md:grid-cols-3">
+				<article class="border border-[#1f1f24] p-4">
+					<h2 class="mb-2 text-sm font-semibold">Domain proof object</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">The hero shows a points balance and a real-format voucher with barcode and code. It would not survive a swap into an unrelated product unchanged.</p>
+				</article>
+				<article class="border border-[#1f1f24] p-4">
+					<h2 class="mb-2 text-sm font-semibold">Hierarchy where it was missing</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Benefits now break the grid: one dominant claim leads, three subordinate items follow as a divided list. The section has an opinion.</p>
+				</article>
+				<article class="border border-[#1f1f24] p-4">
+					<h2 class="mb-2 text-sm font-semibold">Semantics and voice</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">dl for benefits, ol for steps, real headings, skip link, aria-labels, and Indonesian copy with a single verb per action.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// PRIORITY ISSUES</div>
+			<div class="border border-[#1f1f24] p-5">
+				<div class="mono mb-2 text-xs text-[#34d399]">CLEAR</div>
+				<p class="text-sm leading-6 text-[#a0a0a0]">No priority issues. Nothing to fix in a follow-up mode.</p>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// CONSIDERED BUT REJECTED</div>
+			<div class="overflow-x-auto">
+				<table class="w-full min-w-[760px] border-collapse text-sm">
+					<thead>
+						<tr class="border-b border-[#222226] text-left mono text-xs text-[#666]">
+							<th class="py-3 pr-4 font-normal">LOCATION</th>
+							<th class="py-3 pr-4 font-normal">CANDIDATE</th>
+							<th class="py-3 font-normal">REJECTED BECAUSE</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">page.tsx:354</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Replace divide-y with spacing only</td>
+							<td class="py-4 text-[#a0a0a0]">The container is one white card; a dim line helps the list read as a unit, which layout.md permits at a group boundary</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">page.tsx:146</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Shrink the "12" number</td>
+							<td class="py-4 text-[#a0a0a0]">It is a meaningful value inside the points artifact, not a decorative stat monument</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">page.tsx:390</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Left-align the closing CTA</td>
+							<td class="py-4 text-[#a0a0a0]">A single centered closing block is a valid convention; the overall composition stays asymmetric</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">page.tsx:95</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Replace Plus Jakarta Sans</td>
+							<td class="py-4 text-[#a0a0a0]">Type is mandated by design.md §5; the pairing with Baloo 2 is deliberate</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">page.tsx:230</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Remove the decorative donut-ring SVG</td>
+							<td class="py-4 text-[#a0a0a0]">Allowed by design.md §12, aria-hidden, and it never covers content</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// VERIFICATION</div>
+			<div class="grid gap-6 md:grid-cols-2">
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">CHECKED</div>
+					<ul class="space-y-3 text-sm text-[#a0a0a0]">
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>Re-read src/app/(public)/page.tsx with line numbers; findings and positives map to specific lines</li>
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>Confirmed the benefits section is now lg:grid-cols-[1.1fr_1fr] with one dominant item and a divided list (page.tsx:338, :354)</li>
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>Production render of "/" (HTTP 200) last pass: DOM has h3 + 3 subordinate items; CSS has grid-template-columns:1.1fr 1fr, divide-warm-border, first:pt-0/last:pb-0</li>
+					</ul>
+				</div>
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">NOT VERIFIED</div>
+					<ul class="space-y-3 text-sm text-[#a0a0a0]">
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>320px reflow and 200% zoom - no browser in this session (agent-browser not installed)</li>
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>Focus ring on plain text links (page.tsx:202, :402, :422) - relies on the UA outline, not seen visually</li>
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>Measured contrast - estimate from design.md §3.4 tokens only, not a tool reading</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="corner-box left-0 top-0 -translate-x-1/2 -translate-y-1/2"></div>
+			<div class="corner-box right-0 top-0 translate-x-1/2 -translate-y-1/2"></div>
+			<div class="mono mb-3 text-xs tracking-widest text-[#666]">// VERDICT</div>
+			<div class="flex flex-wrap items-center gap-3">
+				<span class="border border-[#34d399]/30 bg-[#34d399]/10 px-3 py-1 text-sm text-[#34d399]">CLEAN - 10/10</span>
+				<span class="border border-[#34d399]/30 bg-[#34d399]/10 px-3 py-1 text-sm text-[#34d399]">APPROVE</span>
+			</div>
+			<p class="mt-4 text-sm leading-6 text-[#a0a0a0]">No HIGH, MEDIUM, or LOW findings open. Nothing to fix in a follow-up mode. Visual verification gaps (320px, zoom, focus, contrast) remain open and are recorded as gaps, not findings. This mode changed no code and created only these two report artifacts.</p>
+		</section>
+
+		<footer class="mono py-8 text-center text-xs tracking-widest text-[#444]">
+			Generated with CommandCode - 2026-09-28
+		</footer>
+	</main>
+</body>
+</html>
