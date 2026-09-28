@@ -139,6 +139,10 @@
   --color-warm-neutral: var(--warm-neutral);
   --color-warm-border: var(--warm-border);
 
+  /* Elevasi (design.md §6) */
+  --shadow-card: 0 2px 8px rgb(69 42 24 / 0.08);
+  --shadow-raised: 0 12px 32px rgb(69 42 24 / 0.18);
+
   /* Radius */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
