@@ -4,10 +4,9 @@ import { ScanPanel } from "@/components/kasir/scan-panel";
 
 export const metadata: Metadata = { title: "Scan QR" };
 
-// Rute pemindaian identitas pelanggan (PRD Lampiran B: /kasir/scan). Memuat
-// viewport kamera dengan validasi payload versi dan input username manual
-// sebagai fallback (PRD §5.2 fitur 1–2, §8.3). Injeksi poin ditambahkan pada
-// Task 20.
+// Rute pemindaian identitas dan injeksi poin (PRD Lampiran B: /kasir/scan).
+// Memuat viewport kamera dengan validasi payload versi, input username manual
+// sebagai fallback, dan pop-up konfirmasi tambah poin (PRD §5.2 fitur 1–3, §8.3).
 export default function KasirScanPage() {
   return (
     <section className="flex flex-col gap-6">

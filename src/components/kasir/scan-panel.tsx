@@ -1,28 +1,30 @@
 "use client";
 
-import { CircleAlert, CircleCheck, Keyboard, RotateCcw, ScanLine } from "lucide-react";
+import { CircleAlert, Keyboard, RotateCcw, ScanLine } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
+import { InjectPointsDialog } from "@/components/kasir/inject-points-dialog";
 import { QrScanner } from "@/components/kasir/qr-scanner";
 import { UsernameSearch } from "@/components/kasir/username-search";
 import { Button } from "@/components/ui/button";
 import { parseAccountQrPayload } from "@/lib/account-qr";
+import type { InjectableMethod } from "@/lib/injection";
 import { scanCustomerQrAction } from "@/server/kasir/actions";
 import type { CashierCustomer } from "@/server/kasir/customers";
 
 type IdentityResult =
   | { kind: "none" }
   | { kind: "loading" }
-  | { kind: "found"; customer: CashierCustomer }
+  | { kind: "found"; customer: CashierCustomer; method: InjectableMethod }
   | { kind: "error"; message: string };
 
 const INVALID_QR_MESSAGE =
   "QR bukan milik platform Donjun Donat. Minta pelanggan menampilkan QR dari aplikasi Donjun.";
 
-// Identifikasi pelanggan lewat QR atau input username manual (PRD §5.2 fitur
-// 1–2, §8.3 langkah 3–5). Payload QR divalidasi versinya di klien untuk umpan
-// balik seketika, lalu diulang di Server Action sebelum lookup (AGENTS.md
-// aturan 1). Pop-up konfirmasi injeksi poin ditambahkan pada Task 20.
+// Identifikasi pelanggan lewat QR atau input username manual, lalu pop-up
+// konfirmasi injeksi poin (PRD §5.2 fitur 1–3, §8.3). Payload QR divalidasi
+// versinya di klien untuk umpan balik seketika, lalu diulang di Server Action
+// sebelum lookup (AGENTS.md aturan 1).
 export function ScanPanel() {
   const [mode, setMode] = useState<"scan" | "manual">("scan");
   const [result, setResult] = useState<IdentityResult>({ kind: "none" });
@@ -47,7 +49,11 @@ export function ScanPanel() {
 
       switch (response.status) {
         case "FOUND":
-          setResult({ kind: "found", customer: response.customer });
+          setResult({
+            kind: "found",
+            customer: response.customer,
+            method: "QR_SCAN",
+          });
           return;
         case "NOT_FOUND":
           setResult({
@@ -74,7 +80,7 @@ export function ScanPanel() {
 
   const handleSelect = useCallback((customer: CashierCustomer) => {
     busyRef.current = true;
-    setResult({ kind: "found", customer });
+    setResult({ kind: "found", customer, method: "USERNAME" });
   }, []);
 
   const reset = useCallback(() => {
@@ -82,7 +88,7 @@ export function ScanPanel() {
     setResult({ kind: "none" });
   }, []);
 
-  const isResolved = result.kind === "found" || result.kind === "error";
+  const isResolved = result.kind !== "none" && result.kind !== "loading";
 
   return (
     <div className="flex flex-col gap-4">
@@ -132,38 +138,6 @@ export function ScanPanel() {
           </p>
         ) : null}
 
-        {result.kind === "found" ? (
-          <div className="flex flex-col items-center gap-2 rounded-card border border-donut-matcha/40 bg-donut-matcha/10 p-6 text-center">
-            <CircleCheck
-              aria-hidden
-              className="size-10 text-donut-matcha-deep"
-            />
-            <h2 className="font-display text-lg font-semibold text-brand-brown-dark">
-              Pelanggan ditemukan
-            </h2>
-            <p className="font-display text-2xl font-bold text-brand-brown-dark">
-              {result.customer.name}
-            </p>
-            <p className="text-sm text-brand-brown-muted">
-              @{result.customer.username}
-            </p>
-            {result.customer.isActive ? null : (
-              <p className="text-sm font-medium text-donut-berry-deep">
-                Akun pelanggan sedang ditangguhkan.
-              </p>
-            )}
-            <Button
-              type="button"
-              variant="outline"
-              className="mt-2 h-11"
-              onClick={reset}
-            >
-              <RotateCcw aria-hidden className="size-4" />
-              Cari pelanggan lain
-            </Button>
-          </div>
-        ) : null}
-
         {result.kind === "error" ? (
           <div className="flex flex-col items-center gap-2 rounded-card border border-donut-berry/40 bg-donut-berry/10 p-6 text-center">
             <CircleAlert aria-hidden className="size-10 text-donut-berry-deep" />
@@ -183,6 +157,14 @@ export function ScanPanel() {
           </div>
         ) : null}
       </div>
+
+      {result.kind === "found" ? (
+        <InjectPointsDialog
+          customer={result.customer}
+          method={result.method}
+          onClose={reset}
+        />
+      ) : null}
     </div>
   );
 }
