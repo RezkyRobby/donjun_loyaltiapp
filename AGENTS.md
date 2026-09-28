@@ -192,7 +192,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 
 ### Fase 3 — Cashier Portal (Hari 10–13)
 
-- [ ] 17. Shell kasir + guard role + penugasan outlet + riwayat injeksi hari ini
+- [x] 17. Shell kasir + guard role + penugasan outlet + riwayat injeksi hari ini
 - [ ] 18. Scan QR (`html5-qrcode`) dengan validasi payload versi
 - [ ] 19. Input username: pencocokan prefix minimal 3 karakter, hanya nama & username yang tampil
 - [ ] 20. Injeksi poin: pop-up konfirmasi + debounce + tombol disabled + idempotency key + cooldown server-side

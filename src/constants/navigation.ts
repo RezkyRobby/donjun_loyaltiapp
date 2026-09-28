@@ -12,3 +12,16 @@ export const CUSTOMER_NAV_ITEMS: CustomerNavItem[] = [
   { href: "/voucher", label: "Voucher" },
   { href: "/pengaturan", label: "Pengaturan" },
 ];
+
+// Navigasi area kasir (PRD Lampiran B). Register *product* (design.md §2):
+// label singkat, target sentuh besar; urutan mengikuti alur kerja kasir.
+export type CashierNavItem = {
+  href: string;
+  label: string;
+};
+
+export const CASHIER_NAV_ITEMS: CashierNavItem[] = [
+  { href: "/kasir/scan", label: "Scan" },
+  { href: "/kasir/validasi", label: "Validasi" },
+  { href: "/kasir/riwayat", label: "Riwayat" },
+];

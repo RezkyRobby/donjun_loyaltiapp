@@ -1,4 +1,7 @@
-import type { VoucherStatus } from "@/generated/prisma/enums";
+import type {
+  PointTransactionMethod,
+  VoucherStatus,
+} from "@/generated/prisma/enums";
 import type { RewardUnavailableReason } from "@/lib/reward-availability";
 
 // Kamus label terpusat (AGENTS.md: label status/istilah UI lewat satu kamus di
@@ -21,5 +24,19 @@ export const VOUCHER_STATUS_LABELS: Record<VoucherStatus, string> = {
   ACTIVE: "Aktif",
   USED: "Terpakai",
   CANCELED: "Dibatalkan",
+};
+
+// Metode input transaksi poin (PRD §5.2 fitur 2 & 6): ditampilkan pada riwayat
+// injeksi kasir dan audit log admin.
+export const POINT_TRANSACTION_METHOD_LABELS: Record<
+  PointTransactionMethod,
+  string
+> = {
+  QR_SCAN: "Scan QR",
+  USERNAME: "Input username",
+  BARCODE_SCAN: "Scan barcode",
+  MANUAL_CODE: "Kode manual",
+  ADMIN: "Admin",
+  SYSTEM: "Sistem",
 };
 

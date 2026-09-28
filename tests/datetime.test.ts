@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  endOfDayWita,
   formatDateWita,
   formatDateTimeWita,
+  formatTimeWita,
   startOfDayWita,
   startOfMonthWita,
   witaDayKey,
@@ -21,6 +23,10 @@ describe("format WITA", () => {
     );
   });
 
+  it("memformat jam WITA tanpa tanggal", () => {
+    expect(formatTimeWita(new Date("2026-09-26T20:30:00.000Z"))).toBe("04:30");
+  });
+
   it("menghitung kunci hari menurut WITA, bukan UTC", () => {
     expect(witaDayKey(new Date("2026-09-26T20:00:00.000Z"))).toBe("2026-09-27");
   });
@@ -30,6 +36,12 @@ describe("batas waktu WITA", () => {
   it("mengembalikan awal hari WITA sebagai instant UTC", () => {
     expect(startOfDayWita(new Date("2026-09-26T20:00:00.000Z")).toISOString()).toBe(
       "2026-09-26T16:00:00.000Z",
+    );
+  });
+
+  it("mengembalikan akhir hari WITA sebagai awal hari berikutnya (UTC)", () => {
+    expect(endOfDayWita(new Date("2026-09-26T20:00:00.000Z")).toISOString()).toBe(
+      "2026-09-27T16:00:00.000Z",
     );
   });
 

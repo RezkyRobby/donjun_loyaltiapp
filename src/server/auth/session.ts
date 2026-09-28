@@ -27,3 +27,21 @@ export async function requireCustomer() {
 
   return session;
 }
+
+// Guard area kasir (PRD Lampiran B: /kasir/* untuk CASHIER dan SUPER_ADMIN).
+// Layout kasir memakainya agar halaman tidak pernah dirender tanpa sesi staf.
+export async function requireStaff() {
+  const session = await getSession();
+
+  if (!session) {
+    redirect(`/masuk?callbackURL=${encodeURIComponent("/kasir/scan")}`);
+  }
+
+  const role = isUserRole(session.user.role) ? session.user.role : null;
+
+  if (role !== UserRole.CASHIER && role !== UserRole.SUPER_ADMIN) {
+    redirect(homeForRole(role));
+  }
+
+  return session;
+}
