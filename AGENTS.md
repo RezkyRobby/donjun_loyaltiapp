@@ -200,7 +200,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 
 ### Fase 4 — Voucher & Redemption (Hari 14–16)
 
-- [ ] 22. Hardening penukaran: anti saldo negatif, kuota atomik, limit per pelanggan dicek di dalam transaksi
+- [x] 22. Hardening penukaran: anti saldo negatif, kuota atomik, limit per pelanggan dicek di dalam transaksi
 - [ ] 23. Pembatalan & koreksi admin (`CANCELED` → `REVERSAL`; revert `USED` ≤ 1x24 jam; `ADJUST` wajib catatan) + AuditLog
 - [ ] 24. Rate limit lengkap (cek username, registrasi, kegagalan scan voucher) + respons 429 ramah
 - [ ] 25. Integration test: idempotency, cooldown, race condition voucher, saldo tidak negatif
