@@ -5,11 +5,17 @@ import { prisma } from "@/lib/prisma";
 import { isUserRole } from "@/lib/rbac";
 import { voucherCodeSchema } from "@/lib/voucher-code";
 import { getSession } from "@/server/auth/session";
+import {
+  checkVoucherValidationLimit,
+  describeVoucherRateLimit,
+  recordVoucherValidationFailure,
+} from "@/server/kasir/voucher-validation-limit";
 
 // Server Action validasi voucher (PRD §5.2 fitur 4–5, §8.4 langkah 7). Perubahan
 // status dijalankan sebagai pembaruan kondisional atomik (`WHERE status =
 // ACTIVE`) sehingga dua pemindaian bersamaan tidak mungkin berhasil dua kali
-// (AGENTS.md aturan 3).
+// (AGENTS.md aturan 3). Kegagalan validasi dibatasi 10 percobaan/menit per kasir
+// untuk mencegah enumerasi kode (PRD §9).
 export type ValidateVoucherErrorCode =
   | "UNAUTHORIZED"
   | "INVALID"
@@ -17,6 +23,7 @@ export type ValidateVoucherErrorCode =
   | "NOT_FOUND"
   | "USED"
   | "CANCELED"
+  | "RATE_LIMITED"
   | "ERROR";
 
 export type ValidateVoucherResult =
@@ -26,6 +33,7 @@ export type ValidateVoucherResult =
       code: ValidateVoucherErrorCode;
       message: string;
       usedAt?: Date;
+      retryAfterSeconds?: number;
     };
 
 export async function validateVoucher(
@@ -51,8 +59,26 @@ export async function validateVoucher(
     };
   }
 
+  const cashierId = session.user.id;
+  const rateLimit = checkVoucherValidationLimit(cashierId);
+
+  // Kegagalan beruntun diblokir lebih awal agar percobaan enumerasi tidak
+  // menyentuh database (PRD §9, §14).
+  if (!rateLimit.allowed) {
+    return {
+      ok: false,
+      code: "RATE_LIMITED",
+      message: describeVoucherRateLimit(rateLimit.retryAfterSeconds),
+      retryAfterSeconds: rateLimit.retryAfterSeconds,
+    };
+  }
+
+  const recordFailure = () => recordVoucherValidationFailure(cashierId);
+
   const parsed = voucherCodeSchema.safeParse(input);
   if (!parsed.success) {
+    recordFailure();
+
     return {
       ok: false,
       code: "INVALID",
@@ -90,6 +116,8 @@ export async function validateVoucher(
     });
 
     if (!voucher) {
+      recordFailure();
+
       return {
         ok: false,
         code: "NOT_FOUND",
@@ -98,6 +126,8 @@ export async function validateVoucher(
     }
 
     if (voucher.status === VoucherStatus.CANCELED) {
+      recordFailure();
+
       return {
         ok: false,
         code: "CANCELED",
@@ -106,6 +136,8 @@ export async function validateVoucher(
     }
 
     if (voucher.status === VoucherStatus.USED) {
+      recordFailure();
+
       return {
         ok: false,
         code: "USED",
@@ -134,6 +166,8 @@ export async function validateVoucher(
       });
 
       if (latest?.status === VoucherStatus.USED) {
+        recordFailure();
+
         return {
           ok: false,
           code: "USED",
@@ -141,6 +175,8 @@ export async function validateVoucher(
           usedAt: latest.usedAt ?? undefined,
         };
       }
+
+      recordFailure();
 
       return {
         ok: false,
