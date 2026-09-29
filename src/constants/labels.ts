@@ -3,6 +3,7 @@ import type {
   PointTransactionType,
   VoucherStatus,
 } from "@/generated/prisma/enums";
+import type { AuditAction } from "@/constants/audit";
 import type { RewardUnavailableReason } from "@/lib/reward-availability";
 
 // Kamus label terpusat (AGENTS.md: label status/istilah UI lewat satu kamus di
@@ -51,5 +52,32 @@ export const POINT_TRANSACTION_TYPE_LABELS: Record<
   REDEEM: "Penukaran voucher",
   ADJUST: "Koreksi manual",
   REVERSAL: "Pengembalian poin",
+};
+
+// Sumber entri pada Audit Log Menyeluruh (PRD §5.3 fitur 3): transaksi poin
+// operasional atau aksi administratif backoffice.
+export const AUDIT_SOURCE_LABELS: Record<"POINT" | "ADMIN", string> = {
+  POINT: "Transaksi Poin",
+  ADMIN: "Aksi Administratif",
+};
+
+// Aksi administratif AuditLog (PRD §7.4): ditampilkan pada audit log dan ekspor
+// CSV. Nilai kunci mengikuti konstanta AUDIT_ACTION.
+export const AUDIT_ACTION_LABELS: Record<AuditAction, string> = {
+  VOUCHER_CANCELED: "Voucher dibatalkan",
+  VOUCHER_REVERTED: "Validasi voucher dikoreksi",
+  POINTS_ADJUSTED: "Saldo poin dikoreksi",
+  REWARD_CREATED: "Reward dibuat",
+  REWARD_UPDATED: "Reward diperbarui",
+  REWARD_DELETED: "Reward dihapus",
+  STAFF_CREATED: "Akun staf dibuat",
+  STAFF_UPDATED: "Akun staf diperbarui",
+  STAFF_INVITED: "Undangan staf dikirim",
+  STAFF_CREDENTIALS_RESET: "Kredensial staf direset",
+  CUSTOMER_SUSPENDED: "Pelanggan ditangguhkan",
+  CUSTOMER_REACTIVATED: "Pelanggan diaktifkan kembali",
+  OUTLET_CREATED: "Outlet dibuat",
+  OUTLET_UPDATED: "Outlet diperbarui",
+  OUTLET_DELETED: "Outlet dihapus",
 };
 
