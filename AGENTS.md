@@ -212,7 +212,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 28. Manajemen staf (buat, undang via email, reset kredensial, pindah outlet, nonaktifkan + cabut sesi)
 - [x] 29. Manajemen pelanggan (cari, riwayat, `ADJUST` + catatan, suspend) + manajemen outlet
 - [x] 30. Audit log: filter, paginasi, ekspor CSV
-- [ ] 31. E2E Playwright alur kritis (registrasi → injeksi → tukar → validasi → voucher terpakai) + test RBAC
+- [x] 31. E2E Playwright alur kritis (registrasi → injeksi → tukar → validasi → voucher terpakai) + test RBAC
 - [ ] 32. Audit Lighthouse mobile ≥ 90 + uji kamera Android/iOS + security hardening
 - [ ] 33. Deploy Vercel + verifikasi alur produksi end-to-end
 
@@ -224,7 +224,8 @@ pnpm dev                  # development server
 pnpm typecheck            # cek tipe (wajib sebelum commit)
 pnpm lint                 # eslint
 pnpm test                 # unit & integration (Vitest)
-pnpm test:e2e             # E2E (Playwright)
+pnpm test:e2e             # E2E (Playwright; butuh E2E_DATABASE_URL + `pnpm test:e2e:install`)
+pnpm test:e2e:install     # pasang peramban Chromium untuk Playwright
 pnpm build                # production build
 pnpm prisma migrate dev   # migrasi lokal
 pnpm prisma db seed       # bootstrap Super Admin + data contoh
