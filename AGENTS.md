@@ -210,7 +210,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 26. Dashboard analitik (definisi metrik PRD §5.3, zona WITA, filter outlet)
 - [x] 27. Manajemen reward (CRUD + upload Cloudinary + kuota/limit/periode/S&K + nonaktifkan)
 - [x] 28. Manajemen staf (buat, undang via email, reset kredensial, pindah outlet, nonaktifkan + cabut sesi)
-- [ ] 29. Manajemen pelanggan (cari, riwayat, `ADJUST` + catatan, suspend) + manajemen outlet
+- [x] 29. Manajemen pelanggan (cari, riwayat, `ADJUST` + catatan, suspend) + manajemen outlet
 - [ ] 30. Audit log: filter, paginasi, ekspor CSV
 - [ ] 31. E2E Playwright alur kritis (registrasi → injeksi → tukar → validasi → voucher terpakai) + test RBAC
 - [ ] 32. Audit Lighthouse mobile ≥ 90 + uji kamera Android/iOS + security hardening

@@ -1,5 +1,6 @@
 import type {
   PointTransactionMethod,
+  PointTransactionType,
   VoucherStatus,
 } from "@/generated/prisma/enums";
 import type { RewardUnavailableReason } from "@/lib/reward-availability";
@@ -38,5 +39,17 @@ export const POINT_TRANSACTION_METHOD_LABELS: Record<
   MANUAL_CODE: "Kode manual",
   ADMIN: "Admin",
   SYSTEM: "Sistem",
+};
+
+// Jenis transaksi poin (PRD §7.4): ditampilkan pada riwayat poin pelanggan di
+// backoffice agar Super Admin memahami asal penyebab perubahan saldo.
+export const POINT_TRANSACTION_TYPE_LABELS: Record<
+  PointTransactionType,
+  string
+> = {
+  EARN: "Injeksi poin",
+  REDEEM: "Penukaran voucher",
+  ADJUST: "Koreksi manual",
+  REVERSAL: "Pengembalian poin",
 };
 
