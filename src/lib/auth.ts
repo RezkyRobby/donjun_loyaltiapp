@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import { APIError } from "better-auth/api";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { username } from "better-auth/plugins";
@@ -110,6 +111,29 @@ export const auth = betterAuth({
       "/sign-up/email": { window: 60 * 60, max: 5 },
       // Cek ketersediaan username: maks 20 permintaan/menit per IP (PRD §9).
       "/is-username-available": { window: 60, max: 20 },
+    },
+  },
+  databaseHooks: {
+    session: {
+      create: {
+        // Menolak pembuatan sesi untuk akun nonaktif sehingga kasir yang
+        // dinonaktifkan atau pelanggan yang di-suspend tidak dapat masuk lagi
+        // (PRD §8.6 langkah 4, §8.3). Sesi berjalan sudah dicabut saat aksi
+        // penonaktifan dijalankan.
+        before: async (session) => {
+          const account = await prisma.user.findUnique({
+            where: { id: session.userId },
+            select: { isActive: true },
+          });
+
+          if (account && account.isActive === false) {
+            throw APIError.from("FORBIDDEN", {
+              message: "Akun Anda sedang dinonaktifkan. Hubungi Super Admin.",
+              code: "ACCOUNT_INACTIVE",
+            });
+          }
+        },
+      },
     },
   },
   plugins: [

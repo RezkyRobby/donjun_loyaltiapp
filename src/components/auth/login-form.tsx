@@ -28,6 +28,16 @@ function describeSignInError(error: SignInError): {
     };
   }
 
+  // Akun dinonaktifkan (kasir dinonaktifkan atau pelanggan di-suspend) ditolak
+  // oleh hook sesi Better-Auth (PRD §8.6, §8.3).
+  if (error.code === "ACCOUNT_INACTIVE") {
+    return {
+      message:
+        "Akun Anda sedang dinonaktifkan. Hubungi Super Admin untuk mengaktifkan kembali.",
+      showResend: false,
+    };
+  }
+
   if (error.code === "INVALID_EMAIL_OR_PASSWORD" || error.status === 401) {
     return {
       message: "Email atau kata sandi salah. Periksa kembali lalu coba lagi.",
