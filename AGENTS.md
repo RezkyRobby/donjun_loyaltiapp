@@ -207,7 +207,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 
 ### Fase 5 — Admin, Hardening & Rilis (Hari 17–21)
 
-- [ ] 26. Dashboard analitik (definisi metrik PRD §5.3, zona WITA, filter outlet)
+- [x] 26. Dashboard analitik (definisi metrik PRD §5.3, zona WITA, filter outlet)
 - [ ] 27. Manajemen reward (CRUD + upload Cloudinary + kuota/limit/periode/S&K + nonaktifkan)
 - [ ] 28. Manajemen staf (buat, undang via email, reset kredensial, pindah outlet, nonaktifkan + cabut sesi)
 - [ ] 29. Manajemen pelanggan (cari, riwayat, `ADJUST` + catatan, suspend) + manajemen outlet

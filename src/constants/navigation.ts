@@ -25,3 +25,20 @@ export const CASHIER_NAV_ITEMS: CashierNavItem[] = [
   { href: "/kasir/validasi", label: "Validasi" },
   { href: "/kasir/riwayat", label: "Riwayat" },
 ];
+
+// Navigasi area admin (PRD Lampiran B). Register *product* (design.md §2):
+// padat dan netral; nav mendatar yang dapat digulir pada layar sempit. Urutan
+// mengikuti menu backoffice: analitik, katalog, lalu pengelolaan operasional.
+export type AdminNavItem = {
+  href: string;
+  label: string;
+};
+
+export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
+  { href: "/admin", label: "Analitik" },
+  { href: "/admin/reward", label: "Reward" },
+  { href: "/admin/staf", label: "Staf" },
+  { href: "/admin/pelanggan", label: "Pelanggan" },
+  { href: "/admin/outlet", label: "Outlet" },
+  { href: "/admin/audit", label: "Audit" },
+];

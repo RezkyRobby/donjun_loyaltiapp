@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   endOfDayWita,
+  endOfMonthWita,
   formatDateWita,
   formatDateTimeWita,
   formatTimeWita,
@@ -49,5 +50,17 @@ describe("batas waktu WITA", () => {
     expect(
       startOfMonthWita(new Date("2026-09-27T00:30:00.000Z")).toISOString(),
     ).toBe("2026-08-31T16:00:00.000Z");
+  });
+
+  it("mengembalikan akhir bulan WITA sebagai awal bulan berikutnya (UTC)", () => {
+    expect(
+      endOfMonthWita(new Date("2026-09-27T00:30:00.000Z")).toISOString(),
+    ).toBe("2026-09-30T16:00:00.000Z");
+  });
+
+  it("mengembalikan akhir Desember sebagai awal Januari tahun berikutnya", () => {
+    expect(
+      endOfMonthWita(new Date("2026-12-15T00:00:00.000Z")).toISOString(),
+    ).toBe("2026-12-31T16:00:00.000Z");
   });
 });

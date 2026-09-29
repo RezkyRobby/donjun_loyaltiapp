@@ -28,6 +28,25 @@ export async function requireCustomer() {
   return session;
 }
 
+// Guard area admin (PRD Lampiran B: /admin/* hanya untuk SUPER_ADMIN). Layout
+// admin memakainya agar halaman backoffice tidak pernah dirender untuk peran
+// lain, sejalan dengan penegakan RBAC di proxy (AGENTS.md aturan 6).
+export async function requireSuperAdmin() {
+  const session = await getSession();
+
+  if (!session) {
+    redirect(`/masuk?callbackURL=${encodeURIComponent("/admin")}`);
+  }
+
+  const role = isUserRole(session.user.role) ? session.user.role : null;
+
+  if (role !== UserRole.SUPER_ADMIN) {
+    redirect(homeForRole(role));
+  }
+
+  return session;
+}
+
 // Guard area kasir (PRD Lampiran B: /kasir/* untuk CASHIER dan SUPER_ADMIN).
 // Layout kasir memakainya agar halaman tidak pernah dirender tanpa sesi staf.
 export async function requireStaff() {

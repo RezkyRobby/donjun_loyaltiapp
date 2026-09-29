@@ -53,3 +53,12 @@ export function startOfMonthWita(date: Date = new Date()): Date {
 
   return fromZonedTime(new Date(year, month - 1, 1), WITA_TIME_ZONE);
 }
+
+// Batas akhir bulan WITA (eksklusif) sebagai instant UTC, yaitu awal bulan
+// berikutnya. Dipakai sebagai batas periode "bulan berjalan" pada laporan
+// analitik (PRD §5.3 fitur 1).
+export function endOfMonthWita(date: Date = new Date()): Date {
+  const [year, month] = witaDayKey(date).split("-").map(Number);
+
+  return fromZonedTime(new Date(year, month, 1), WITA_TIME_ZONE);
+}
