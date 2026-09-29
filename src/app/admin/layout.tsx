@@ -4,10 +4,11 @@ import { AdminHeader } from "@/components/admin/admin-header";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { requireSuperAdmin } from "@/server/auth/session";
 
-// Shell area admin (Task 26). Guard sisi server menjaga seluruh rute /admin/*
-// hanya untuk SUPER_ADMIN (PRD Lampiran B) sebagai lapisan kedua setelah proxy.
-// Kerangka mengikuti register *product* (design.md §2): padat, netral, tanpa
-// navigasi bawah — backoffice dipakai di layar lebar.
+// Shell area admin (Task 26, disesuaikan Task 27). Guard sisi server menjaga
+// seluruh rute /admin/* hanya untuk SUPER_ADMIN (PRD Lampiran B) sebagai lapisan
+// kedua setelah proxy. Tata letak mengikuti design.md §10: sidebar + area konten
+// pada 1024px ke atas, nav mendatar pada layar sempit; lebar konten maksimum
+// 1440px.
 export default async function AdminLayout({
   children,
 }: {
@@ -24,10 +25,15 @@ export default async function AdminLayout({
         Lewati ke konten
       </a>
       <AdminHeader name={session.user.name} />
-      <AdminNav />
-      <main id="konten" className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
-        {children}
-      </main>
+      <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col lg:flex-row">
+        <AdminNav />
+        <main
+          id="konten"
+          className="min-w-0 flex-1 px-4 py-6 lg:px-8"
+        >
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

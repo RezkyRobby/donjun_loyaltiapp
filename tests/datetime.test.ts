@@ -6,6 +6,8 @@ import {
   formatDateWita,
   formatDateTimeWita,
   formatTimeWita,
+  parseWitaDateEndInclusive,
+  parseWitaDateStart,
   startOfDayWita,
   startOfMonthWita,
   witaDayKey,
@@ -62,5 +64,25 @@ describe("batas waktu WITA", () => {
     expect(
       endOfMonthWita(new Date("2026-12-15T00:00:00.000Z")).toISOString(),
     ).toBe("2026-12-31T16:00:00.000Z");
+  });
+});
+
+describe("periode dari tanggal kalender WITA", () => {
+  it("mengubah tanggal kalender menjadi awal hari WITA (UTC)", () => {
+    expect(parseWitaDateStart("2026-09-27").toISOString()).toBe(
+      "2026-09-26T16:00:00.000Z",
+    );
+  });
+
+  it("mengubah tanggal kalender menjadi akhir hari WITA inklusif (UTC)", () => {
+    expect(parseWitaDateEndInclusive("2026-09-27").toISOString()).toBe(
+      "2026-09-27T15:59:59.999Z",
+    );
+  });
+
+  it("menangani pergantian bulan pada akhir hari inklusif", () => {
+    expect(parseWitaDateEndInclusive("2026-09-30").toISOString()).toBe(
+      "2026-09-30T15:59:59.999Z",
+    );
   });
 });

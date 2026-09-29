@@ -5,6 +5,9 @@ export const AUDIT_ACTION = {
   VOUCHER_CANCELED: "VOUCHER_CANCELED",
   VOUCHER_REVERTED: "VOUCHER_REVERTED",
   POINTS_ADJUSTED: "POINTS_ADJUSTED",
+  REWARD_CREATED: "REWARD_CREATED",
+  REWARD_UPDATED: "REWARD_UPDATED",
+  REWARD_DELETED: "REWARD_DELETED",
 } as const;
 
 export type AuditAction = (typeof AUDIT_ACTION)[keyof typeof AUDIT_ACTION];
@@ -14,6 +17,7 @@ export type AuditAction = (typeof AUDIT_ACTION)[keyof typeof AUDIT_ACTION];
 export const AUDIT_ENTITY = {
   VOUCHER: "Voucher",
   USER: "User",
+  REWARD: "RewardCatalog",
 } as const;
 
 export type AuditEntity = (typeof AUDIT_ENTITY)[keyof typeof AUDIT_ENTITY];

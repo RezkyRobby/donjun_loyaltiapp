@@ -3,7 +3,7 @@
 export function AdminHeader({ name }: { name: string }) {
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-card">
-      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-3 pt-[calc(0.75rem+env(safe-area-inset-top))]">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-3 pt-[calc(0.75rem+env(safe-area-inset-top))] lg:px-8">
         <div className="flex items-center gap-2">
           <span
             aria-hidden

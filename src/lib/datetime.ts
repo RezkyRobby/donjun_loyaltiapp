@@ -62,3 +62,22 @@ export function endOfMonthWita(date: Date = new Date()): Date {
 
   return fromZonedTime(new Date(year, month, 1), WITA_TIME_ZONE);
 }
+
+// Mengubah tanggal kalender WITA (format `yyyy-MM-dd`) menjadi instant UTC awal
+// hari. Dipakai menerjemahkan periode promo dari input tanggal admin.
+export function parseWitaDateStart(dateKey: string): Date {
+  const [year, month, day] = dateKey.split("-").map(Number);
+
+  return fromZonedTime(new Date(year, month - 1, day), WITA_TIME_ZONE);
+}
+
+// Akhir hari WITA inklusif (23:59:59.999) dari tanggal kalender WITA. `endAt`
+// promo bersifat inklusif di kedua ujung (PRD §5.3 fitur 2).
+export function parseWitaDateEndInclusive(dateKey: string): Date {
+  const [year, month, day] = dateKey.split("-").map(Number);
+
+  return new Date(
+    fromZonedTime(new Date(year, month - 1, day + 1), WITA_TIME_ZONE).getTime() -
+      1,
+  );
+}

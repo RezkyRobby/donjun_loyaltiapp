@@ -11,6 +11,13 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    // Unggah gambar promo via Server Action; naikkan batas dari 1 MB bawaan agar
+    // berkas hingga 5 MB dapat diterima sebelum divalidasi (Task 27).
+    serverActions: {
+      bodySizeLimit: "6mb",
+    },
+  },
 };
 
 export default nextConfig;
