@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { FormAlert } from "@/components/auth/form-alert";
+import { LogoutButton } from "@/components/auth/logout-button";
 import { PasswordForm } from "@/components/customer/password-form";
 import { ProfileForm } from "@/components/customer/profile-form";
+import { LegalDialog } from "@/components/legal/legal-dialog";
+import { PrivacyContent } from "@/components/legal/privacy-content";
+import { TermsContent } from "@/components/legal/terms-content";
 import { prisma } from "@/lib/prisma";
 import { requireCustomer } from "@/server/auth/session";
 
@@ -137,20 +140,38 @@ export default async function CustomerSettingsPage() {
           Untuk mengakses, mengoreksi, atau meminta penghapusan data pribadi
           Anda, hubungi admin Donjun Donat.
         </p>
-        <div className="flex flex-col gap-2">
-          <Link
-            href="/kebijakan-privasi"
-            className="text-sm font-medium text-brand-orange-deep underline"
-          >
-            Kebijakan Privasi
-          </Link>
-          <Link
-            href="/syarat-ketentuan"
-            className="text-sm font-medium text-brand-orange-deep underline"
-          >
-            Syarat dan Ketentuan
-          </Link>
+        <div className="flex flex-col gap-2 text-sm">
+          <p className="text-brand-brown-muted">
+            <LegalDialog label="Kebijakan Privasi" title="Kebijakan Privasi">
+              <PrivacyContent crossLink={false} />
+            </LegalDialog>
+          </p>
+          <p className="text-brand-brown-muted">
+            <LegalDialog
+              label="Syarat dan Ketentuan"
+              title="Syarat dan Ketentuan"
+            >
+              <TermsContent crossLink={false} />
+            </LegalDialog>
+          </p>
         </div>
+      </section>
+
+      <section
+        aria-labelledby="keluar-judul"
+        className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4 shadow-card"
+      >
+        <h2
+          id="keluar-judul"
+          className="font-display text-lg font-semibold text-brand-brown-dark"
+        >
+          Keluar
+        </h2>
+        <p className="text-sm text-brand-brown-muted">
+          Anda akan keluar dari akun ini dan kembali ke halaman masuk. Voucher
+          yang sudah Anda miliki tetap tersimpan di akun.
+        </p>
+        <LogoutButton />
       </section>
     </section>
   );

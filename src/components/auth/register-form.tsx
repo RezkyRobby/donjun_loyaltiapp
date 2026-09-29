@@ -7,6 +7,9 @@ import { FormAlert } from "@/components/auth/form-alert";
 import { GoogleAuthButton } from "@/components/auth/google-auth-button";
 import { TextField } from "@/components/auth/text-field";
 import { UsernameField } from "@/components/auth/username-field";
+import { LegalDialog } from "@/components/legal/legal-dialog";
+import { PrivacyContent } from "@/components/legal/privacy-content";
+import { TermsContent } from "@/components/legal/terms-content";
 import { Button } from "@/components/ui/button";
 import { registrationFormSchema, toFieldErrors } from "@/lib/registration";
 import { registerCustomer } from "@/server/auth/register";
@@ -169,19 +172,16 @@ export function RegisterForm() {
           />
           <span>
             Saya menyetujui{" "}
-            <Link
-              href="/kebijakan-privasi"
-              className="font-medium text-brand-orange-deep underline"
-            >
-              Kebijakan Privasi
-            </Link>{" "}
+            <LegalDialog label="Kebijakan Privasi" title="Kebijakan Privasi">
+              <PrivacyContent crossLink={false} />
+            </LegalDialog>{" "}
             dan{" "}
-            <Link
-              href="/syarat-ketentuan"
-              className="font-medium text-brand-orange-deep underline"
+            <LegalDialog
+              label="Syarat dan Ketentuan"
+              title="Syarat dan Ketentuan"
             >
-              Syarat dan Ketentuan
-            </Link>{" "}
+              <TermsContent crossLink={false} />
+            </LegalDialog>{" "}
             program loyalitas Donjun Donat.
           </span>
         </label>
