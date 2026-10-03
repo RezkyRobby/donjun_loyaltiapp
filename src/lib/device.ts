@@ -46,6 +46,23 @@ export function isAndroid(userAgent: string): boolean {
   return /Android/i.test(userAgent);
 }
 
+export type CameraOption = {
+  id: string;
+  label: string;
+};
+
+// Label kamera belakang berbeda antar peramban/bahasa ("Back Camera",
+// "camera2 1, facing back", "Kamera Belakang", dsb.).
+const REAR_CAMERA_PATTERN =
+  /back|rear|environment|belakang|trasera|arrière|rück|后置/i;
+
+// Memilih kamera belakang dari daftar perangkat berdasarkan label. Mengembalikan
+// -1 bila label tidak informatif, sehingga pemanggil dapat memakai petunjuk
+// facingMode sebagai gantinya.
+export function findRearCameraIndex(cameras: CameraOption[]): number {
+  return cameras.findIndex((camera) => REAR_CAMERA_PATTERN.test(camera.label));
+}
+
 // Android dapat membuka tautan langsung di Chrome lewat skema intent://.
 // iOS tidak menyediakan padanan serupa; pengguna diarahkan secara manual.
 export function buildOpenInBrowserUrl(

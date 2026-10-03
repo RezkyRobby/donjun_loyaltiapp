@@ -1,11 +1,18 @@
 "use client";
 
 import type { Html5Qrcode } from "html5-qrcode";
-import { CameraOff, RotateCcw, Zap, ZapOff } from "lucide-react";
+import {
+  CameraOff,
+  RotateCcw,
+  SwitchCamera,
+  Zap,
+  ZapOff,
+} from "lucide-react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 import { useInAppBrowser } from "@/components/shared/use-in-app-browser";
 import { Button } from "@/components/ui/button";
+import { findRearCameraIndex, type CameraOption } from "@/lib/device";
 import { cn } from "@/lib/utils";
 
 type ScanMode = "qr" | "barcode";
@@ -93,6 +100,11 @@ export function CodeScanner({
   const [cameraError, setCameraError] = useState<CameraErrorReason | null>(
     null,
   );
+  // `cameraId` null berarti pemilihan otomatis (utamakan kamera belakang).
+  // Nilai ini diisi saat kasir menekan "Ganti kamera".
+  const [cameraId, setCameraId] = useState<string | null>(null);
+  const [cameras, setCameras] = useState<CameraOption[]>([]);
+  const [activeCameraId, setActiveCameraId] = useState<string | null>(null);
   const [torchSupported, setTorchSupported] = useState(false);
   const [torchOn, setTorchOn] = useState(false);
   const { label: inAppBrowser } = useInAppBrowser();
@@ -111,6 +123,8 @@ export function CodeScanner({
 
     async function start() {
       setCameraError(null);
+      setTorchOn(false);
+      setTorchSupported(false);
 
       // Konteks aman (HTTPS) dan dukungan getUserMedia diperiksa lebih dahulu
       // agar pesan yang tampil sesuai penyebabnya.
@@ -130,6 +144,28 @@ export function CodeScanner({
         );
         if (cancelled) return;
 
+        // `facingMode: "environment"` hanya petunjuk dan dapat diabaikan
+        // sebagian peramban, sehingga kamera depan bisa terbuka. Bila label
+        // perangkat tersedia, pilih kamera belakang lewat deviceId secara
+        // eksplisit; bila tidak, andalkan petunjuk facingMode.
+        let source: string | MediaTrackConstraints = cameraId ?? {
+          facingMode: "environment",
+        };
+
+        try {
+          const devices = await Html5Qrcode.getCameras();
+          if (cancelled) return;
+          setCameras(devices);
+
+          if (!cameraId) {
+            const rearIndex = findRearCameraIndex(devices);
+            if (rearIndex !== -1) source = devices[rearIndex].id;
+          }
+        } catch {
+          // Enumerasi gagal (izin belum ada atau label kosong): gunakan
+          // petunjuk facingMode.
+        }
+
         scanner = new Html5Qrcode(containerId, {
           verbose: false,
           formatsToSupport:
@@ -140,7 +176,7 @@ export function CodeScanner({
         scannerRef.current = scanner;
 
         await scanner.start(
-          { facingMode: "environment" },
+          source,
           {
             fps: 10,
             qrbox: (viewfinderWidth, viewfinderHeight) => {
@@ -177,6 +213,8 @@ export function CodeScanner({
 
         if (cancelled) return;
 
+        setActiveCameraId(typeof source === "string" ? source : null);
+
         const capabilities = scanner.getRunningTrackCapabilities() as
           MediaTrackCapabilities & { torch?: boolean };
         setTorchSupported(capabilities.torch === true);
@@ -201,7 +239,7 @@ export function CodeScanner({
           });
       }
     };
-  }, [attempt, containerId, scanMode]);
+  }, [attempt, cameraId, containerId, scanMode]);
 
   const toggleTorch = useCallback(async () => {
     const scanner = scannerRef.current;
@@ -219,6 +257,18 @@ export function CodeScanner({
       setTorchSupported(false);
     }
   }, [torchOn]);
+
+  // Menggilir kamera yang tersedia agar kasir dapat memilih manual bila
+  // perangkat membuka kamera yang salah.
+  const switchCamera = useCallback(() => {
+    if (cameras.length < 2) return;
+
+    const currentIndex = cameras.findIndex((c) => c.id === activeCameraId);
+    const nextIndex =
+      currentIndex === -1 ? 0 : (currentIndex + 1) % cameras.length;
+
+    setCameraId(cameras[nextIndex].id);
+  }, [activeCameraId, cameras]);
 
   if (cameraError) {
     const text = CAMERA_ERROR_TEXT[cameraError];
@@ -264,6 +314,17 @@ export function CodeScanner({
         className="[&_video]:block [&_video]:w-full"
         aria-label={ARIA_LABEL[scanMode]}
       />
+      {cameras.length > 1 ? (
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={switchCamera}
+          className="absolute bottom-3 left-3 h-11"
+        >
+          <SwitchCamera aria-hidden className="size-5" />
+          Ganti kamera
+        </Button>
+      ) : null}
       {torchSupported ? (
         <Button
           type="button"

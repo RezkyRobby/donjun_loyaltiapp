@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildOpenInBrowserUrl,
   detectInAppBrowser,
+  findRearCameraIndex,
   isAndroid,
 } from "@/lib/device";
 
@@ -57,5 +58,41 @@ describe("buildOpenInBrowserUrl", () => {
       buildOpenInBrowserUrl("https://loyalty.donjundonat.com", SAFARI_IOS),
     ).toBeNull();
     expect(buildOpenInBrowserUrl("bukan-url", WHATSAPP_ANDROID)).toBeNull();
+  });
+});
+
+describe("findRearCameraIndex", () => {
+  it("memilih kamera belakang dari label iOS", () => {
+    expect(
+      findRearCameraIndex([
+        { id: "1", label: "Front Camera" },
+        { id: "2", label: "Back Camera" },
+      ]),
+    ).toBe(1);
+  });
+
+  it("mengenali label Android dan bahasa Indonesia", () => {
+    expect(
+      findRearCameraIndex([
+        { id: "1", label: "camera2 0, facing front" },
+        { id: "2", label: "camera2 1, facing back" },
+      ]),
+    ).toBe(1);
+    expect(
+      findRearCameraIndex([
+        { id: "1", label: "Kamera Depan" },
+        { id: "2", label: "Kamera Belakang" },
+      ]),
+    ).toBe(1);
+  });
+
+  it("mengembalikan -1 saat label tidak informatif", () => {
+    expect(
+      findRearCameraIndex([
+        { id: "1", label: "" },
+        { id: "2", label: "" },
+      ]),
+    ).toBe(-1);
+    expect(findRearCameraIndex([])).toBe(-1);
   });
 });
