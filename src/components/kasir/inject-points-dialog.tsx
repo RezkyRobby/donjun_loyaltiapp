@@ -107,7 +107,7 @@ export function InjectPointsDialog({
         if (isPending) event.preventDefault();
       }}
       aria-label={`Konfirmasi tambah poin untuk ${customer.name}`}
-      className="w-[min(24rem,calc(100%-2rem))] rounded-card border border-border bg-card p-0 text-brand-brown-dark backdrop:bg-brand-brown-dark/60"
+      className="m-auto w-[min(24rem,calc(100%-2rem))] rounded-card border border-border bg-card p-0 text-brand-brown-dark backdrop:bg-brand-brown-dark/60"
     >
       <div className="flex flex-col gap-4 p-6">
         <div className="flex flex-col gap-1 text-center">
