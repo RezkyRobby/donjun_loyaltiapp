@@ -174,12 +174,14 @@ export function VoucherCard({ voucher }: { voucher: CustomerVoucher }) {
               aria-label={`Barcode voucher ${voucher.voucherCode}`}
               className="w-full max-w-md rounded-lg bg-brand-white"
             >
-              <Barcode
-                value={voucher.voucherCode}
-                {...BARCODE_OPTIONS}
-                height={140}
-                className="h-auto w-full"
-              />
+              {isFullscreen ? (
+                <Barcode
+                  value={voucher.voucherCode}
+                  {...BARCODE_OPTIONS}
+                  height={140}
+                  className="h-auto w-full"
+                />
+              ) : null}
             </div>
             <p className="text-center text-xl font-bold uppercase tracking-[0.08em] tabular-nums">
               {voucher.voucherCode}

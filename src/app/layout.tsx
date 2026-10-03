@@ -13,14 +13,47 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
 });
 
+// Basis URL metadata untuk kanonik dan Open Graph (PRD Lampiran C).
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+const siteDescription =
+  "Platform loyalitas pelanggan Donjun Donat: kumpulkan poin di setiap transaksi, tukarkan dengan voucher promo, dan kelola akun Anda secara mandiri.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Donjun Donat Loyalty",
     template: "%s · Donjun Donat Loyalty",
   },
-  description:
-    "Platform loyalitas pelanggan Donjun Donat: kumpulkan poin di setiap transaksi, tukarkan dengan voucher promo, dan kelola akun Anda secara mandiri.",
+  description: siteDescription,
+  applicationName: "Donjun Donat Loyalty",
   manifest: "/manifest.webmanifest",
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    siteName: "Donjun Donat Loyalty",
+    title: "Donjun Donat Loyalty",
+    description: siteDescription,
+    url: "/",
+    images: [
+      {
+        url: "/icons/icon-512.png",
+        width: 512,
+        height: 512,
+        alt: "Logo Donjun Donat Loyalty",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Donjun Donat Loyalty",
+    description: siteDescription,
+    images: ["/icons/icon-512.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   appleWebApp: {
     capable: true,
     title: "Donjun Donat",

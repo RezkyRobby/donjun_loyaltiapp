@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { CustomerBottomNav } from "@/components/customer/customer-bottom-nav";
 import { CustomerHeader } from "@/components/customer/customer-header";
 import { ConnectionStatus } from "@/components/shared/connection-status";
+import { InAppBrowserNotice } from "@/components/shared/in-app-browser-notice";
 import { PwaRegistration } from "@/components/shared/pwa-registration";
 import { requireCustomer } from "@/server/auth/session";
 
@@ -30,6 +31,7 @@ export default async function CustomerLayout({
         id="konten"
         className="mx-auto w-full max-w-md flex-1 px-4 pb-24 pt-4"
       >
+        <InAppBrowserNotice />
         {children}
       </main>
       <CustomerBottomNav />

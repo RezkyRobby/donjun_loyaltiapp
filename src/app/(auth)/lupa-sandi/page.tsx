@@ -16,7 +16,7 @@ export default function LupaSandiPage() {
   return (
     <Card className="shadow-card">
       <CardHeader>
-        <CardTitle className="font-display text-xl">
+        <CardTitle as="h1" className="font-display text-xl">
           Atur ulang kata sandi
         </CardTitle>
         <CardDescription>

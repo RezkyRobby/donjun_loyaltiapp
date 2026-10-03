@@ -39,7 +39,7 @@ export default async function VerifikasiEmailPage({
   return (
     <Card className="shadow-card">
       <CardHeader>
-        <CardTitle className="font-display text-xl">
+        <CardTitle as="h1" className="font-display text-xl">
           Verifikasi email Anda
         </CardTitle>
         <CardDescription>

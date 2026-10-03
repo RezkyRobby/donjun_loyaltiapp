@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   title: "Kumpulkan poin, tukarkan dengan voucher donat",
   description:
     "Donjun Donat Loyalty: kumpulkan 1 poin dari setiap transaksi, lalu tukarkan dengan voucher promo. Tanpa unduh aplikasi, berlaku di semua outlet Donjun Donat.",
+  alternates: { canonical: "/" },
 };
 
 // Pratinjau voucher pada hero. Kode contoh memakai alfabet non-ambigu yang sama
@@ -245,7 +246,7 @@ export default function LandingPage() {
           </svg>
 
           <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 py-12 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:py-20">
-            <div className="flex flex-col items-start gap-6 motion-safe:animate-in motion-safe:duration-500 motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2">
+            <div className="flex flex-col items-start gap-6">
               <span className="inline-flex items-center gap-2 rounded-badge border border-warm-border bg-brand-white px-3 py-1.5 text-[0.8125rem] font-medium text-brand-orange-deep shadow-card">
                 <BadgeCheck aria-hidden className="size-4" />
                 Program loyalitas resmi Donjun Donat
@@ -255,7 +256,7 @@ export default function LandingPage() {
                 Kumpulkan poin, tukarkan dengan voucher donat
               </h1>
 
-              <p className="max-w-[60ch] text-base/relaxed text-brand-brown-muted sm:text-lg/relaxed">
+              <p className="max-w-[60ch] text-base/relaxed text-brand-brown-dark sm:text-lg/relaxed">
                 Setiap transaksi di Donjun Donat bernilai 1 poin. Kumpulkan
                 poinnya, lalu tukarkan dengan voucher promo favorit Anda. Tanpa
                 unduh aplikasi, cukup dari peramban ponsel.
@@ -356,24 +357,21 @@ export default function LandingPage() {
                   const Icon = benefit.icon;
 
                   return (
-                    <div
-                      key={benefit.title}
-                      className="flex gap-4 py-5 first:pt-0 last:pb-0"
-                    >
-                      <span
-                        aria-hidden
-                        className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-yellow text-brand-orange-deep"
-                      >
-                        <Icon className="size-5" />
-                      </span>
-                      <div>
-                        <dt className="font-display text-base font-semibold text-brand-brown-dark">
+                    <div key={benefit.title} className="py-5 first:pt-0 last:pb-0">
+                      <dt className="flex items-start gap-4">
+                        <span
+                          aria-hidden
+                          className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-yellow text-brand-orange-deep"
+                        >
+                          <Icon className="size-5" />
+                        </span>
+                        <span className="font-display text-base font-semibold text-brand-brown-dark">
                           {benefit.title}
-                        </dt>
-                        <dd className="mt-1 text-sm text-brand-brown-muted">
-                          {benefit.description}
-                        </dd>
-                      </div>
+                        </span>
+                      </dt>
+                      <dd className="mt-1 pl-14 text-sm text-brand-brown-muted">
+                        {benefit.description}
+                      </dd>
                     </div>
                   );
                 })}

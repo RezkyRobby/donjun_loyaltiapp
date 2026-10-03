@@ -61,6 +61,7 @@ export default async function CustomerVoucherPage({
         </div>
       ) : (
         <>
+          <h2 className="sr-only">Daftar voucher</h2>
           <ul className="flex flex-col gap-4">
             {vouchers.map((voucher) => (
               <li key={voucher.id}>

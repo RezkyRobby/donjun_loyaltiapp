@@ -23,7 +23,9 @@ export default async function MasukPage({
   return (
     <Card className="shadow-card">
       <CardHeader>
-        <CardTitle className="font-display text-xl">Masuk ke akun Anda</CardTitle>
+        <CardTitle as="h1" className="font-display text-xl">
+          Masuk ke akun Anda
+        </CardTitle>
         <CardDescription>
           Masuk untuk melihat saldo poin, promo, dan voucher Anda.
         </CardDescription>

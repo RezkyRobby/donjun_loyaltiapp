@@ -37,7 +37,7 @@ export default async function LengkapiUsernamePage() {
   return (
     <Card className="shadow-card">
       <CardHeader>
-        <CardTitle className="font-display text-xl">
+        <CardTitle as="h1" className="font-display text-xl">
           Lengkapi username Anda
         </CardTitle>
         <CardDescription>

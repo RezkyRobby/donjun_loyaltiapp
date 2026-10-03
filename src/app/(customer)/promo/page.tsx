@@ -43,13 +43,16 @@ export default async function CustomerPromoPage() {
           </p>
         </div>
       ) : (
-        <ul className="flex flex-col gap-4">
-          {rewards.map((reward) => (
-            <li key={reward.id}>
-              <RewardCard reward={reward} />
-            </li>
-          ))}
-        </ul>
+        <>
+          <h2 className="sr-only">Daftar promo</h2>
+          <ul className="flex flex-col gap-4">
+            {rewards.map((reward) => (
+              <li key={reward.id}>
+                <RewardCard reward={reward} />
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </section>
   );

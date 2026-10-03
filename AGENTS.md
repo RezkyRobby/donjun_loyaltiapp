@@ -213,7 +213,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 29. Manajemen pelanggan (cari, riwayat, `ADJUST` + catatan, suspend) + manajemen outlet
 - [x] 30. Audit log: filter, paginasi, ekspor CSV
 - [x] 31. E2E Playwright alur kritis (registrasi → injeksi → tukar → validasi → voucher terpakai) + test RBAC
-- [ ] 32. Audit Lighthouse mobile ≥ 90 + uji kamera Android/iOS + security hardening
+- [x] 32. Audit Lighthouse mobile ≥ 90 + uji kamera Android/iOS + security hardening
 - [ ] 33. Deploy Vercel + verifikasi alur produksi end-to-end
 
 ## Perintah Umum

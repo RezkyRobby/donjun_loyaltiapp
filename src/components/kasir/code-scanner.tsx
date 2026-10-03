@@ -4,6 +4,7 @@ import type { Html5Qrcode } from "html5-qrcode";
 import { CameraOff, RotateCcw, Zap, ZapOff } from "lucide-react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
+import { useInAppBrowser } from "@/components/shared/use-in-app-browser";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -18,10 +19,61 @@ type CodeScannerProps = {
   scanMode?: ScanMode;
 };
 
+type CameraErrorReason =
+  | "insecure"
+  | "unsupported"
+  | "permission"
+  | "not-found"
+  | "unknown";
+
 const ARIA_LABEL: Record<ScanMode, string> = {
   qr: "Area pemindaian QR",
   barcode: "Area pemindaian barcode",
 };
+
+// Pesan kegagalan kamera dibedakan agar kasir tahu langkah tepatnya
+// (PRD §9 Kompatibilitas Perangkat: kamera hanya aktif pada konteks aman).
+const CAMERA_ERROR_TEXT: Record<
+  CameraErrorReason,
+  { title: string; body: string }
+> = {
+  insecure: {
+    title: "Kamera memerlukan koneksi aman",
+    body: "Akses kamera hanya tersedia melalui HTTPS. Pastikan alamat situs diawali https:// lalu coba lagi.",
+  },
+  unsupported: {
+    title: "Kamera tidak didukung",
+    body: "Peramban ini tidak menyediakan akses kamera. Gunakan input manual, atau buka halaman ini di Chrome (Android) atau Safari (iOS).",
+  },
+  permission: {
+    title: "Izin kamera ditolak",
+    body: "Izinkan akses kamera pada pengaturan peramban, lalu coba lagi.",
+  },
+  "not-found": {
+    title: "Kamera tidak ditemukan",
+    body: "Perangkat ini tidak memiliki kamera yang dapat dipakai. Gunakan input manual.",
+  },
+  unknown: {
+    title: "Kamera tidak dapat diakses",
+    body: "Izinkan akses kamera pada browser, atau buka halaman ini di browser utama (bukan di dalam aplikasi lain), lalu coba lagi.",
+  },
+};
+
+// html5-qrcode dapat melempar DOMException maupun string; klasifikasikan
+// berdasarkan nama galat agar arahan ke pengguna tetap spesifik.
+function classifyCameraError(error: unknown): CameraErrorReason {
+  const name =
+    error instanceof Error
+      ? error.name
+      : typeof error === "string"
+        ? error
+        : "";
+
+  if (/NotAllowed|Permission|Security/i.test(name)) return "permission";
+  if (/NotFound|Overconstrained|DevicesNotFound/i.test(name)) return "not-found";
+
+  return "unknown";
+}
 
 // Viewport pemindaian kamera (PRD §5.2 fitur 1 & 4, design.md §9.3). Kamera
 // berjalan penuh lebar, senter tersedia bila perangkat mendukung, dan kegagalan
@@ -38,9 +90,12 @@ export function CodeScanner({
   const pausedRef = useRef(paused);
   const lastDecodeRef = useRef<{ text: string; at: number } | null>(null);
   const [attempt, setAttempt] = useState(0);
-  const [cameraError, setCameraError] = useState(false);
+  const [cameraError, setCameraError] = useState<CameraErrorReason | null>(
+    null,
+  );
   const [torchSupported, setTorchSupported] = useState(false);
   const [torchOn, setTorchOn] = useState(false);
+  const { label: inAppBrowser } = useInAppBrowser();
 
   useEffect(() => {
     onDecodeRef.current = onDecode;
@@ -55,7 +110,19 @@ export function CodeScanner({
     let scanner: Html5Qrcode | null = null;
 
     async function start() {
-      setCameraError(false);
+      setCameraError(null);
+
+      // Konteks aman (HTTPS) dan dukungan getUserMedia diperiksa lebih dahulu
+      // agar pesan yang tampil sesuai penyebabnya.
+      if (!window.isSecureContext) {
+        setCameraError("insecure");
+        return;
+      }
+
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setCameraError("unsupported");
+        return;
+      }
 
       try {
         const { Html5Qrcode, Html5QrcodeSupportedFormats } = await import(
@@ -113,8 +180,8 @@ export function CodeScanner({
         const capabilities = scanner.getRunningTrackCapabilities() as
           MediaTrackCapabilities & { torch?: boolean };
         setTorchSupported(capabilities.torch === true);
-      } catch {
-        if (!cancelled) setCameraError(true);
+      } catch (error) {
+        if (!cancelled) setCameraError(classifyCameraError(error));
       }
     }
 
@@ -154,6 +221,8 @@ export function CodeScanner({
   }, [torchOn]);
 
   if (cameraError) {
+    const text = CAMERA_ERROR_TEXT[cameraError];
+
     return (
       <div
         role="alert"
@@ -166,12 +235,15 @@ export function CodeScanner({
           <CameraOff className="size-6" />
         </span>
         <h2 className="font-display text-lg font-semibold text-brand-brown-dark">
-          Kamera tidak dapat diakses
+          {text.title}
         </h2>
-        <p className="text-sm text-brand-brown-muted">
-          Izinkan akses kamera pada browser, atau buka halaman ini di browser
-          utama (bukan di dalam aplikasi lain), lalu coba lagi.
-        </p>
+        <p className="text-sm text-brand-brown-muted">{text.body}</p>
+        {inAppBrowser ? (
+          <p className="text-sm text-brand-brown-muted">
+            Halaman ini sedang dibuka di dalam {inAppBrowser}. Ketuk menu
+            peramban, lalu pilih <strong>Buka di Browser</strong>.
+          </p>
+        ) : null}
         <Button
           type="button"
           variant="outline"

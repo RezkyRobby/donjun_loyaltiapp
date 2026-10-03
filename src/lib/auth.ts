@@ -8,6 +8,10 @@ import { isReservedUsername } from "@/constants/reserved-usernames";
 import { UserRole } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import {
+  CUSTOMER_SESSION_REFRESH_SECONDS,
+  CUSTOMER_SESSION_SECONDS,
+} from "@/lib/session-policy";
+import {
   EmailQuotaError,
   sendResetPasswordEmail,
   sendVerificationEmail,
@@ -79,6 +83,12 @@ export const auth = betterAuth({
     sendVerificationEmail: async ({ user, url }) => {
       await deliverQuietly(() => sendVerificationEmail({ user, url }));
     },
+  },
+  // Sesi pelanggan berlaku 30 hari dengan penyegaran geser (PRD §9). Batas
+  // khusus staf (12 jam + idle timeout kasir) ditegakkan di proxy.
+  session: {
+    expiresIn: CUSTOMER_SESSION_SECONDS,
+    updateAge: CUSTOMER_SESSION_REFRESH_SECONDS,
   },
   user: {
     additionalFields: {
@@ -162,6 +172,13 @@ export const auth = betterAuth({
     database: {
       // ID dibuat database lewat @default(cuid()) agar sesuai PRD §7.1.
       generateId: false,
+    },
+    // Cookie sesi eksplisit: httpOnly, sameSite lax, dan secure saat HTTPS
+    // (PRD §9 Manajemen Sesi).
+    useSecureCookies: process.env.NODE_ENV === "production",
+    defaultCookieAttributes: {
+      httpOnly: true,
+      sameSite: "lax",
     },
   },
 });

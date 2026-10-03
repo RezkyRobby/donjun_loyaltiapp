@@ -106,16 +106,18 @@ export function AccountQrCard({ username }: { username: string }) {
             </Button>
           </div>
           <div className="flex flex-1 flex-col items-center justify-center gap-6 px-6 pb-[calc(2rem+env(safe-area-inset-bottom))]">
-            <QRCodeSVG
-              value={payload}
-              size={QR_SIZE_LARGE}
-              level="M"
-              marginSize={4}
-              bgColor="#ffffff"
-              fgColor="#000000"
-              title={`QR Code akun @${username}`}
-              className="h-auto w-full max-w-80"
-            />
+            {isEnlarged ? (
+              <QRCodeSVG
+                value={payload}
+                size={QR_SIZE_LARGE}
+                level="M"
+                marginSize={4}
+                bgColor="#ffffff"
+                fgColor="#000000"
+                title={`QR Code akun @${username}`}
+                className="h-auto w-full max-w-80"
+              />
+            ) : null}
             <div className="flex flex-col gap-1 text-center">
               <p className="font-display text-xl font-bold">@{username}</p>
               <p className="text-sm text-brand-brown-muted">

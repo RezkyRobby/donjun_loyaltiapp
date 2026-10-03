@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { KasirHeader } from "@/components/kasir/kasir-header";
 import { KasirNav } from "@/components/kasir/kasir-nav";
 import { ConnectionStatus } from "@/components/shared/connection-status";
+import { InAppBrowserNotice } from "@/components/shared/in-app-browser-notice";
 import { UserRole } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { isUserRole } from "@/lib/rbac";
@@ -60,6 +61,7 @@ export default async function KasirLayout({
             </span>
           </p>
         ) : null}
+        <InAppBrowserNotice />
         {children}
       </main>
       <KasirNav />

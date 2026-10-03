@@ -6,17 +6,19 @@ import type { ReactNode } from "react";
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-6 bg-background px-4 py-10">
-      <Link href="/" className="flex items-center gap-2">
-        <span
-          aria-hidden
-          className="flex size-10 items-center justify-center rounded-full bg-brand-orange font-display text-xl font-bold text-brand-brown-dark"
-        >
-          D
-        </span>
-        <span className="font-display text-xl font-bold text-brand-brown-dark">
-          Donjun Donat
-        </span>
-      </Link>
+      <header>
+        <Link href="/" className="flex items-center gap-2">
+          <span
+            aria-hidden
+            className="flex size-10 items-center justify-center rounded-full bg-brand-orange font-display text-xl font-bold text-brand-brown-dark"
+          >
+            D
+          </span>
+          <span className="font-display text-xl font-bold text-brand-brown-dark">
+            Donjun Donat
+          </span>
+        </Link>
+      </header>
       <main className="w-full max-w-md">{children}</main>
     </div>
   );

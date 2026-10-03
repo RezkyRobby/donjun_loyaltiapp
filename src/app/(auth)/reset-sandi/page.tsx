@@ -29,7 +29,7 @@ export default async function ResetSandiPage({
     return (
       <Card className="shadow-card">
         <CardHeader>
-          <CardTitle className="font-display text-xl">
+          <CardTitle as="h1" className="font-display text-xl">
             Tautan tidak valid
           </CardTitle>
           <CardDescription>
@@ -56,7 +56,7 @@ export default async function ResetSandiPage({
   return (
     <Card className="shadow-card">
       <CardHeader>
-        <CardTitle className="font-display text-xl">
+        <CardTitle as="h1" className="font-display text-xl">
           Buat kata sandi baru
         </CardTitle>
         <CardDescription>
