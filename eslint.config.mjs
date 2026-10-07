@@ -14,6 +14,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Hasil generate Prisma Client:
     "src/generated/**",
+    // Luaran uji E2E (laporan Playwright & hasil test) tidak boleh di-lint:
+    "playwright-report/**",
+    "test-results/**",
     // Aset statis (service worker, ikon) disajikan apa adanya, bukan modul aplikasi:
     "public/**",
   ]),

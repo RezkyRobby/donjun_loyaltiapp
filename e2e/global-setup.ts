@@ -21,7 +21,7 @@ export default async function globalSetup(): Promise<void> {
     return;
   }
 
-  execSync("pnpm exec prisma db push --skip-generate --accept-data-loss", {
+  execSync("pnpm exec prisma db push --accept-data-loss", {
     stdio: "inherit",
     env: { ...process.env, DATABASE_URL: databaseUrl },
   });

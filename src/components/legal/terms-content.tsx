@@ -26,7 +26,7 @@ export function TermsContent({ crossLink = true }: { crossLink?: boolean }) {
           <li>Satu alamat email hanya untuk satu akun.</li>
           <li>
             Username dan email bersifat permanen dan tidak dapat diubah. Hanya
-            nama, nomor telepon, dan kata sandi yang dapat diubah.
+            nama, nomor telepon, domisili, dan kata sandi yang dapat diubah.
           </li>
           <li>
             Akun kasir dibuat oleh admin melalui backoffice, bukan melalui

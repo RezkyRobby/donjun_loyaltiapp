@@ -10,19 +10,22 @@ import { toFieldErrors } from "@/lib/registration";
 import { profileUpdateSchema } from "@/lib/settings";
 import { updateCustomerProfile } from "@/server/customer/settings";
 
-// Form perubahan nama dan nomor telepon (PRD §5.1 fitur 7). Nomor telepon
-// opsional dan dapat dikosongkan. Setelah berhasil, halaman disegarkan agar
-// sapaan pada header ikut terbarui.
+// Form perubahan nama, nomor telepon, dan domisili (PRD §5.1 fitur 7). Nomor
+// telepon opsional dan dapat dikosongkan. Setelah berhasil, halaman disegarkan
+// agar sapaan pada header ikut terbarui.
 export function ProfileForm({
   initialName,
   initialPhone,
+  initialDomisili,
 }: {
   initialName: string;
   initialPhone: string;
+  initialDomisili: string;
 }) {
   const router = useRouter();
   const [name, setName] = useState(initialName);
   const [phone, setPhone] = useState(initialPhone);
+  const [domisili, setDomisili] = useState(initialDomisili);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState<{
     tone: "success" | "error";
@@ -34,7 +37,7 @@ export function ProfileForm({
     event.preventDefault();
     setMessage(null);
 
-    const parsed = profileUpdateSchema.safeParse({ name, phone });
+    const parsed = profileUpdateSchema.safeParse({ name, phone, domisili });
 
     if (!parsed.success) {
       setFieldErrors(toFieldErrors(parsed.error));
@@ -47,6 +50,7 @@ export function ProfileForm({
     const result = await updateCustomerProfile({
       name: parsed.data.name,
       phone: parsed.data.phone,
+      domisili: parsed.data.domisili,
     });
 
     setIsSubmitting(false);
@@ -87,6 +91,15 @@ export function ProfileForm({
         required={false}
         hint="Dipakai admin untuk membantu menemukan akun Anda."
         error={fieldErrors.phone}
+      />
+      <TextField
+        id="domisili"
+        label="Domisili"
+        value={domisili}
+        onValueChange={setDomisili}
+        autoComplete="address-level2"
+        hint="Contoh: Makassar, Sulawesi Selatan."
+        error={fieldErrors.domisili}
       />
 
       <Button type="submit" disabled={isSubmitting} className="h-12 w-full">

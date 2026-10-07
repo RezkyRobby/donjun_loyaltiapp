@@ -18,6 +18,7 @@ const INITIAL_VALUES = {
   name: "",
   email: "",
   phone: "",
+  domisili: "",
   username: "",
   password: "",
   confirmPassword: "",
@@ -57,6 +58,7 @@ export function RegisterForm() {
       email: parsed.data.email,
       username: parsed.data.username,
       phone: parsed.data.phone,
+      domisili: parsed.data.domisili,
       password: parsed.data.password,
       consent: parsed.data.consent,
     });
@@ -127,6 +129,15 @@ export function RegisterForm() {
         required={false}
         hint="Dipakai admin untuk membantu menemukan akun Anda."
         error={fieldErrors.phone}
+      />
+      <TextField
+        id="domisili"
+        label="Domisili"
+        value={values.domisili}
+        onValueChange={(value) => update("domisili", value)}
+        autoComplete="address-level2"
+        hint="Contoh: Makassar, Sulawesi Selatan."
+        error={fieldErrors.domisili}
       />
       <UsernameField
         id="username"

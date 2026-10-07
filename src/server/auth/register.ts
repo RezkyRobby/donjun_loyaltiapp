@@ -69,7 +69,7 @@ export async function registerCustomer(
     };
   }
 
-  const { name, email, username, password } = parsed.data;
+  const { name, email, username, password, domisili } = parsed.data;
   const phone = parsed.data.phone
     ? normalizePhone(parsed.data.phone)
     : undefined;
@@ -114,6 +114,7 @@ export async function registerCustomer(
         email,
         password,
         username,
+        domisili,
         ...(phone ? { phone } : {}),
         // Setelah verifikasi berhasil, pengguna diarahkan ke halaman verifikasi
         // yang otomatis memindahkannya ke dashboard (proxy).

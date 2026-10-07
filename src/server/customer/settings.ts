@@ -51,7 +51,7 @@ export async function updateCustomerProfile(
     };
   }
 
-  const { name } = parsed.data;
+  const { name, domisili } = parsed.data;
   const phone = parsed.data.phone ? normalizePhone(parsed.data.phone) : null;
 
   if (phone) {
@@ -72,7 +72,7 @@ export async function updateCustomerProfile(
   try {
     await prisma.user.update({
       where: { id: userId },
-      data: { name, phone },
+      data: { name, phone, domisili },
     });
   } catch {
     return { ok: false, message: "Gagal menyimpan perubahan. Coba lagi." };

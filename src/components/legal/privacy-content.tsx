@@ -30,6 +30,7 @@ export function PrivacyContent({ crossLink = true }: { crossLink?: boolean }) {
             sandi.
           </li>
           <li>Nomor telepon, bersifat opsional.</li>
+          <li>Domisili, yaitu kota tempat tinggal Anda.</li>
           <li>
             Foto profil, hanya bila Anda mendaftar atau masuk dengan Google.
           </li>
@@ -71,8 +72,9 @@ export function PrivacyContent({ crossLink = true }: { crossLink?: boolean }) {
           5. Hak Anda
         </h2>
         <p>
-          Anda berhak mengakses data pribadi Anda, mengoreksi nama dan nomor
-          telepon melalui halaman Pengaturan, serta meminta penghapusan akun.
+          Anda berhak mengakses data pribadi Anda, mengoreksi nama, nomor
+          telepon, dan domisili melalui halaman Pengaturan, serta meminta
+          penghapusan akun.
           Permintaan penghapusan diproses oleh admin melalui penonaktifan akun
           dan anonimisasi data pribadi.
         </p>

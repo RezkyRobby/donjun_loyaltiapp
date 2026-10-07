@@ -14,6 +14,7 @@ export type E2eAccount = {
   email: string;
   username: string;
   password: string;
+  domisili: string;
 };
 
 export function buildAccount(kind: "customer" | "cashier"): E2eAccount {
@@ -24,6 +25,7 @@ export function buildAccount(kind: "customer" | "cashier"): E2eAccount {
     email: `e2e.${kind}.${suffix}@contoh.test`,
     username: `${kind === "customer" ? "uji" : "kasir"}${suffix}`,
     password: "RahasiaE2E123",
+    domisili: "Makassar",
   };
 }
 
@@ -35,13 +37,18 @@ export async function registerViaUi(
   await page.goto("/daftar");
   await page.getByLabel("Nama lengkap").fill(account.name);
   await page.getByLabel("Email").fill(account.email);
+  await page.getByLabel("Domisili").fill(account.domisili);
   await page.getByLabel("Username").fill(account.username);
   await page.getByLabel("Kata sandi", { exact: true }).fill(account.password);
   await page.getByLabel("Konfirmasi kata sandi").fill(account.password);
   await page.getByRole("checkbox").check();
-  await page.getByRole("button", { name: "Daftar" }).click();
+  await page.getByRole("button", { name: "Daftar", exact: true }).click();
 
-  await expect(page.getByText(/Akun berhasil dibuat/)).toBeVisible();
+  // Registrasi menunggu pengiriman email verifikasi (SMTP) sehingga respons
+  // dapat melewati batas bawaan 5 detik; beri ruang tunggu yang realistis.
+  await expect(page.getByText(/Akun berhasil dibuat/)).toBeVisible({
+    timeout: 20_000,
+  });
 }
 
 export async function loginViaUi(
@@ -52,7 +59,7 @@ export async function loginViaUi(
   await page.goto("/masuk");
   await page.getByLabel("Email").fill(account.email);
   await page.getByLabel("Kata sandi", { exact: true }).fill(account.password);
-  await page.getByRole("button", { name: "Masuk" }).click();
+  await page.getByRole("button", { name: "Masuk", exact: true }).click();
 
   await page.waitForURL(expectedUrl, { timeout: 30_000 });
 }

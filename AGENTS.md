@@ -9,8 +9,8 @@ Seluruh komunikasi, komentar kode, pesan commit, teks UI, konten email, dan labe
 ## Sumber Kebenaran & Urutan Baca
 
 1. **`PRD.md`** — spesifikasi fitur, alur bisnis (§8), skema database (§7), NFR (§9), peta route (Lampiran B), dan environment variables (Lampiran C).
-2. **`PRD.md` §15 Glossary** — istilah domain wajib dipakai persis: **Voucher** (bukan kupon), **Injeksi Poin**, **Voucher single-use**, **Outlet**, **WITA**. Istilah yang salah menyesatkan pembaca kode berikutnya.
-3. **`design.md`** — sumber kebenaran desain visual (v1.0 — tersedia). Wajib dipatuhi untuk halaman pelanggan; halaman kasir dan admin mengikuti register *product* (design.md §2).
+2. **`PRD.md` §15 Glossary** — istilah domain wajib dipakai persis: **Voucher** (bukan kupon), **Injeksi Poin**, **Voucher single-use**, **Outlet**, **WITA**, **Pesanan**, **Bukti Transfer**. Istilah yang salah menyesatkan pembaca kode berikutnya.
+3. **`design.md`** — sumber kebenaran desain visual (v1.1 — tersedia). Wajib dipatuhi untuk halaman pelanggan; halaman kasir dan admin mengikuti register *product* (design.md §2).
 4. **`.env.example`** — daftar environment variable (ringkasan: PRD Lampiran C).
 5. **`AGENTS.md`** (file ini) — aturan main pengerjaan.
 
@@ -28,14 +28,16 @@ Pelanggaran aturan ini adalah **bug meskipun fiturnya berjalan**:
 
 1. **Validasi dua lapis dengan Zod** — satu skema dipakai di klien (UX) dan wajib divalidasi ulang di Server Action / Route Handler (keamanan). Jangan pernah mempercayai validasi klien.
 2. **Akses database hanya via Prisma Client.** `$queryRawUnsafe` dan `$executeRawUnsafe` dilarang; query mentah hanya bentuk *tagged template* berparameter (`$queryRaw`/`$executeRaw`). Nilai filter/sort dinamis hanya dari daftar putih (*whitelist*); wildcard pencarian (`%`, `_`) di-escape.
-3. **Semua mutasi multi-tabel dan mutasi saldo/kuota wajib dalam `prisma.$transaction` dengan pembaruan kondisional**: voucher `WHERE status = 'ACTIVE'` (jaminan single-use atomik), saldo `pointsBalance >= pointsCost` (anti saldo negatif). Pola *check-then-update* untuk status voucher dilarang.
+3. **Semua mutasi multi-tabel dan mutasi saldo/kuota wajib dalam `prisma.$transaction` dengan pembaruan kondisional**: voucher `WHERE status = 'ACTIVE'` (jaminan single-use atomik), saldo `pointsBalance >= pointsCost` (anti saldo negatif), dan status pesanan `WHERE status = <fase saat ini>` (transisi pesanan atomik). Pola *check-then-update* untuk status voucher/pesanan dilarang.
 4. **Injeksi poin wajib melewati idempotency key + cooldown server-side** (`POINT_COOLDOWN_SECONDS`, default 60 detik per pelanggan). Tidak ada jalur pintas — termasuk untuk demo.
-5. **Zona waktu `Asia/Makassar` (WITA) untuk semua logika tanggal** — batas harian/bulanan, laporan, agregasi "per jam kerja". Simpan UTC di database, konversi di kode; jangan mengasumsikan jam server.
-6. **RBAC ditegakkan di middleware dan di setiap action/handler**: `/kasir/*` → `CASHIER | SUPER_ADMIN` (hanya outlet penugasan); `/admin/*` dan `/api/admin/*` → `SUPER_ADMIN`; `/api/cashier/*` → `CASHIER | SUPER_ADMIN`.
-7. **Rate limit wajib aktif** sesuai NFR §9: login 5/15 menit; cek username 20/menit/IP; registrasi 5/jam/IP; email transaksional 5/akun/hari; kegagalan validasi voucher 10/menit/kasir. Pelanggaran mengembalikan 429 dengan pesan ramah.
-8. **Format kode terpusat**: payload QR akun hanya `DONJUN:v1:<username>`; kode voucher hanya `DJN-` + 16 karakter dari alfabet non-ambigu (`23456789ABCDEFGHJKMNPQRSTUVWXYZ`), digenerate satu generator; tangani tabrakan unique dengan retry.
-9. **AuditLog wajib tercatat** untuk aksi yang dispesifikasikan PRD: koreksi poin (`ADJUST`, dengan `note` wajib), perubahan reward/staf/outlet, pembatalan voucher, revert `USED`, suspend pelanggan.
+5. **Zona waktu `Asia/Makassar` (WITA) untuk semua logika tanggal** — batas harian/bulanan, laporan, agregasi "per jam kerja", tenggat pembayaran. Simpan UTC di database, konversi di kode; jangan mengasumsikan jam server.
+6. **RBAC ditegakkan di middleware dan di setiap action/handler**: `/kasir/*` → `CASHIER | SUPER_ADMIN` (hanya outlet penugasan); `/admin/*` dan `/api/admin/*` → `SUPER_ADMIN`; `/api/cashier/*` → `CASHIER | SUPER_ADMIN`; rute belanja pelanggan (`/belanja`, `/keranjang`, `/pesanan`) → `CUSTOMER`. Route webhook `/api/webhook/*` tidak memakai sesi, melainkan verifikasi tanda tangan provider.
+7. **Rate limit wajib aktif** sesuai NFR §9: login 5/15 menit; cek username 20/menit/IP; registrasi 5/jam/IP; email transaksional 5/akun/hari; kegagalan validasi voucher 10/menit/kasir; pembuatan pesanan belanja 10/jam/pelanggan; unggah bukti transfer 10/jam/pelanggan. Pelanggaran mengembalikan 429 dengan pesan ramah.
+8. **Format kode terpusat**: payload QR akun hanya `DONJUN:v1:<username>`; kode voucher hanya `DJN-` + 16 karakter dari alfabet non-ambigu (`23456789ABCDEFGHJKMNPQRSTUVWXYZ`); kode pesanan `ORD-` + 10 karakter dari alfabet yang sama; masing-masing digenerate satu generator; tangani tabrakan unique dengan retry.
+9. **AuditLog wajib tercatat** untuk aksi yang dispesifikasikan PRD: koreksi poin (`ADJUST`, dengan `note` wajib), perubahan reward/menu/kategori menu/rekening pembayaran/staf/outlet, pembatalan voucher, revert `USED`, suspend pelanggan, perubahan status pesanan (konfirmasi/tolak/selesai/batal), dan kedaluwarsa pesanan oleh sistem.
 10. **Aturan akun**: satu email untuk satu akun; akun kasir hanya dibuat via UI admin (bukan seed); `SUPER_ADMIN` hanya via seeder; data pelanggan yang tampil ke kasir hanya nama & username.
+11. **Manfaat voucher disnapshot.** Saat penukaran, `RewardCatalog` menyalin manfaat (`benefitType`, potongan, menu tertaut + nama/harga) ke `Voucher` — bukan dibaca live dari reward. Mengedit reward tidak mengubah voucher yang sudah terbit (sejajar dengan snapshot `rewardTitle`).
+12. **Pembayaran hanya lewat `OrderPayment`.** Transfer manual dan (kelak) gateway daring memakai entitas yang sama; menambah provider tidak boleh mengubah model `Order`.
 
 ## Keputusan Bisnis yang Mudah Tertukar
 
@@ -43,7 +45,7 @@ Ini kesalahan implementasi yang paling mungkin terjadi — pegang spesifikasinya
 
 | Topik | Keputusan |
 |---|---|
-| Identitas akun | `username` dan email **permanen** (tidak dapat diubah). Hanya nama, nomor telepon, dan kata sandi yang dapat diubah. |
+| Identitas akun | `username` dan email **permanen** (tidak dapat diubah). Hanya nama, nomor telepon, domisili, dan kata sandi yang dapat diubah. |
 | Skala poin | Poin & voucher **global lintas outlet**; filter outlet hanya untuk pelaporan. Setiap injeksi/redemption tetap merekam `outletId`. |
 | Pembatalan voucher | Voucher yang sudah ditukar **tidak dapat dibatalkan pelanggan**. Hanya Super Admin (alasan wajib) → status `CANCELED` + poin kembali sebagai `REVERSAL`. |
 | Koreksi validasi | Voucher `USED` dapat dikembalikan ke `ACTIVE` oleh Super Admin **maksimal 1x24 jam**, alasan wajib. Di luar itu hanya `ADJUST` manual. |
@@ -53,6 +55,13 @@ Ini kesalahan implementasi yang paling mungkin terjadi — pegang spesifikasinya
 | Kuota & limit | `quota` dihitung global (lintas outlet); `perUserLimit` per pelanggan; keduanya dicek **di dalam transaksi** penukaran. |
 | Earning | "1 transaksi = 1 poin" berbasis kejujuran kasir + cooldown + idempotency + audit log — **tanpa integrasi POS**; jangan berasumsi ada nomor struk. |
 | Mata uang & format | Rupiah `id-ID`; tanggal ditampilkan dalam WITA. |
+| Tipe voucher | Reward punya `benefitType`: `GENERIC` (judul saja/perilaku lama), `PRODUCT` (menu tertaut → 1 item gratis), `PERCENT_DISCOUNT`, `AMOUNT_DISCOUNT`. Manfaat **disnapshot** ke voucher saat penukaran. |
+| Voucher di pesanan | Ditempel di checkout, **maksimal 1 voucher per pesanan**. Status voucher → `USED` **saat kasir mengonfirmasi pembayaran**, bukan saat checkout. |
+| Pesanan ditolak/kedaluwarsa | Voucher **tidak dikonsumsi** (tetap `ACTIVE`) dan bebas dipakai lagi. |
+| Kategori & menu belanja | Dikelola Super Admin: `MenuCategory` dan `Menu` (beserta grup opsi/tag). Tag opsi **opsional, multi-pilih**, boleh menambah harga; semua harga dihitung ulang di server. |
+| Pembayaran pesanan | Transfer manual: pelanggan unggah **bukti transfer**, kasir konfirmasi atau tolak (alasan wajib). Tenggat bayar **24 jam** (`ORDER_PAYMENT_WINDOW_MINUTES`); lewat tenggat → status `EXPIRED` (ditegakkan lazy saat data diakses). |
+| Belanja & poin | Belanja **tidak** memberi poin otomatis; poin tetap hanya dari injeksi manual kasir. |
+| Pembayaran provider-agnostic | Seluruh pembayaran lewat `OrderPayment` (v1 hanya `MANUAL_TRANSFER`). Gateway daring (mis. Midtrans) ditambahkan sebagai adapter + webhook **tanpa migrasi skema**. |
 
 ## Konvensi Proyek
 
@@ -63,13 +72,13 @@ src/
 ├── app/
 │   ├── (public)/        # landing, kebijakan-privasi, syarat-ketentuan
 │   ├── (auth)/          # masuk, daftar, lupa-sandi, reset-sandi, verifikasi-email
-│   ├── (customer)/      # dashboard, promo, voucher, pengaturan
-│   ├── kasir/           # scan, validasi, riwayat
-│   ├── admin/           # analitik, reward, staf, pelanggan, outlet, audit
-│   └── api/             # route handler (hanya bila Server Actions tidak cocok)
+│   ├── (customer)/      # dashboard, belanja, keranjang, pesanan, promo, voucher, pengaturan
+│   ├── kasir/           # scan, validasi, pesanan, riwayat
+│   ├── admin/           # analitik, kategori, menu, reward, pembayaran, pesanan, staf, pelanggan, outlet, audit
+│   └── api/             # route handler (hanya bila Server Actions tidak cocok; termasuk webhook pembayaran)
 ├── components/          # ui/ (shadcn), shared/, komponen per fitur
-├── server/              # server actions & service layer (transaksi poin/voucher)
-├── lib/                 # auth, prisma client, zod, kode voucher, waktu WITA, rate limiter
+├── server/              # server actions & service layer (transaksi poin/voucher/pesanan/pembayaran)
+├── lib/                 # auth, prisma client, zod, kode voucher & pesanan, waktu WITA, rate limiter, harga
 ├── constants/           # reserved username (Lampiran A), enum, label, pesan error
 └── types/
 prisma/                  # schema.prisma, migrations/, seed.ts
@@ -81,9 +90,9 @@ Sesuaikan nama folder saat implementasi nyata; pertahankan pemisahan route group
 
 ### Pola Wajib
 
-- **Server Component sebagai default**; `"use client"` hanya untuk interaksi (scanner kamera, form interaktif, animasi).
+- **Server Component sebagai default**; `"use client"` hanya untuk interaksi (scanner kamera, form interaktif, keranjang, animasi).
 - **Server Actions untuk mutasi**; route handler `/api/*` hanya bila memang tidak cocok dengan Server Actions.
-- **Label status/istilah UI lewat satu kamus terpusat** di `src/constants` (mis. `ACTIVE` → "Aktif", `USED` → "Terpakai") — jangan hardcode string per komponen.
+- **Label status/istilah UI lewat satu kamus terpusat** di `src/constants` (mis. `ACTIVE` → "Aktif", `USED` → "Terpakai", pesanan `AWAITING_PAYMENT` → "Menunggu pembayaran") — jangan hardcode string per komponen.
 - **Error handling**: Server Action / Route Handler wajib try-catch dengan pesan Bahasa Indonesia; toast (`sonner`) untuk operasi CRUD; loading skeleton dan empty state untuk semua data fetching.
 - **Pagination server-side** (default 50 baris/halaman) untuk semua daftar; filter dan ekspor CSV untuk audit log.
 - **Tanggal & angka** diformat lewat util terpusat (`date-fns-tz` + locale `id-ID`), bukan formatting ad-hoc.
@@ -101,8 +110,8 @@ Fitur dianggap selesai bila semua cek lolos:
 3. Injeksi poin teruji: idempotency key, cooldown, dan audit `PointTransaction` (`cashierId`, `outletId`, `method`).
 4. Validasi Zod aktif di klien dan server untuk setiap input yang menyentuh database.
 5. RBAC teruji: rute antar-role menolak akses yang salah; kasir hanya melihat nama & username pelanggan.
-6. Rate limit terpasang untuk endpoint terkait (login, cek username, registrasi, email, scan voucher).
-7. Unit test untuk logika deterministik (validasi username + reserved words, generator kode voucher, logika poin); integration test untuk transaksi atomik & race condition; E2E untuk alur yang terdampak.
+6. Rate limit terpasang untuk endpoint terkait (login, cek username, registrasi, email, scan voucher, pembuatan pesanan, unggah bukti).
+7. Unit test untuk logika deterministik (validasi username + reserved words, generator kode voucher/pesanan, logika poin, perhitungan harga & potongan, tenggat pembayaran); integration test untuk transaksi atomik & race condition; E2E untuk alur yang terdampak.
 8. Label enum lewat kamus terpusat; seluruh teks UI Bahasa Indonesia.
 9. `pnpm typecheck`, `pnpm lint`, `pnpm test`, dan `pnpm build` hijau.
 10. Perubahan UI diuji pada viewport 375px (mobile-first) dan tidak menurunkan skor Lighthouse.
@@ -139,6 +148,7 @@ Pesan Bahasa Indonesia imperatif dengan prefix:
 | Portal kasir | `feat(kasir):` | `feat(kasir): injeksi poin dengan idempotency dan cooldown` |
 | Dashboard admin | `feat(admin):` | `feat(admin): audit log dengan filter dan ekspor CSV` |
 | API/actions | `feat(api):` | `feat(api): endpoint rate-limit cek ketersediaan username` |
+| Dokumentasi | `docs:` | `docs: rencanakan modul belanja, tipe voucher, kategori menu, batas waktu bayar, dan kesiapan gateway` |
 | Testing | `test:` | `test: integration validasi voucher single-use di bawah konkurensi` |
 | Deploy | `deploy:` | `deploy: konfigurasi environment produksi Vercel` |
 
@@ -215,6 +225,25 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 31. E2E Playwright alur kritis (registrasi → injeksi → tukar → validasi → voucher terpakai) + test RBAC
 - [x] 32. Audit Lighthouse mobile ≥ 90 + uji kamera Android/iOS + security hardening
 - [ ] 33. Deploy Vercel + verifikasi alur produksi end-to-end
+
+### Fase 6 — Fitur Belanja & Integrasi Voucher (PRD §5.4–§5.6, §8.7–§8.9)
+
+- [ ] 34. Dokumentasi: perbarui PRD (v2.5), AGENTS.md, design.md (v1.1), `.env.example`
+- [ ] 35. Skema Prisma: `MenuCategory`, `Menu`, `MenuOptionGroup`, `MenuOptionTag`, `Order`, `OrderItem`, `OrderItemOption`, `OrderPayment`, `OrderPaymentProof`, `PaymentAccount` + enum + snapshot manfaat pada `RewardCatalog`/`Voucher` (PRD §7) + migrasi
+- [ ] 36. Konstanta terpusat: label status pesanan/tipe voucher/rekening/status bukti, aksi & entitas audit, item navigasi
+- [ ] 37. Utilitas & skema Zod: `shop-pricing`, `payment-window`, `order-code`, `shop`, `menu-category-admin`, `menu-admin`, `payment-account-admin`, `order`; perluasan `cloudinary` & `rate-limit`
+- [ ] 38. RBAC: tambah rute `/belanja`, `/keranjang`, `/pesanan` → `CUSTOMER`
+- [ ] 39. Server admin: manajemen kategori menu
+- [ ] 40. Server admin: manajemen menu (CRUD + grup opsi/tag)
+- [ ] 41. Server admin: manajemen rekening pembayaran
+- [ ] 42. Server pelanggan: katalog belanja, `createOrder` (voucher row-lock, harga otoritatif, tenggat bayar), `cancelOrder`
+- [ ] 43. Server pelanggan: unggah bukti transfer (Cloudinary) + helper kedaluwarsa lazy
+- [ ] 44. Server kasir: antrean pesanan + konfirmasi/tolak/selesai (konsumsi voucher atomik)
+- [ ] 45. Kontrak adapter pembayaran provider-agnostic (stub) + route webhook kosong
+- [ ] 46. UI admin: kategori menu, menu + editor opsi/tag, rekening pembayaran, tipe voucher pada form reward
+- [ ] 47. UI pelanggan: tombol melayang (FAB), katalog menu, detail + opsi, keranjang, checkout + tempel voucher, halaman pesanan + unggah bukti + tenggat
+- [ ] 48. UI kasir: antrean pesanan, detail, konfirmasi/tolak/selesai
+- [ ] 49. Test: unit (harga/potongan, tenggat, kode pesanan, skema admin) + integration (atomik pesanan, voucher single-use, kedaluwarsa) + E2E alur belanja
 
 ## Perintah Umum
 

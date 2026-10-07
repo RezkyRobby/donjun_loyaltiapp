@@ -9,6 +9,8 @@ export const PASSWORD_MIN_LENGTH = 8;
 export const PASSWORD_MAX_LENGTH = 128;
 export const NAME_MIN_LENGTH = 2;
 export const NAME_MAX_LENGTH = 80;
+export const DOMISILI_MIN_LENGTH = 2;
+export const DOMISILI_MAX_LENGTH = 100;
 
 // Nomor telepon opsional (PRD §7.1): angka dengan pemisah spasi atau tanda
 // hubung dan awalan + opsional. Normalisasi sebelum disimpan.
@@ -50,11 +52,23 @@ export const phoneSchema = z
   })
   .optional();
 
+export const domisiliSchema = z
+  .string({ error: "Domisili wajib diisi." })
+  .trim()
+  .min(1, { error: "Domisili wajib diisi." })
+  .min(DOMISILI_MIN_LENGTH, {
+    error: `Domisili minimal ${DOMISILI_MIN_LENGTH} karakter.`,
+  })
+  .max(DOMISILI_MAX_LENGTH, {
+    error: `Domisili maksimal ${DOMISILI_MAX_LENGTH} karakter.`,
+  });
+
 export const registrationSchema = z.object({
   name: nameSchema,
   email: emailSchema,
   username: usernameSchema,
   phone: phoneSchema,
+  domisili: domisiliSchema,
   password: passwordSchema,
   // PRD §10: persetujuan Kebijakan Privasi & Syarat dan Ketentuan wajib.
   consent: z.literal(true, {

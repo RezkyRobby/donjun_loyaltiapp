@@ -2,7 +2,7 @@
 
 ## Brand Identity & UI Design Guidelines — Donjun Donat Loyalty Web App
 
-**Versi Dokumen: 1.0** · **Tanggal: 2026-09-26** · Mengikuti zona waktu operasional WITA
+**Versi Dokumen: 1.1** · **Tanggal: 2026-10-07** · Mengikuti zona waktu operasional WITA
 
 ### Dokumen Terkait
 
@@ -18,6 +18,7 @@
 | Versi | Tanggal | Ringkasan Perubahan |
 |---|---|---|
 | 1.0 | 2026-09-26 | Versi final berbasis draf owner: perbaikan kontras (step warna tambahan), pemetaan token ke shadcn/ui, token tipografi/spacing/elevasi/motion, spesifikasi komponen & status, surface QR/Barcode/Scanner, aturan aksesibilitas & responsive. |
+| 1.1 | 2026-10-07 | Menambah surface modul belanja: tombol melayang (FAB) Belanja, peta status pesanan (menunggu pembayaran/konfirmasi, diproses, selesai, ditolak, kedaluwarsa), dan indikator tenggat pembayaran. |
 
 ---
 
@@ -35,8 +36,8 @@ Dua register diterapkan pada area berbeda — jangan tertukar:
 
 | Area | Register | Karakter |
 |---|---|---|
-| **Pelanggan** (landing, dashboard, promo, voucher) | **Brand** | Hangat, playful, ilustratif. Warna brand dipakai penuh; motion halus diperbolehkan; momen selebrasi (poin bertambah, voucher terbit) boleh ekspresif. |
-| **Kasir** (scan, validasi) | **Product** | Cepat, tegas, tenang. Warna brand hanya di aksen tombol utama; tanpa animasi dekoratif; target sentuh besar; kontras status maksimal (hijau/merah + ikon + teks). |
+| **Pelanggan** (landing, dashboard, belanja, keranjang, pesanan, promo, voucher) | **Brand** | Hangat, playful, ilustratif. Warna brand dipakai penuh; motion halus diperbolehkan; momen selebrasi (poin bertambah, voucher terbit, pesanan diterima) boleh ekspresif. |
+| **Kasir** (scan, validasi, pesanan, riwayat) | **Product** | Cepat, tegas, tenang. Warna brand hanya di aksen tombol utama; tanpa animasi dekoratif; target sentuh besar; kontras status maksimal (hijau/merah + ikon + teks). |
 | **Admin** (backoffice) | **Product** | Padat dan netral. Komponen shadcn/ui default dipakai apa adanya; warna brand untuk aksen navigasi dan angka penting saja. |
 
 Aturan: keputusan visual pada area pelanggan tidak boleh "menular" ke kasir/admin bila menambah friksi kecepatan atau kejelasan.
@@ -230,13 +231,13 @@ Catatan implementasi:
 | `text-display` | 2,5rem / 1,1 | Baloo 2 · 700 | Angka saldo poin utama, angka hero landing |
 | `text-h1` | 1,75rem / 1,2 | Baloo 2 · 700 | Judul halaman |
 | `text-h2` | 1,375rem / 1,25 | Baloo 2 · 600 | Judul seksi, judul kartu besar |
-| `text-h3` | 1,125rem / 1,3 | Baloo 2 · 600 | Judul kartu promo, nama reward |
+| `text-h3` | 1,125rem / 1,3 | Baloo 2 · 600 | Judul kartu promo, nama reward, nama menu |
 | `text-body` | 1rem / 1,6 | Plus Jakarta · 400 | Teks utama, deskripsi |
 | `text-body-sm` | 0,875rem / 1,5 | Plus Jakarta · 400 | Teks sekunder, Syarat & Ketentuan |
 | `text-caption` | 0,8125rem / 1,4 | Plus Jakarta · 500 | Label kecil, metadata tanggal |
 | `text-voucher-code` | 1,125rem / 1,3 · tracking 0,08em | Plus Jakarta · 700 | Kode alfanumerik voucher (huruf kapital) |
 
-**Aturan:** setiap blok teks mengikuti tiga lapis (judul → pendukung → isi). Ukuran minimum 16px untuk seluruh `input`/`select`/`textarea` pada layar < 640px. Panjang baris isi 60–76 karakter. Ganti em dash dengan koma, titik dua, atau kalimat baru. Semua label status enum memakai kamus label terpusat (AGENTS.md). Media query memakai `rem`; border/fokus/bayangan memakai `px`. Aturan lain: pemisah ribuan dan mata uang memakai locale `id-ID`; angka saldo/poin memakai `tabular-nums` agar stabil saat berubah; teks error tidak pernah mengandalkan warna saja.
+**Aturan:** setiap blok teks mengikuti tiga lapis (judul → pendukung → isi). Ukuran minimum 16px untuk seluruh `input`/`select`/`textarea` pada layar < 640px. Panjang baris isi 60–76 karakter. Ganti em dash dengan koma, titik dua, atau kalimat baru. Semua label status enum memakai kamus label terpusat (AGENTS.md). Media query memakai `rem`; border/fokus/bayangan memakai `px`. Aturan lain: pemisah ribuan dan mata uang memakai locale `id-ID`; angka saldo/poin/harga memakai `tabular-nums` agar stabil saat berubah; teks error tidak pernah mengandalkan warna saja.
 
 ---
 
@@ -257,7 +258,7 @@ Catatan implementasi:
 
 **Radius:** `radius-badge` 9999px (chip/pil), `radius-card` 1.25rem (kartu, dialog, sheet), `radius-button` 0.875rem.
 
-**Elevasi:** `shadow-card` untuk kartu di atas `brand-yellow-light`; `shadow-raised` untuk dialog/sheet/toast. Kartu wajib memiliki `shadow-card` dan/atau border `warm-border` agar terpisah dari latar (kontras permukaan putih vs kuning hanya ±1,06:1).
+**Elevasi:** `shadow-card` untuk kartu di atas `brand-yellow-light`; `shadow-raised` untuk dialog/sheet/toast/tombol melayang. Kartu wajib memiliki `shadow-card` dan/atau border `warm-border` agar terpisah dari latar (kontras permukaan putih vs kuning hanya ±1,06:1).
 
 ---
 
@@ -287,6 +288,7 @@ Catatan implementasi:
 | **Toast (`sonner`)** | Permukaan putih, ikon status + judul + pesan; sukses memakai `donut-matcha-deep`, galat `donut-berry-deep`; `role="status"`; galat tidak menutup otomatis. |
 | **Tabel (admin)** | Header sticky, baris padat 44px, angka `tabular-nums`, aksi baris eksplisit (bukan ikon tanpa label). |
 | **Skeleton & Empty State** | Wajib untuk setiap pemuatan data; empty state menjelaskan isi ruang dan aksi pengisinya. |
+| **Tombol melayang (FAB)** | Khusus pelanggan (lihat §9.6): isian `brand-orange`, radius badge, `shadow-raised`, target ≥ 48px, ikon + nama aksesibel. |
 
 **Peta status terpusat** (warna + ikon + label; label dari kamus `src/constants`):
 
@@ -299,6 +301,12 @@ Catatan implementasi:
 | `REDEEM` | `brand-orange-deep` | minus | "Poin terpakai" |
 | `ADJUST` | `brand-brown-muted` | penyetel | "Koreksi admin" |
 | `REVERSAL` | `sky-pastel` + `brand-brown-dark` | panah balik | "Pengembalian poin" |
+| `AWAITING_PAYMENT` (pesanan) | `brand-orange-deep` | jam | "Menunggu pembayaran" |
+| `AWAITING_CONFIRMATION` | `sky-pastel` + `brand-brown-dark` | unggah / jam pasir | "Menunggu konfirmasi" |
+| `IN_PROGRESS` | `donut-matcha-deep` | tungku / api | "Pesanan dibuat" |
+| `COMPLETED` | `donut-matcha-deep` | centang | "Selesai" |
+| `REJECTED` | `donut-berry-deep` | silang | "Ditolak" |
+| `EXPIRED` | `brand-brown-muted` | jam kedaluwarsa | "Kedaluwarsa" |
 
 ---
 
@@ -335,31 +343,48 @@ Catatan implementasi:
 
 - Menampilkan nama + username pelanggan (hanya dua data ini), tombol utama "Tambah 1 Poin" tinggi 56px, tombol batal berukuran sama di posisi sekunder (aksi paling tidak berbahaya menerima fokus awal).
 
+### 9.6 Tombol Melayang (FAB) Belanja (Pelanggan)
+
+- Akses masuk ke modul Belanja tanpa menambah item navigasi bawah (nav tetap maksimal 4 item, §10).
+- **Posisi:** sisi kanan, mengambang di atas navigasi bawah, `right: 16px`, `bottom: tinggi nav + jarak aman` (mis. `bottom: calc(4.5rem + env(safe-area-inset-bottom))`). Z-index di atas konten dan nav, namun di bawah dialog/sheet.
+- **Ukuran & warna:** target sentuh ≥ 48×48px (disarankan 56px); isian `brand-orange` + ikon/teks `brand-brown-dark`; `shadow-raised`; radius badge.
+- **Nama aksesibel wajib** ("Belanja"): utamakan ikon + label teks; bila hanya ikon, sediakan `aria-label` dan `<span class="sr-only">`.
+- **Tidak menutupi konten:** konten pelanggan sudah menyediakan `padding-bottom` (ruang bawah); saat FAB tampil, pastikan elemen paling bawah (tombol aksi, kartu terakhir) tetap dapat dijangkau dan tidak tertutup. Tidak ada elemen penting yang rata kanan-bawah tanpa jarak.
+- **Zona jempol:** posisi kanan-bawah agar mudah dijangkau satu tangan pada 375px.
+
+### 9.7 Tenggat Pembayaran Pesanan (Pelanggan)
+
+- Kartu pesanan pada fase `AWAITING_PAYMENT` menampilkan **tenggat pembayaran** dalam WITA: ikon jam + teks "Bayar sebelum [tanggal, jam] WITA".
+- Mendekati/melewati tenggat: warna peringatan `donut-berry-deep` (ikon + teks, bukan warna saja).
+- Setelah unggah bukti (`AWAITING_CONFIRMATION`), tenggat tidak ditampilkan lagi (tanggung jawab pindah ke kasir).
+- Status `EXPIRED`: ikon jam kedaluwarsa + teks "Pesanan kedaluwarsa" + aksi "Buat pesanan baru"; invoice/langkah bayar disembunyikan.
+- Format tanggal & jam lewat util terpusat (`date-fns-tz`, locale `id-ID`).
+
 ---
 
 ## 10. Responsive & Layout
 
 | Viewport | Prioritas | Tata letak |
 |---|---|---|
-| **375px** (ponsel pelanggan) | Mobile-first | Satu kolom; aksi utama di zona jempol (25% bawah); navigasi bawah maksimal 4 item; konten QR/voucher tanpa elemen mengganggu. |
+| **375px** (ponsel pelanggan) | Mobile-first | Satu kolom; aksi utama di zona jempol (25% bawah); navigasi bawah maksimal 4 item; FAB Belanja mengambang di atas nav tanpa menutupi konten; konten QR/voucher tanpa elemen mengganggu. |
 | **768px** (tablet kasir, lanskap) | Kecepatan | Dua zona: kiri viewport kamera besar, kanan panel hasil/riwayat; tombol tinggi 56px; hindari scroll horizontal. |
 | **1024px+** (admin) | Kepadatan | Sidebar navigasi + area konten; tabel penuh; filter di atas tabel. Lebar konten maksimum 1440px. |
 
-Aturan: hormati `env(safe-area-inset-*)` pada PWA; deteksi input (`pointer: coarse`) untuk ukuran sentuh; tidak ada fungsi yang hanya dapat diakses lewat hover; uji reflow pada 320px dan zoom 200%.
+Aturan: hormati `env(safe-area-inset-*)` pada PWA; deteksi input (`pointer: coarse`) untuk ukuran sentuh; tidak ada fungsi yang hanya dapat diakses lewat hover; uji reflow pada 320px dan zoom 200%. FAB Belanja hanya tampil pada area pelanggan dan tidak boleh bertumpuk dengan item navigasi bawah.
 
 ---
 
 ## 11. Aksesibilitas
 
 1. Fokus keyboard selalu terlihat (`:focus-visible`, ring 2px offset 2px) dan urutan tab masuk akal.
-2. Target sentuh minimum 44×44px; tidak ada dua target yang tumpang tindih.
+2. Target sentuh minimum 44×44px; tidak ada dua target yang tumpang tindih (termasuk FAB vs nav bawah).
 3. Status tidak pernah disampaikan warna saja — selalu ikon/teks.
 4. Semua input memiliki label nyata dan atribut `autocomplete` yang tepat; font input ≥16px pada layar kecil.
 5. Galat formulir tampil di samping field, diumumkan (`aria-describedby`, `aria-invalid`), dan memindahkan fokus ke field pertama yang gagal.
 6. Dialog menahan fokus, menutup dengan Escape, dan mengembalikan fokus ke pemicu.
 7. Animasi menghormati `prefers-reduced-motion`; tidak ada gerakan otomatis yang tak bisa dihentikan.
 8. Semua konten berfungsi pada zoom 200% dan reflow 320px tanpa scroll horizontal.
-9. Gambar promosi memiliki `alt` sesuai fungsinya; ikon dekoratif `aria-hidden`.
+9. Gambar promosi/menu memiliki `alt` sesuai fungsinya; ikon dekoratif `aria-hidden`.
 10. Tombol ikon selalu memiliki nama aksesibel (teks terlihat lebih diutamakan daripada `aria-label`).
 
 ---
@@ -367,7 +392,8 @@ Aturan: hormati `env(safe-area-inset-*)` pada PWA; deteksi input (`pointer: coar
 ## 12. Ilustrasi, Logo & Aset
 
 - **Ilustrasi:** goresan hangat bergaya *artisanal* (donat, piknik, meja kue) hanya di area pelanggan; proporsional, tidak menutupi konten penting, dan tidak pernah berada di belakang QR/barcode.
-- **Foto promo:** rasio 4:3 (kartu katalog) atau 1:1 (thumbnail); diunggah via Cloudinary dengan `f_auto,q_auto` (WebP/AVIF otomatis); tanpa *watermark*; `alt` deskriptif Bahasa Indonesia.
+- **Foto promo/menu:** rasio 4:3 (kartu katalog) atau 1:1 (thumbnail); diunggah via Cloudinary dengan `f_auto,q_auto` (WebP/AVIF otomatis); tanpa *watermark*; `alt` deskriptif Bahasa Indonesia.
+- **Bukti transfer (unggahan pelanggan):** ditampilkan sebagai gambar terkontrol (bukan tautan mentah) pada kartu pesanan pelanggan dan panel kasir; rasio tetap, `object-contain`, dengan latar putih.
 - **Logo:** versi utama di atas latar terang; area bebas minimum setinggi satu huruf "D"; jangan mengubah warna logo di atas foto.
 - **PWA:** `theme_color` `#F6DE8C`, `background_color` `#FDF8E8`; ikon *maskable* dengan zona aman 80%.
 
@@ -376,10 +402,11 @@ Aturan: hormati `env(safe-area-inset-*)` pada PWA; deteksi input (`pointer: coar
 ## 13. Voice & Copywriting
 
 - Bahasa Indonesia formal; kalimat perintah ringkas; huruf kapital di awal kalimat (bukan Title Case).
-- Satu kata kerja per tombol: "Tukar poin", "Tambah 1 Poin", "Batalkan voucher", "Tampilkan ke kasir". Hindari "OK", "Ya", "Proses".
+- Satu kata kerja per tombol: "Tukar poin", "Tambah 1 Poin", "Batalkan voucher", "Tampilkan ke kasir", "Tambah ke keranjang", "Kirim bukti transfer", "Konfirmasi pembayaran", "Tolak bukti". Hindari "OK", "Ya", "Proses".
 - Galat menjelaskan apa yang gagal, mengapa bila relevan, dan langkah berikutnya; jangan menyalahkan pengguna.
 - Empty state mengajarkan: sebut isi ruang, manfaatnya, dan aksi untuk mengisinya.
-- Teks pemuatan menyebut pekerjaan nyata ("Memuat voucher", "Memverifikasi kode") — bukan "Loading".
+- Teks pemuatan menyebut pekerjaan nyata ("Memuat voucher", "Memverifikasi kode", "Memuat menu") — bukan "Loading".
+- Status pesanan memakai label kamus terpusat ("Menunggu pembayaran", "Menunggu konfirmasi", "Pesanan dibuat", "Selesai", "Ditolak", "Kedaluwarsa").
 - Tanpa tanda seru dan tanpa emoji pada antarmuka; nominal memakai Rupiah `id-ID`; waktu ditampilkan WITA.
 
 ---

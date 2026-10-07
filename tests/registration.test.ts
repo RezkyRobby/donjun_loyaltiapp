@@ -13,6 +13,7 @@ const validInput = {
   email: "Budi.Santoso@example.com",
   username: "budi.santoso",
   phone: "081234567890",
+  domisili: "Makassar",
   password: "rahasia123",
   consent: true,
 };
@@ -23,17 +24,28 @@ describe("registrationSchema", () => {
     expect(result.success).toBe(true);
   });
 
-  it("menormalkan email, username, dan spasi nama", () => {
+  it("menormalkan email, username, spasi nama, dan domisili", () => {
     const parsed = registrationSchema.parse({
       ...validInput,
       name: "  Budi Santoso  ",
       email: "  Budi.Santoso@Example.COM ",
       username: "Budi.Santoso",
+      domisili: "  Makassar  ",
     });
 
     expect(parsed.email).toBe("budi.santoso@example.com");
     expect(parsed.username).toBe("budi.santoso");
     expect(parsed.name).toBe("Budi Santoso");
+    expect(parsed.domisili).toBe("Makassar");
+  });
+
+  it("mewajibkan domisili", () => {
+    const result = registrationSchema.safeParse({ ...validInput, domisili: "" });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(toFieldErrors(result.error).domisili).toContain("wajib");
+    }
   });
 
   it("menolak email tidak valid", () => {

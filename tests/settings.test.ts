@@ -7,10 +7,11 @@ import {
 } from "@/lib/settings";
 
 describe("profileUpdateSchema", () => {
-  it("menerima nama dan nomor telepon valid", () => {
+  it("menerima nama, nomor telepon, dan domisili valid", () => {
     const result = profileUpdateSchema.safeParse({
       name: "Budi Donat",
       phone: "081234567890",
+      domisili: "Makassar",
     });
 
     expect(result.success).toBe(true);
@@ -18,13 +19,33 @@ describe("profileUpdateSchema", () => {
 
   it("membolehkan nomor telepon dikosongkan", () => {
     expect(
-      profileUpdateSchema.safeParse({ name: "Budi", phone: "" }).success,
+      profileUpdateSchema.safeParse({
+        name: "Budi",
+        phone: "",
+        domisili: "Makassar",
+      }).success,
     ).toBe(true);
-    expect(profileUpdateSchema.safeParse({ name: "Budi" }).success).toBe(true);
+    expect(
+      profileUpdateSchema.safeParse({ name: "Budi", domisili: "Makassar" })
+        .success,
+    ).toBe(true);
+  });
+
+  it("mewajibkan domisili", () => {
+    const result = profileUpdateSchema.safeParse({ name: "Budi", domisili: "" });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.path).toContain("domisili");
+    }
   });
 
   it("menolak nama yang terlalu pendek", () => {
-    const result = profileUpdateSchema.safeParse({ name: "B", phone: "" });
+    const result = profileUpdateSchema.safeParse({
+      name: "B",
+      phone: "",
+      domisili: "Makassar",
+    });
 
     expect(result.success).toBe(false);
   });
@@ -33,6 +54,7 @@ describe("profileUpdateSchema", () => {
     const result = profileUpdateSchema.safeParse({
       name: "Budi",
       phone: "abc",
+      domisili: "Makassar",
     });
 
     expect(result.success).toBe(false);

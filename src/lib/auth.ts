@@ -103,6 +103,10 @@ export const auth = betterAuth({
         type: "string",
         required: false,
       },
+      domisili: {
+        type: "string",
+        required: false,
+      },
     },
   },
   rateLimit: {

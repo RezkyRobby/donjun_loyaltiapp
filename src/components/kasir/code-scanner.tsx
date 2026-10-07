@@ -231,12 +231,18 @@ export function CodeScanner({
       scannerRef.current = null;
 
       if (instance) {
-        instance
-          .stop()
-          .then(() => instance.clear())
-          .catch(() => {
-            // Scanner belum berjalan atau sudah berhenti: tidak perlu dibersihkan.
-          });
+        try {
+          instance
+            .stop()
+            .then(() => instance.clear())
+            .catch(() => {
+              // Scanner sudah berhenti: tidak perlu dibersihkan.
+            });
+        } catch {
+          // html5-qrcode melempar galat secara sinkron bila scanner belum
+          // berjalan (mis. kamera gagal dimulai); abaikan agar pembersihan efek
+          // tidak meruntuhkan halaman kasir.
+        }
       }
     };
   }, [attempt, cameraId, containerId, scanMode]);

@@ -1,14 +1,20 @@
 import { z } from "zod";
 
-import { nameSchema, passwordSchema, phoneSchema } from "@/lib/registration";
+import {
+  domisiliSchema,
+  nameSchema,
+  passwordSchema,
+  phoneSchema,
+} from "@/lib/registration";
 
 // Skema pengaturan akun pelanggan (PRD §5.1 fitur 7). Username dan email
-// bersifat permanen sehingga tidak ada di sini; hanya nama, nomor telepon, dan
-// kata sandi yang dapat diubah. Validasi klien dipakai untuk umpan balik, dan
-// tetap divalidasi ulang di Server Action (AGENTS.md aturan 1).
+// bersifat permanen sehingga tidak ada di sini; hanya nama, nomor telepon,
+// domisili, dan kata sandi yang dapat diubah. Validasi klien dipakai untuk
+// umpan balik, dan tetap divalidasi ulang di Server Action (AGENTS.md aturan 1).
 export const profileUpdateSchema = z.object({
   name: nameSchema,
   phone: phoneSchema,
+  domisili: domisiliSchema,
 });
 
 export type ProfileUpdateInput = z.infer<typeof profileUpdateSchema>;

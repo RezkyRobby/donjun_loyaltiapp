@@ -23,7 +23,7 @@ export default async function CustomerSettingsPage() {
   const [user, credential] = await Promise.all([
     prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { name: true, email: true, username: true, phone: true },
+      select: { name: true, email: true, username: true, phone: true, domisili: true },
     }),
     prisma.account.findFirst({
       where: {
@@ -95,7 +95,11 @@ export default async function CustomerSettingsPage() {
         >
           Data akun
         </h2>
-        <ProfileForm initialName={user.name} initialPhone={user.phone ?? ""} />
+        <ProfileForm
+          initialName={user.name}
+          initialPhone={user.phone ?? ""}
+          initialDomisili={user.domisili ?? ""}
+        />
       </section>
 
       <section
@@ -134,7 +138,8 @@ export default async function CustomerSettingsPage() {
         </p>
         <p className="text-sm text-brand-brown-muted">
           Data yang dikumpulkan mencakup nama, email, nomor telepon (opsional),
-          foto profil (bila masuk dengan Google), dan riwayat transaksi poin.
+          domisili, foto profil (bila masuk dengan Google), dan riwayat
+          transaksi poin.
         </p>
         <p className="text-sm text-brand-brown-muted">
           Untuk mengakses, mengoreksi, atau meminta penghapusan data pribadi
