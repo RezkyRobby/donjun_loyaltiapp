@@ -1,6 +1,19 @@
 import { describe, expect, it } from "vitest";
 
-import { createRateLimiter } from "@/lib/rate-limit";
+import { createRateLimiter, RATE_LIMITS } from "@/lib/rate-limit";
+
+describe("RATE_LIMITS", () => {
+  it("menetapkan batas pesanan & bukti transfer 10 per jam per pelanggan", () => {
+    expect(RATE_LIMITS.orderCreation).toEqual({
+      limit: 10,
+      windowMs: 60 * 60_000,
+    });
+    expect(RATE_LIMITS.paymentProofUpload).toEqual({
+      limit: 10,
+      windowMs: 60 * 60_000,
+    });
+  });
+});
 
 describe("createRateLimiter", () => {
   it("mengizinkan sampai batas lalu menolak dengan sisa waktu tunggu", () => {

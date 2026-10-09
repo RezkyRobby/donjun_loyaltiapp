@@ -34,6 +34,10 @@ export const RATE_LIMITS = {
   },
   // Kegagalan validasi voucher: maks 10 per menit per kasir.
   voucherValidationFailure: { limit: 10, windowMs: 60_000 },
+  // Pembuatan pesanan belanja: maks 10 per jam per pelanggan (PRD §9).
+  orderCreation: { limit: 10, windowMs: 60 * 60_000 },
+  // Unggah bukti transfer: maks 10 per jam per pelanggan (PRD §9).
+  paymentProofUpload: { limit: 10, windowMs: 60 * 60_000 },
 } as const satisfies Record<string, RateLimitOptions>;
 
 export function createRateLimiter(options: RateLimitOptions): RateLimiter {
