@@ -23,6 +23,7 @@ export type CashierNavItem = {
 export const CASHIER_NAV_ITEMS: CashierNavItem[] = [
   { href: "/kasir/scan", label: "Scan" },
   { href: "/kasir/validasi", label: "Validasi" },
+  { href: "/kasir/pesanan", label: "Pesanan" },
   { href: "/kasir/riwayat", label: "Riwayat" },
 ];
 
@@ -36,7 +37,11 @@ export type AdminNavItem = {
 
 export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { href: "/admin", label: "Analitik" },
+  { href: "/admin/kategori", label: "Kategori" },
+  { href: "/admin/menu", label: "Menu" },
   { href: "/admin/reward", label: "Reward" },
+  { href: "/admin/pembayaran", label: "Pembayaran" },
+  { href: "/admin/pesanan", label: "Pesanan" },
   { href: "/admin/staf", label: "Staf" },
   { href: "/admin/pelanggan", label: "Pelanggan" },
   { href: "/admin/outlet", label: "Outlet" },

@@ -230,7 +230,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 
 - [x] 34. Dokumentasi: perbarui PRD (v2.5), AGENTS.md, design.md (v1.1), `.env.example`
 - [x] 35. Skema Prisma: `MenuCategory`, `Menu`, `MenuOptionGroup`, `MenuOptionTag`, `Order`, `OrderItem`, `OrderItemOption`, `OrderPayment`, `OrderPaymentProof`, `PaymentAccount` + enum + snapshot manfaat pada `RewardCatalog`/`Voucher` (PRD §7) + migrasi
-- [ ] 36. Konstanta terpusat: label status pesanan/tipe voucher/rekening/status bukti, aksi & entitas audit, item navigasi
+- [x] 36. Konstanta terpusat: label status pesanan/tipe voucher/rekening/status bukti, aksi & entitas audit, item navigasi
 - [ ] 37. Utilitas & skema Zod: `shop-pricing`, `payment-window`, `order-code`, `shop`, `menu-category-admin`, `menu-admin`, `payment-account-admin`, `order`; perluasan `cloudinary` & `rate-limit`
 - [ ] 38. RBAC: tambah rute `/belanja`, `/keranjang`, `/pesanan` → `CUSTOMER`
 - [ ] 39. Server admin: manajemen kategori menu

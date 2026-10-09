@@ -2,11 +2,15 @@
 
 import {
   ChartColumn,
+  ClipboardList,
+  CreditCard,
   Gift,
   ScrollText,
   Store,
+  Tags,
   UserCog,
   Users,
+  UtensilsCrossed,
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -21,7 +25,11 @@ import { cn } from "@/lib/utils";
 // aktif dibawa warna + ikon + atribut aria-current sekaligus.
 const NAV_ICONS: Record<string, LucideIcon> = {
   "/admin": ChartColumn,
+  "/admin/kategori": Tags,
+  "/admin/menu": UtensilsCrossed,
   "/admin/reward": Gift,
+  "/admin/pembayaran": CreditCard,
+  "/admin/pesanan": ClipboardList,
   "/admin/staf": UserCog,
   "/admin/pelanggan": Users,
   "/admin/outlet": Store,

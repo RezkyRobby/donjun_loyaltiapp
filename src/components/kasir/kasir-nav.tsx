@@ -1,6 +1,12 @@
 "use client";
 
-import { History, ScanLine, TicketCheck, type LucideIcon } from "lucide-react";
+import {
+  ClipboardList,
+  History,
+  ScanLine,
+  TicketCheck,
+  type LucideIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -13,6 +19,7 @@ import { cn } from "@/lib/utils";
 const NAV_ICONS: Record<string, LucideIcon> = {
   "/kasir/scan": ScanLine,
   "/kasir/validasi": TicketCheck,
+  "/kasir/pesanan": ClipboardList,
   "/kasir/riwayat": History,
 };
 

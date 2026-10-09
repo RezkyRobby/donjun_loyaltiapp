@@ -1,6 +1,10 @@
 import type {
+  OrderPaymentProofStatus,
+  OrderStatus,
+  PaymentAccountType,
   PointTransactionMethod,
   PointTransactionType,
+  RewardBenefitType,
   VoucherStatus,
 } from "@/generated/prisma/enums";
 import type { AuditAction } from "@/constants/audit";
@@ -26,6 +30,46 @@ export const VOUCHER_STATUS_LABELS: Record<VoucherStatus, string> = {
   ACTIVE: "Aktif",
   USED: "Terpakai",
   CANCELED: "Dibatalkan",
+};
+
+// Tipe manfaat voucher/reward (PRD §5.4 fitur 4, §7.3). Dipakai pada form reward
+// admin dan tampilan detail voucher pelanggan: GENERIC tidak mengubah total,
+// PRODUCT menambah 1 menu tertaut gratis, PERCENT_DISCOUNT/AMOUNT_DISCOUNT
+// memotong total.
+export const REWARD_BENEFIT_TYPE_LABELS: Record<RewardBenefitType, string> = {
+  GENERIC: "Generik",
+  PRODUCT: "Gratis 1 produk",
+  PERCENT_DISCOUNT: "Diskon persen",
+  AMOUNT_DISCOUNT: "Diskon nominal",
+};
+
+// Status pesanan belanja (PRD §5.4 fitur 7, §5.5, §7.6): ditampilkan pada
+// pelacakan pesanan pelanggan, antrean kasir, dan monitoring admin.
+export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
+  AWAITING_PAYMENT: "Menunggu pembayaran",
+  AWAITING_CONFIRMATION: "Menunggu konfirmasi",
+  IN_PROGRESS: "Diproses",
+  COMPLETED: "Selesai",
+  REJECTED: "Ditolak",
+  EXPIRED: "Kedaluwarsa",
+};
+
+// Jenis rekening tujuan pembayaran manual (PRD §5.3 fitur 9, §7.6).
+export const PAYMENT_ACCOUNT_TYPE_LABELS: Record<PaymentAccountType, string> = {
+  BANK_TRANSFER: "Transfer bank",
+  EWALLET: "E-wallet",
+  QRIS: "QRIS",
+};
+
+// Status bukti transfer manual (PRD §5.4 fitur 6, §7.6): ditampilkan pada detail
+// pesanan pelanggan dan antrean kasir.
+export const ORDER_PAYMENT_PROOF_STATUS_LABELS: Record<
+  OrderPaymentProofStatus,
+  string
+> = {
+  PENDING: "Menunggu tinjauan",
+  ACCEPTED: "Diterima",
+  REJECTED: "Ditolak",
 };
 
 // Metode input transaksi poin (PRD §5.2 fitur 2 & 6): ditampilkan pada riwayat
@@ -79,5 +123,19 @@ export const AUDIT_ACTION_LABELS: Record<AuditAction, string> = {
   OUTLET_CREATED: "Outlet dibuat",
   OUTLET_UPDATED: "Outlet diperbarui",
   OUTLET_DELETED: "Outlet dihapus",
+  MENU_CATEGORY_CREATED: "Kategori menu dibuat",
+  MENU_CATEGORY_UPDATED: "Kategori menu diperbarui",
+  MENU_CATEGORY_DELETED: "Kategori menu dihapus",
+  MENU_CREATED: "Menu dibuat",
+  MENU_UPDATED: "Menu diperbarui",
+  MENU_DELETED: "Menu dihapus",
+  PAYMENT_ACCOUNT_CREATED: "Rekening pembayaran dibuat",
+  PAYMENT_ACCOUNT_UPDATED: "Rekening pembayaran diperbarui",
+  PAYMENT_ACCOUNT_DELETED: "Rekening pembayaran dihapus",
+  ORDER_CONFIRMED: "Pembayaran pesanan dikonfirmasi",
+  ORDER_REJECTED: "Pembayaran pesanan ditolak",
+  ORDER_COMPLETED: "Pesanan diselesaikan",
+  ORDER_CANCELED: "Pesanan dibatalkan",
+  ORDER_EXPIRED: "Pesanan kedaluwarsa",
 };
 
