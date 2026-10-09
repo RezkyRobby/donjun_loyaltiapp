@@ -46,6 +46,57 @@ enum PointTransactionMethod {
   SYSTEM
 }
 
+/// Tipe manfaat voucher yang diterbitkan (PRD §7.3).
+/// GENERIC = perilaku lama (judul saja), PRODUCT = 1 menu tertaut gratis,
+/// PERCENT_DISCOUNT = potongan persen, AMOUNT_DISCOUNT = potongan nominal Rupiah.
+enum RewardBenefitType {
+  GENERIC
+  PRODUCT
+  PERCENT_DISCOUNT
+  AMOUNT_DISCOUNT
+}
+
+/// Status siklus hidup pesanan belanja (PRD §7.6).
+enum OrderStatus {
+  AWAITING_PAYMENT
+  AWAITING_CONFIRMATION
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+  EXPIRED
+}
+
+/// Jenis rekening tujuan pembayaran (PRD §7.6).
+enum PaymentAccountType {
+  BANK_TRANSFER
+  EWALLET
+  QRIS
+}
+
+/// Status bukti transfer manual (PRD §7.6).
+enum OrderPaymentProofStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+/// Metode pembayaran pesanan (PRD §7.6).
+/// v1 hanya MANUAL_TRANSFER; PAYMENT_GATEWAY disiapkan untuk adapter daring.
+enum PaymentMethod {
+  MANUAL_TRANSFER
+  PAYMENT_GATEWAY
+}
+
+/// Status pembayaran pesanan (PRD §7.6).
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  EXPIRED
+  CANCELED
+  REFUNDED
+}
+
 /// Akun pelanggan, kasir, dan super admin (PRD §7.1).
 /// Kolom inti (id, name, email, emailVerified, image, createdAt, updatedAt)
 /// mengikuti skema Better-Auth; `username` berasal dari plugin username dengan
@@ -66,14 +117,18 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  outlet                Outlet?            @relation(fields: [outletId], references: [id])
+  outlet                Outlet?             @relation(fields: [outletId], references: [id])
   sessions              Session[]
   accounts              Account[]
-  vouchers              Voucher[]          @relation("VoucherOwner")
-  validatedVouchers     Voucher[]          @relation("VoucherUsedByCashier")
-  pointTransactions     PointTransaction[] @relation("PointTransactionCustomer")
-  performedTransactions PointTransaction[] @relation("PointTransactionCashier")
+  vouchers              Voucher[]           @relation("VoucherOwner")
+  validatedVouchers     Voucher[]           @relation("VoucherUsedByCashier")
+  pointTransactions     PointTransaction[]  @relation("PointTransactionCustomer")
+  performedTransactions PointTransaction[]  @relation("PointTransactionCashier")
   auditLogs             AuditLog[]
+  orders                Order[]             @relation("OrderCustomer")
+  confirmedOrders       Order[]             @relation("OrderConfirmedByCashier")
+  rejectedOrders        Order[]             @relation("OrderRejectedByCashier")
+  reviewedPaymentProofs OrderPaymentProof[] @relation("OrderPaymentProofReviewedBy")
 }
 
 /// Sesi login (tabel standar Better-Auth, PRD §7.1).
@@ -138,37 +193,51 @@ model Outlet {
   users             User[]
   vouchersUsed      Voucher[]          @relation("VoucherUsedAtOutlet")
   pointTransactions PointTransaction[]
+  orders            Order[]
 }
 
 /// Katalog reward/promo yang dapat ditukar poin (PRD §7.3).
 model RewardCatalog {
-  id           String    @id @default(cuid())
-  title        String
-  description  String?
-  imageUrl     String?
-  pointsCost   Int
-  quota        Int?
-  perUserLimit Int?
-  startAt      DateTime?
-  endAt        DateTime?
-  terms        String?
-  isActive     Boolean   @default(true)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id              String            @id @default(cuid())
+  title           String
+  description     String?
+  imageUrl        String?
+  benefitType     RewardBenefitType @default(GENERIC)
+  linkedMenuId    String?
+  discountPercent Int?
+  discountAmount  Int?
+  pointsCost      Int
+  quota           Int?
+  perUserLimit    Int?
+  startAt         DateTime?
+  endAt           DateTime?
+  terms           String?
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 
-  vouchers Voucher[]
+  linkedMenu Menu?     @relation(fields: [linkedMenuId], references: [id])
+  vouchers   Voucher[]
 }
 
 /// Voucher single-use hasil penukaran poin (PRD §7.3).
+/// Manfaat reward disnapshot saat penukaran agar perubahan reward tidak
+/// mengubah voucher yang sudah terbit (AGENTS.md — Aturan Non-Negotiable no. 11).
 model Voucher {
-  id              String        @id @default(cuid())
-  voucherCode     String        @unique
+  id              String            @id @default(cuid())
+  voucherCode     String            @unique
   userId          String
   rewardId        String
   pointsSpent     Int
   rewardTitle     String
-  status          VoucherStatus @default(ACTIVE)
-  claimedAt       DateTime      @default(now())
+  benefitType     RewardBenefitType @default(GENERIC)
+  discountPercent Int?
+  discountAmount  Int?
+  linkedMenuId    String?
+  linkedMenuName  String?
+  linkedMenuPrice Int?
+  status          VoucherStatus     @default(ACTIVE)
+  claimedAt       DateTime          @default(now())
   usedAt          DateTime?
   usedByCashierId String?
   usedAtOutletId  String?
@@ -177,9 +246,11 @@ model Voucher {
 
   user              User               @relation("VoucherOwner", fields: [userId], references: [id])
   reward            RewardCatalog      @relation(fields: [rewardId], references: [id])
+  linkedMenu        Menu?              @relation(fields: [linkedMenuId], references: [id])
   usedByCashier     User?              @relation("VoucherUsedByCashier", fields: [usedByCashierId], references: [id])
   usedAtOutlet      Outlet?            @relation("VoucherUsedAtOutlet", fields: [usedAtOutletId], references: [id])
   pointTransactions PointTransaction[]
+  orders            Order[]
 
   @@index([userId, status])
   @@index([userId, rewardId])
@@ -220,4 +291,209 @@ model AuditLog {
   actor User? @relation(fields: [actorId], references: [id])
 
   @@index([createdAt])
+}
+
+/// Kategori menu belanja (PRD §7.5).
+model MenuCategory {
+  id        String   @id @default(cuid())
+  name      String
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  menus Menu[]
+}
+
+/// Item menu belanja (PRD §7.5).
+model Menu {
+  id          String   @id @default(cuid())
+  categoryId  String?
+  name        String
+  description String?
+  imageUrl    String?
+  price       Int
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category     MenuCategory?     @relation(fields: [categoryId], references: [id])
+  optionGroups MenuOptionGroup[]
+  orderItems   OrderItem[]
+  rewards      RewardCatalog[]
+  vouchers     Voucher[]
+
+  @@index([isActive, sortOrder])
+  @@index([categoryId])
+}
+
+/// Grup opsi yang dapat dipilih pada sebuah menu (PRD §7.5).
+model MenuOptionGroup {
+  id        String   @id @default(cuid())
+  menuId    String
+  name      String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  menu Menu            @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  tags MenuOptionTag[]
+
+  @@index([menuId])
+}
+
+/// Tag opsi dalam sebuah grup (PRD §7.5).
+/// Tag bersifat opsional, multi-pilih, dan boleh menambah harga lewat priceDelta.
+model MenuOptionTag {
+  id         String   @id @default(cuid())
+  groupId    String
+  name       String
+  priceDelta Int      @default(0)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  group            MenuOptionGroup   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  orderItemOptions OrderItemOption[]
+
+  @@index([groupId])
+}
+
+/// Rekening/kanal tujuan pembayaran manual (PRD §7.6).
+model PaymentAccount {
+  id            String             @id @default(cuid())
+  type          PaymentAccountType
+  providerName  String
+  accountNumber String?
+  accountHolder String?
+  imageUrl      String?
+  isActive      Boolean            @default(true)
+  sortOrder     Int                @default(0)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  payments OrderPayment[]
+}
+
+/// Pesanan belanja pelanggan (PRD §7.6).
+model Order {
+  id                   String      @id @default(cuid())
+  orderCode            String      @unique
+  customerId           String
+  outletId             String
+  status               OrderStatus @default(AWAITING_PAYMENT)
+  subtotal             Int
+  discountAmount       Int         @default(0)
+  total                Int
+  paymentDueAt         DateTime
+  note                 String?
+  voucherId            String?
+  confirmedByCashierId String?
+  confirmedAt          DateTime?
+  rejectionReason      String?
+  rejectedByCashierId  String?
+  rejectedAt           DateTime?
+  completedAt          DateTime?
+  expiredAt            DateTime?
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+
+  customer           User                @relation("OrderCustomer", fields: [customerId], references: [id])
+  outlet             Outlet              @relation(fields: [outletId], references: [id])
+  voucher            Voucher?            @relation(fields: [voucherId], references: [id])
+  confirmedByCashier User?               @relation("OrderConfirmedByCashier", fields: [confirmedByCashierId], references: [id])
+  rejectedByCashier  User?               @relation("OrderRejectedByCashier", fields: [rejectedByCashierId], references: [id])
+  items              OrderItem[]
+  payments           OrderPayment[]
+  proofs             OrderPaymentProof[]
+
+  @@index([customerId, createdAt])
+  @@index([outletId, status, createdAt])
+  @@index([status, paymentDueAt])
+}
+
+/// Baris item dalam sebuah pesanan (PRD §7.6).
+/// Harga otoritatif dihitung ulang di server; snapshot disimpan agar riwayat utuh.
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  menuId    String
+  menuName  String
+  unitPrice Int
+  quantity  Int
+  isFree    Boolean  @default(false)
+  note      String?
+  lineTotal Int
+  createdAt DateTime @default(now())
+
+  order   Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menu    Menu              @relation(fields: [menuId], references: [id])
+  options OrderItemOption[]
+
+  @@index([orderId])
+  @@index([menuId])
+}
+
+/// Snapshot opsi/tag yang dipilih pada sebuah baris item (PRD §7.6).
+model OrderItemOption {
+  id          String   @id @default(cuid())
+  orderItemId String
+  tagId       String?
+  name        String
+  priceDelta  Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  orderItem OrderItem      @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
+  tag       MenuOptionTag? @relation(fields: [tagId], references: [id], onDelete: SetNull)
+
+  @@index([orderItemId])
+  @@index([tagId])
+}
+
+/// Pembayaran pesanan provider-agnostic (PRD §7.6).
+/// v1 hanya transfer manual; gateway daring ditambahkan sebagai adapter tanpa
+/// mengubah model Order (AGENTS.md — Aturan Non-Negotiable no. 12).
+model OrderPayment {
+  id                  String        @id @default(cuid())
+  orderId             String
+  method              PaymentMethod @default(MANUAL_TRANSFER)
+  provider            String?
+  status              PaymentStatus @default(PENDING)
+  amount              Int
+  paymentAccountId    String?
+  providerRef         String?       @unique
+  providerPaymentType String?
+  vaNumber            String?
+  qrString            String?
+  expiresAt           DateTime?
+  paidAt              DateTime?
+  rawPayload          Json?
+  idempotencyKey      String?       @unique
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  order          Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  paymentAccount PaymentAccount? @relation(fields: [paymentAccountId], references: [id])
+
+  @@index([orderId, status])
+  @@index([paymentAccountId])
+}
+
+/// Bukti transfer yang diunggah pelanggan (PRD §7.6).
+model OrderPaymentProof {
+  id                  String                  @id @default(cuid())
+  orderId             String
+  imageUrl            String
+  status              OrderPaymentProofStatus @default(PENDING)
+  uploadedAt          DateTime                @default(now())
+  reviewedAt          DateTime?
+  reviewedByCashierId String?
+  rejectionReason     String?
+
+  order             Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  reviewedByCashier User? @relation("OrderPaymentProofReviewedBy", fields: [reviewedByCashierId], references: [id])
+
+  @@index([orderId, uploadedAt])
+  @@index([reviewedByCashierId])
 }
