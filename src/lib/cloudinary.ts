@@ -14,14 +14,17 @@ export const IMAGE_TYPES = [
 
 const REWARD_IMAGE_FOLDER = "donjun/reward";
 const MENU_IMAGE_FOLDER = "donjun/menu";
+const PAYMENT_ACCOUNT_IMAGE_FOLDER = "donjun/payment-account";
 const PAYMENT_PROOF_FOLDER = "donjun/payment-proof";
 
 export const REWARD_IMAGE_MAX_BYTES = IMAGE_MAX_BYTES;
 export const MENU_IMAGE_MAX_BYTES = IMAGE_MAX_BYTES;
+export const PAYMENT_ACCOUNT_IMAGE_MAX_BYTES = IMAGE_MAX_BYTES;
 export const PAYMENT_PROOF_MAX_BYTES = IMAGE_MAX_BYTES;
 
 export const REWARD_IMAGE_TYPES = IMAGE_TYPES;
 export const MENU_IMAGE_TYPES = IMAGE_TYPES;
+export const PAYMENT_ACCOUNT_IMAGE_TYPES = IMAGE_TYPES;
 export const PAYMENT_PROOF_TYPES = IMAGE_TYPES;
 
 const IMAGE_FORMAT_ERROR = "Format gambar harus JPG, PNG, atau WebP.";
@@ -59,6 +62,16 @@ export function getRewardImageError(file: ImageValidationInput): string | null {
 
 export function getMenuImageError(file: ImageValidationInput): string | null {
   return getImageError(file, MENU_IMAGE_TYPES, MENU_IMAGE_MAX_BYTES);
+}
+
+export function getPaymentAccountImageError(
+  file: ImageValidationInput,
+): string | null {
+  return getImageError(
+    file,
+    PAYMENT_ACCOUNT_IMAGE_TYPES,
+    PAYMENT_ACCOUNT_IMAGE_MAX_BYTES,
+  );
 }
 
 export function getPaymentProofError(file: ImageValidationInput): string | null {
@@ -162,6 +175,16 @@ export function uploadMenuImage(file: File): Promise<ImageUploadResult> {
     folder: MENU_IMAGE_FOLDER,
     maxBytes: MENU_IMAGE_MAX_BYTES,
     allowedTypes: MENU_IMAGE_TYPES,
+  });
+}
+
+export function uploadPaymentAccountImage(
+  file: File,
+): Promise<ImageUploadResult> {
+  return uploadImage(file, {
+    folder: PAYMENT_ACCOUNT_IMAGE_FOLDER,
+    maxBytes: PAYMENT_ACCOUNT_IMAGE_MAX_BYTES,
+    allowedTypes: PAYMENT_ACCOUNT_IMAGE_TYPES,
   });
 }
 

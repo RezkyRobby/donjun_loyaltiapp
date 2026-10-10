@@ -235,7 +235,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 38. RBAC: tambah rute `/belanja`, `/keranjang`, `/pesanan` → `CUSTOMER`
 - [x] 39. Server admin: manajemen kategori menu
 - [x] 40. Server admin: manajemen menu (CRUD + grup opsi/tag)
-- [ ] 41. Server admin: manajemen rekening pembayaran
+- [x] 41. Server admin: manajemen rekening pembayaran
 - [ ] 42. Server pelanggan: katalog belanja, `createOrder` (voucher row-lock, harga otoritatif, tenggat bayar), `cancelOrder`
 - [ ] 43. Server pelanggan: unggah bukti transfer (Cloudinary) + helper kedaluwarsa lazy
 - [ ] 44. Server kasir: antrean pesanan + konfirmasi/tolak/selesai (konsumsi voucher atomik)
