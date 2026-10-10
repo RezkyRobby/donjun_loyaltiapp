@@ -10,14 +10,35 @@ import { FormAlert } from "@/components/auth/form-alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { REWARD_BENEFIT_TYPE_LABELS } from "@/constants/labels";
+import { RewardBenefitType } from "@/generated/prisma/enums";
+import { formatRupiah } from "@/lib/format";
 import { toFieldErrors } from "@/lib/registration";
-import { rewardFormSchema } from "@/lib/reward-admin";
+import {
+  REWARD_DISCOUNT_PERCENT_MAX,
+  REWARD_DISCOUNT_PERCENT_MIN,
+  REWARD_MAX_DISCOUNT_AMOUNT,
+  rewardFormSchema,
+} from "@/lib/reward-admin";
 import { createReward, updateReward } from "@/server/admin/rewards";
 
 // Form buat/ubah reward (PRD §5.3 fitur 2). Validasi klien memakai skema Zod
 // yang sama dengan server (AGENTS.md aturan 1) untuk umpan balik langsung.
 // Gambar diunggah ke Cloudinary melalui Server Action; berkas baru hanya dikirim
-// bila admin benar-benar memilihnya.
+// bila admin benar-benar memilihnya. Tipe manfaat voucher (PRD §5.4 fitur 4)
+// membuka kolom tambahan: menu tertaut untuk PRODUCT, persentase/nominal untuk
+// diskon.
+
+// Urutan tampil tipe manfaat pada pilihan.
+const BENEFIT_TYPES: RewardBenefitType[] = [
+  RewardBenefitType.GENERIC,
+  RewardBenefitType.PRODUCT,
+  RewardBenefitType.PERCENT_DISCOUNT,
+  RewardBenefitType.AMOUNT_DISCOUNT,
+];
+
+const SELECT_CLASS =
+  "h-12 w-full rounded-lg border border-input bg-card px-2.5 text-base text-brand-brown-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:text-sm";
 
 export type RewardFormInitial = {
   id: string;
@@ -31,6 +52,10 @@ export type RewardFormInitial = {
   terms: string;
   isActive: boolean;
   imageUrl: string | null;
+  benefitType: RewardBenefitType;
+  linkedMenuId: string | null;
+  discountPercent: number | null;
+  discountAmount: number | null;
 };
 
 function FieldMessage({
@@ -86,9 +111,11 @@ function Field({
 export function RewardForm({
   mode,
   initial,
+  menus = [],
 }: {
   mode: "create" | "edit";
   initial?: RewardFormInitial;
+  menus?: { id: string; name: string }[];
 }) {
   const router = useRouter();
 
@@ -101,6 +128,20 @@ export function RewardForm({
   const [endAt, setEndAt] = useState(initial?.endAt ?? "");
   const [terms, setTerms] = useState(initial?.terms ?? "");
   const [isActive, setIsActive] = useState(initial?.isActive ?? true);
+  const [benefitType, setBenefitType] = useState<RewardBenefitType>(
+    initial?.benefitType ?? RewardBenefitType.GENERIC,
+  );
+  const [linkedMenuId, setLinkedMenuId] = useState(initial?.linkedMenuId ?? "");
+  const [discountPercent, setDiscountPercent] = useState(
+    initial?.discountPercent === null || initial?.discountPercent === undefined
+      ? ""
+      : String(initial.discountPercent),
+  );
+  const [discountAmount, setDiscountAmount] = useState(
+    initial?.discountAmount === null || initial?.discountAmount === undefined
+      ? ""
+      : String(initial.discountAmount),
+  );
   const existingImageUrl = initial?.imageUrl ?? null;
   const [image, setImage] = useState<File | null>(null);
   const [removeImage, setRemoveImage] = useState(false);
@@ -130,6 +171,10 @@ export function RewardForm({
       endAt,
       terms,
       isActive,
+      benefitType,
+      linkedMenuId,
+      discountPercent,
+      discountAmount,
       image,
       removeImage,
     };
@@ -304,6 +349,127 @@ export function RewardForm({
           className="min-h-28 w-full rounded-lg border border-input bg-card px-2.5 py-2 text-base outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive md:text-sm"
         />
       </Field>
+
+      <fieldset className="flex flex-col gap-5 rounded-button border border-border bg-muted/40 p-4">
+        <legend className="px-1 text-sm font-medium text-brand-brown-dark">
+          Tipe manfaat voucher
+        </legend>
+
+        <Field
+          id="benefitType"
+          label="Manfaat saat voucher dipakai"
+          error={fieldErrors.benefitType}
+          hint="Generik tidak mengubah total belanja, Gratis 1 produk menautkan satu menu, Diskon memotong total belanja."
+        >
+          <select
+            id="benefitType"
+            name="benefitType"
+            value={benefitType}
+            onChange={(event) =>
+              setBenefitType(event.target.value as RewardBenefitType)
+            }
+            aria-invalid={fieldErrors.benefitType ? true : undefined}
+            aria-describedby={
+              fieldErrors.benefitType
+                ? "benefitType-galat"
+                : "benefitType-petunjuk"
+            }
+            className={SELECT_CLASS}
+          >
+            {BENEFIT_TYPES.map((type) => (
+              <option key={type} value={type}>
+                {REWARD_BENEFIT_TYPE_LABELS[type]}
+              </option>
+            ))}
+          </select>
+        </Field>
+
+        {benefitType === RewardBenefitType.PRODUCT ? (
+          <Field
+            id="linkedMenuId"
+            label="Menu yang digratiskan"
+            error={fieldErrors.linkedMenuId}
+            hint={
+              menus.length === 0
+                ? "Belum ada menu. Tambahkan menu terlebih dahulu pada halaman Menu."
+                : "Pelanggan mendapat 1 item menu ini gratis saat memakai voucher."
+            }
+          >
+            <select
+              id="linkedMenuId"
+              name="linkedMenuId"
+              value={linkedMenuId}
+              onChange={(event) => setLinkedMenuId(event.target.value)}
+              aria-invalid={fieldErrors.linkedMenuId ? true : undefined}
+              aria-describedby={
+                fieldErrors.linkedMenuId
+                  ? "linkedMenuId-galat"
+                  : "linkedMenuId-petunjuk"
+              }
+              className={SELECT_CLASS}
+            >
+              <option value="">Pilih menu</option>
+              {menus.map((menu) => (
+                <option key={menu.id} value={menu.id}>
+                  {menu.name}
+                </option>
+              ))}
+            </select>
+          </Field>
+        ) : null}
+
+        {benefitType === RewardBenefitType.PERCENT_DISCOUNT ? (
+          <Field
+            id="discountPercent"
+            label="Persentase diskon"
+            error={fieldErrors.discountPercent}
+            hint={`Potongan dari subtotal belanja, ${REWARD_DISCOUNT_PERCENT_MIN} sampai ${REWARD_DISCOUNT_PERCENT_MAX} persen.`}
+          >
+            <Input
+              id="discountPercent"
+              name="discountPercent"
+              type="number"
+              min={REWARD_DISCOUNT_PERCENT_MIN}
+              max={REWARD_DISCOUNT_PERCENT_MAX}
+              value={discountPercent}
+              onChange={(event) => setDiscountPercent(event.target.value)}
+              aria-invalid={fieldErrors.discountPercent ? true : undefined}
+              aria-describedby={
+                fieldErrors.discountPercent
+                  ? "discountPercent-galat"
+                  : "discountPercent-petunjuk"
+              }
+              className="h-12 bg-card"
+            />
+          </Field>
+        ) : null}
+
+        {benefitType === RewardBenefitType.AMOUNT_DISCOUNT ? (
+          <Field
+            id="discountAmount"
+            label="Nominal diskon (Rupiah)"
+            error={fieldErrors.discountAmount}
+            hint={`Potongan tetap dari subtotal belanja, maksimal ${formatRupiah(REWARD_MAX_DISCOUNT_AMOUNT)}.`}
+          >
+            <Input
+              id="discountAmount"
+              name="discountAmount"
+              type="number"
+              min={1}
+              max={REWARD_MAX_DISCOUNT_AMOUNT}
+              value={discountAmount}
+              onChange={(event) => setDiscountAmount(event.target.value)}
+              aria-invalid={fieldErrors.discountAmount ? true : undefined}
+              aria-describedby={
+                fieldErrors.discountAmount
+                  ? "discountAmount-galat"
+                  : "discountAmount-petunjuk"
+              }
+              className="h-12 bg-card"
+            />
+          </Field>
+        ) : null}
+      </fieldset>
 
       <Field
         id="image"

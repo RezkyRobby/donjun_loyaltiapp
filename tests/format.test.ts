@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { formatCount, formatPercent, formatPoints } from "@/lib/format";
+import { formatCount, formatPercent, formatPoints, formatRupiah } from "@/lib/format";
 
 describe("formatPoints", () => {
   it("memakai pemisah ribuan locale id-ID", () => {
@@ -21,6 +21,20 @@ describe("formatCount", () => {
   it("memakai pemisah ribuan locale id-ID", () => {
     expect(formatCount(1250)).toBe("1.250");
     expect(formatCount(0)).toBe("0");
+  });
+});
+
+describe("formatRupiah", () => {
+  // Locale id-ID memisahkan simbol "Rp" dengan spasi tak-terputus (U+00A0);
+  // disamakan agar asersi tetap terbaca.
+  function normalized(value: number): string {
+    return formatRupiah(value).replace(/\u00a0/g, " ");
+  }
+
+  it("memakai awalan Rp tanpa desimal dan pemisah ribuan id-ID", () => {
+    expect(normalized(8000)).toBe("Rp 8.000");
+    expect(normalized(1_000_000)).toBe("Rp 1.000.000");
+    expect(normalized(0)).toBe("Rp 0");
   });
 });
 

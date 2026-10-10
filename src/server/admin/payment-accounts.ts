@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { AUDIT_ACTION, AUDIT_ENTITY } from "@/constants/audit";
 import { Prisma } from "@/generated/prisma/client";
+import type { PaymentAccountType } from "@/generated/prisma/enums";
 import { uploadPaymentAccountImage } from "@/lib/cloudinary";
 import {
   paymentAccountFormSchema,
@@ -22,7 +23,13 @@ import { getSuperAdminId } from "@/server/admin/guard";
 // Rekening yang sudah dipakai pembayaran tidak dihapus permanen — dinonaktifkan
 // agar riwayat pembayaran tetap utuh.
 
-export type PaymentAccountFormPayload = PaymentAccountFormInput & {
+export type PaymentAccountFormPayload = {
+  type: PaymentAccountType;
+  providerName: string;
+  accountNumber: string;
+  accountHolder: string;
+  sortOrder: string;
+  isActive: boolean;
   image?: File | null;
   removeImage?: boolean;
 };

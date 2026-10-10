@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { rewardFormSchema, toRewardPeriod } from "@/lib/reward-admin";
+import {
+  normalizeRewardBenefit,
+  rewardFormSchema,
+  toRewardPeriod,
+} from "@/lib/reward-admin";
 
 // Input mentah seperti yang dikirim form (semua nilai berupa string).
 const baseInput = {
@@ -13,6 +17,10 @@ const baseInput = {
   endAt: "",
   terms: "",
   isActive: true,
+  benefitType: "GENERIC",
+  linkedMenuId: "",
+  discountPercent: "",
+  discountAmount: "",
 };
 
 describe("rewardFormSchema", () => {
@@ -100,6 +108,168 @@ describe("rewardFormSchema", () => {
     });
 
     expect(parsed.success).toBe(true);
+  });
+
+  it("mengosongkan kolom manfaat yang tidak relevan pada tipe GENERIC", () => {
+    const parsed = rewardFormSchema.safeParse({
+      ...baseInput,
+      discountPercent: "50",
+    });
+
+    expect(parsed.success).toBe(true);
+    if (!parsed.success) return;
+
+    expect(parsed.data.benefitType).toBe("GENERIC");
+    expect(parsed.data.linkedMenuId).toBeNull();
+    expect(parsed.data.discountPercent).toBe(50);
+  });
+
+  it("mewajibkan menu tertaut pada tipe PRODUCT", () => {
+    const missing = rewardFormSchema.safeParse({
+      ...baseInput,
+      benefitType: "PRODUCT",
+    });
+
+    expect(missing.success).toBe(false);
+    if (missing.success) return;
+    expect(missing.error.issues[0]?.path).toEqual(["linkedMenuId"]);
+
+    const parsed = rewardFormSchema.safeParse({
+      ...baseInput,
+      benefitType: "PRODUCT",
+      linkedMenuId: "menu-1",
+    });
+
+    expect(parsed.success).toBe(true);
+    if (!parsed.success) return;
+    expect(parsed.data.linkedMenuId).toBe("menu-1");
+  });
+
+  it("mewajibkan persentase diskon pada tipe PERCENT_DISCOUNT", () => {
+    const missing = rewardFormSchema.safeParse({
+      ...baseInput,
+      benefitType: "PERCENT_DISCOUNT",
+    });
+
+    expect(missing.success).toBe(false);
+    if (missing.success) return;
+    expect(missing.error.issues[0]?.path).toEqual(["discountPercent"]);
+
+    const parsed = rewardFormSchema.safeParse({
+      ...baseInput,
+      benefitType: "PERCENT_DISCOUNT",
+      discountPercent: "25",
+    });
+
+    expect(parsed.success).toBe(true);
+    if (!parsed.success) return;
+    expect(parsed.data.discountPercent).toBe(25);
+  });
+
+  it("menolak persentase diskon di luar 1 sampai 100", () => {
+    expect(
+      rewardFormSchema.safeParse({
+        ...baseInput,
+        benefitType: "PERCENT_DISCOUNT",
+        discountPercent: "0",
+      }).success,
+    ).toBe(false);
+    expect(
+      rewardFormSchema.safeParse({
+        ...baseInput,
+        benefitType: "PERCENT_DISCOUNT",
+        discountPercent: "101",
+      }).success,
+    ).toBe(false);
+  });
+
+  it("mewajibkan nominal diskon pada tipe AMOUNT_DISCOUNT", () => {
+    const missing = rewardFormSchema.safeParse({
+      ...baseInput,
+      benefitType: "AMOUNT_DISCOUNT",
+    });
+
+    expect(missing.success).toBe(false);
+    if (missing.success) return;
+    expect(missing.error.issues[0]?.path).toEqual(["discountAmount"]);
+
+    const parsed = rewardFormSchema.safeParse({
+      ...baseInput,
+      benefitType: "AMOUNT_DISCOUNT",
+      discountAmount: "10000",
+    });
+
+    expect(parsed.success).toBe(true);
+    if (!parsed.success) return;
+    expect(parsed.data.discountAmount).toBe(10_000);
+  });
+
+  it("menolak tipe manfaat yang tidak dikenal", () => {
+    expect(
+      rewardFormSchema.safeParse({ ...baseInput, benefitType: "BOGO" }).success,
+    ).toBe(false);
+  });
+});
+
+describe("normalizeRewardBenefit", () => {
+  it("menyisakan hanya kolom yang relevan untuk tiap tipe", () => {
+    expect(
+      normalizeRewardBenefit({
+        benefitType: "PRODUCT",
+        linkedMenuId: "menu-1",
+        discountPercent: 30,
+        discountAmount: 5000,
+      }),
+    ).toEqual({
+      benefitType: "PRODUCT",
+      linkedMenuId: "menu-1",
+      discountPercent: null,
+      discountAmount: null,
+    });
+
+    expect(
+      normalizeRewardBenefit({
+        benefitType: "PERCENT_DISCOUNT",
+        linkedMenuId: "menu-1",
+        discountPercent: 30,
+        discountAmount: 5000,
+      }),
+    ).toEqual({
+      benefitType: "PERCENT_DISCOUNT",
+      linkedMenuId: null,
+      discountPercent: 30,
+      discountAmount: null,
+    });
+
+    expect(
+      normalizeRewardBenefit({
+        benefitType: "AMOUNT_DISCOUNT",
+        linkedMenuId: "menu-1",
+        discountPercent: 30,
+        discountAmount: 5000,
+      }),
+    ).toEqual({
+      benefitType: "AMOUNT_DISCOUNT",
+      linkedMenuId: null,
+      discountPercent: null,
+      discountAmount: 5000,
+    });
+  });
+
+  it("menghapus semua kolom manfaat untuk tipe GENERIC", () => {
+    expect(
+      normalizeRewardBenefit({
+        benefitType: "GENERIC",
+        linkedMenuId: "menu-1",
+        discountPercent: 30,
+        discountAmount: 5000,
+      }),
+    ).toEqual({
+      benefitType: "GENERIC",
+      linkedMenuId: null,
+      discountPercent: null,
+      discountAmount: null,
+    });
   });
 });
 

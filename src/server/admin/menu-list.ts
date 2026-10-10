@@ -32,6 +32,7 @@ export type AdminMenuSummary = {
   sortOrder: number;
   createdAt: Date;
   optionGroupCount: number;
+  canDelete: boolean;
 };
 
 export type AdminMenuDetail = AdminMenuSummary & {
@@ -49,7 +50,9 @@ const ADMIN_MENU_LIST_SELECT = {
   sortOrder: true,
   createdAt: true,
   category: { select: { name: true } },
-  _count: { select: { optionGroups: true } },
+  _count: {
+    select: { optionGroups: true, orderItems: true, vouchers: true },
+  },
 } satisfies Prisma.MenuSelect;
 
 const ADMIN_MENU_DETAIL_SELECT = {
@@ -89,6 +92,7 @@ function toAdminMenuSummary(row: MenuListRow): AdminMenuSummary {
     sortOrder: row.sortOrder,
     createdAt: row.createdAt,
     optionGroupCount: row._count.optionGroups,
+    canDelete: row._count.orderItems === 0 && row._count.vouchers === 0,
   };
 }
 

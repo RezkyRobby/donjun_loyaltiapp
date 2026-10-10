@@ -8,6 +8,7 @@ import { uploadRewardImage } from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
 import { toFieldErrors } from "@/lib/registration";
 import {
+  normalizeRewardBenefit,
   rewardFormSchema,
   rewardIdSchema,
   toRewardPeriod,
@@ -19,7 +20,8 @@ import { getSuperAdminId } from "@/server/admin/guard";
 // melewati guard Super Admin, validasi Zod ulang (AGENTS.md aturan 1), dan
 // menulis AuditLog dalam transaksi yang sama (aturan 9). Reward yang sudah
 // memiliki voucher tidak boleh dihapus permanen — diarahkan untuk dinonaktifkan
-// agar snapshot judul pada voucher tetap utuh.
+// agar snapshot judul pada voucher tetap utuh. Kolom manfaat voucher disimpan
+// menyesuaikan tipe terpilih (PRD §5.4 fitur 4, §7.3).
 
 export type RewardFormPayload = {
   title: string;
@@ -31,6 +33,10 @@ export type RewardFormPayload = {
   endAt: string;
   terms: string;
   isActive: boolean;
+  benefitType: string;
+  linkedMenuId: string;
+  discountPercent: string;
+  discountAmount: string;
   image?: File | null;
   removeImage?: boolean;
 };
@@ -47,6 +53,10 @@ type RewardAuditFields = {
   startAt: Date | null;
   endAt: Date | null;
   isActive: boolean;
+  benefitType: string;
+  linkedMenuId: string | null;
+  discountPercent: number | null;
+  discountAmount: number | null;
 };
 
 function rewardAuditMetadata(reward: RewardAuditFields) {
@@ -58,6 +68,10 @@ function rewardAuditMetadata(reward: RewardAuditFields) {
     startAt: reward.startAt ? reward.startAt.toISOString() : null,
     endAt: reward.endAt ? reward.endAt.toISOString() : null,
     isActive: reward.isActive,
+    benefitType: reward.benefitType,
+    linkedMenuId: reward.linkedMenuId,
+    discountPercent: reward.discountPercent,
+    discountAmount: reward.discountAmount,
   };
 }
 
@@ -108,6 +122,7 @@ export async function createReward(
   }
 
   const period = toRewardPeriod(data);
+  const benefit = normalizeRewardBenefit(data);
 
   try {
     const reward = await prisma.$transaction(async (tx) => {
@@ -123,6 +138,10 @@ export async function createReward(
           endAt: period.endAt,
           terms: data.terms,
           isActive: data.isActive,
+          benefitType: benefit.benefitType,
+          linkedMenuId: benefit.linkedMenuId,
+          discountPercent: benefit.discountPercent,
+          discountAmount: benefit.discountAmount,
         },
         select: { id: true },
       });
@@ -209,6 +228,7 @@ export async function updateReward(
   }
 
   const period = toRewardPeriod(data);
+  const benefit = normalizeRewardBenefit(data);
 
   try {
     await prisma.$transaction(async (tx) => {
@@ -225,6 +245,10 @@ export async function updateReward(
           endAt: period.endAt,
           terms: data.terms,
           isActive: data.isActive,
+          benefitType: benefit.benefitType,
+          linkedMenuId: benefit.linkedMenuId,
+          discountPercent: benefit.discountPercent,
+          discountAmount: benefit.discountAmount,
         },
       });
 

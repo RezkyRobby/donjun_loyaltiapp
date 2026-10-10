@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { RewardForm } from "@/components/admin/reward-form";
 import { witaDayKey } from "@/lib/datetime";
+import { getAdminMenus } from "@/server/admin/menu-list";
 import { getAdminRewardById } from "@/server/admin/reward-list";
 
 export const metadata: Metadata = { title: "Ubah Reward" };
@@ -18,6 +19,8 @@ export default async function AdminRewardEditPage({
   const reward = await getAdminRewardById(id);
 
   if (!reward) notFound();
+
+  const menus = await getAdminMenus();
 
   return (
     <section className="mx-auto flex w-full max-w-3xl flex-col gap-6">
@@ -46,7 +49,12 @@ export default async function AdminRewardEditPage({
             terms: reward.terms ?? "",
             isActive: reward.isActive,
             imageUrl: reward.imageUrl,
+            benefitType: reward.benefitType,
+            linkedMenuId: reward.linkedMenuId,
+            discountPercent: reward.discountPercent,
+            discountAmount: reward.discountAmount,
           }}
+          menus={menus.map((menu) => ({ id: menu.id, name: menu.name }))}
         />
       </div>
     </section>

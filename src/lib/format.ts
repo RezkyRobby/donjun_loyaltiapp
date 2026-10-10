@@ -10,6 +10,15 @@ const percentFormatter = new Intl.NumberFormat("id-ID", {
   maximumFractionDigits: 1,
 });
 
+// Nominal Rupiah tanpa desimal (design.md §5: mata uang memakai locale id-ID),
+// mis. 8000 → "Rp8.000".
+const rupiahFormatter = new Intl.NumberFormat("id-ID", {
+  style: "currency",
+  currency: "IDR",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
 // Bilangan bulat dengan pemisah ribuan id-ID, mis. jumlah anggota atau voucher.
 export function formatCount(value: number): string {
   return numberFormatter.format(value);
@@ -18,6 +27,12 @@ export function formatCount(value: number): string {
 // Saldo poin ditampilkan dengan pemisah ribuan id-ID (design.md §5).
 export function formatPoints(value: number): string {
   return numberFormatter.format(value);
+}
+
+// Nominal Rupiah dengan awalan "Rp" dan pemisah ribuan id-ID (design.md §5),
+// mis. 8000 → "Rp8.000". Dipakai pada harga menu dan potongan belanja.
+export function formatRupiah(value: number): string {
+  return rupiahFormatter.format(value);
 }
 
 // Rasio ditampilkan sebagai persen id-ID, mis. 0,5 → "50%". Nilai `null`

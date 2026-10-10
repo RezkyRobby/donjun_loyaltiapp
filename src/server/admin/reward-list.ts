@@ -1,11 +1,13 @@
 import type { Prisma } from "@/generated/prisma/client";
+import type { RewardBenefitType } from "@/generated/prisma/enums";
 import { VoucherStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { getRemainingQuota } from "@/lib/reward-availability";
 
 // Kueri daftar reward untuk backoffice (PRD §5.3 fitur 2). Kuota terpakai hanya
 // menghitung voucher yang belum dibatalkan — sejalan dengan perhitungan katalog
-// pelanggan dan penukaran (voucher CANCELED mengembalikan kuota).
+// pelanggan dan penukaran (voucher CANCELED mengembalikan kuota). Kolom manfaat
+// voucher dibawa agar formulir edit dapat memuat ulang tipe manfaat (PRD §7.3).
 
 const COUNTED_VOUCHER_STATUSES = [VoucherStatus.ACTIVE, VoucherStatus.USED];
 
@@ -21,6 +23,10 @@ export type AdminReward = {
   endAt: Date | null;
   terms: string | null;
   isActive: boolean;
+  benefitType: RewardBenefitType;
+  linkedMenuId: string | null;
+  discountPercent: number | null;
+  discountAmount: number | null;
   claimedCount: number;
   remainingQuota: number | null;
 };
@@ -37,6 +43,10 @@ const rewardSelect = {
   endAt: true,
   terms: true,
   isActive: true,
+  benefitType: true,
+  linkedMenuId: true,
+  discountPercent: true,
+  discountAmount: true,
   _count: {
     select: {
       vouchers: { where: { status: { in: COUNTED_VOUCHER_STATUSES } } },
@@ -61,6 +71,10 @@ function toAdminReward(row: RewardRow): AdminReward {
     endAt: row.endAt,
     terms: row.terms,
     isActive: row.isActive,
+    benefitType: row.benefitType,
+    linkedMenuId: row.linkedMenuId,
+    discountPercent: row.discountPercent,
+    discountAmount: row.discountAmount,
     claimedCount,
     remainingQuota: getRemainingQuota(row.quota, claimedCount),
   };

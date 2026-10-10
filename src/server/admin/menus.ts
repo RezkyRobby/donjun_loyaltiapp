@@ -18,7 +18,28 @@ import { getSuperAdminId } from "@/server/admin/guard";
 // masukan terkini (masukan tidak membawa id). Menu yang telah direferensikan
 // pesanan atau voucher tidak dihapus permanen — cukup dinonaktifkan.
 
-export type MenuFormPayload = MenuFormInput & {
+export type MenuOptionTagPayload = {
+  name: string;
+  priceDelta: string;
+  sortOrder: number;
+};
+
+export type MenuOptionGroupPayload = {
+  name: string;
+  sortOrder: number;
+  tags: MenuOptionTagPayload[];
+};
+
+// Nilai mentah dari formulir (angka berupa string) divalidasi ulang oleh
+// `menuFormSchema` di server (AGENTS.md aturan 1).
+export type MenuFormPayload = {
+  categoryId: string;
+  name: string;
+  description: string;
+  price: string;
+  sortOrder: string;
+  isActive: boolean;
+  optionGroups: MenuOptionGroupPayload[];
   image?: File | null;
   removeImage?: boolean;
 };
