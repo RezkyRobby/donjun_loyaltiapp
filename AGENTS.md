@@ -234,7 +234,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 37. Utilitas & skema Zod: `shop-pricing`, `payment-window`, `order-code`, `shop`, `menu-category-admin`, `menu-admin`, `payment-account-admin`, `order`; perluasan `cloudinary` & `rate-limit`
 - [x] 38. RBAC: tambah rute `/belanja`, `/keranjang`, `/pesanan` → `CUSTOMER`
 - [x] 39. Server admin: manajemen kategori menu
-- [ ] 40. Server admin: manajemen menu (CRUD + grup opsi/tag)
+- [x] 40. Server admin: manajemen menu (CRUD + grup opsi/tag)
 - [ ] 41. Server admin: manajemen rekening pembayaran
 - [ ] 42. Server pelanggan: katalog belanja, `createOrder` (voucher row-lock, harga otoritatif, tenggat bayar), `cancelOrder`
 - [ ] 43. Server pelanggan: unggah bukti transfer (Cloudinary) + helper kedaluwarsa lazy
