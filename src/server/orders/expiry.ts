@@ -1,4 +1,5 @@
 import { AUDIT_ACTION, AUDIT_ENTITY } from "@/constants/audit";
+import type { Prisma } from "@/generated/prisma/client";
 import { OrderStatus } from "@/generated/prisma/enums";
 import { shouldExpireOrder } from "@/lib/payment-window";
 import { prisma } from "@/lib/prisma";
@@ -48,15 +49,15 @@ export async function expireOrderIfDue(
   });
 }
 
-// Menegakkan kedaluwarsa untuk seluruh pesanan pelanggan yang sudah lewat
-// tenggat; dipakai sebelum menampilkan daftar pesanan.
-export async function expireDueOrdersForCustomer(
-  customerId: string,
-  now: Date = new Date(),
+// Menegakkan kedaluwarsa untuk seluruh pesanan yang cocok dengan filter dan
+// sudah lewat tenggat; dipakai sebelum menampilkan daftar pesanan.
+async function expireDueOrders(
+  where: Prisma.OrderWhereInput,
+  now: Date,
 ): Promise<void> {
   const due = await prisma.order.findMany({
     where: {
-      customerId,
+      ...where,
       status: OrderStatus.AWAITING_PAYMENT,
       paymentDueAt: { lt: now },
     },
@@ -66,4 +67,18 @@ export async function expireDueOrdersForCustomer(
   for (const order of due) {
     await expireOrderIfDue(order.id, now);
   }
+}
+
+export async function expireDueOrdersForCustomer(
+  customerId: string,
+  now: Date = new Date(),
+): Promise<void> {
+  await expireDueOrders({ customerId }, now);
+}
+
+export async function expireDueOrdersForOutlet(
+  outletId: string,
+  now: Date = new Date(),
+): Promise<void> {
+  await expireDueOrders({ outletId }, now);
 }
