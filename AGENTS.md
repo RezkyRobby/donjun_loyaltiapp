@@ -57,7 +57,7 @@ Ini kesalahan implementasi yang paling mungkin terjadi — pegang spesifikasinya
 | Mata uang & format | Rupiah `id-ID`; tanggal ditampilkan dalam WITA. |
 | Tipe voucher | Reward punya `benefitType`: `GENERIC` (judul saja/perilaku lama), `PRODUCT` (menu tertaut → 1 item gratis), `PERCENT_DISCOUNT`, `AMOUNT_DISCOUNT`. Manfaat **disnapshot** ke voucher saat penukaran. |
 | Voucher di pesanan | Ditempel di checkout, **maksimal 1 voucher per pesanan**. Status voucher → `USED` **saat kasir mengonfirmasi pembayaran**, bukan saat checkout. |
-| Pesanan ditolak/kedaluwarsa | Voucher **tidak dikonsumsi** (tetap `ACTIVE`) dan bebas dipakai lagi. |
+| Pesanan ditolak/kedaluwarsa/dibatalkan | Voucher **tidak dikonsumsi** (tetap `ACTIVE`) dan bebas dipakai lagi. |
 | Kategori & menu belanja | Dikelola Super Admin: `MenuCategory` dan `Menu` (beserta grup opsi/tag). Tag opsi **opsional, multi-pilih**, boleh menambah harga; semua harga dihitung ulang di server. |
 | Pembayaran pesanan | Transfer manual: pelanggan unggah **bukti transfer**, kasir konfirmasi atau tolak (alasan wajib). Tenggat bayar **24 jam** (`ORDER_PAYMENT_WINDOW_MINUTES`); lewat tenggat → status `EXPIRED` (ditegakkan lazy saat data diakses). |
 | Belanja & poin | Belanja **tidak** memberi poin otomatis; poin tetap hanya dari injeksi manual kasir. |
@@ -236,7 +236,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 39. Server admin: manajemen kategori menu
 - [x] 40. Server admin: manajemen menu (CRUD + grup opsi/tag)
 - [x] 41. Server admin: manajemen rekening pembayaran
-- [ ] 42. Server pelanggan: katalog belanja, `createOrder` (voucher row-lock, harga otoritatif, tenggat bayar), `cancelOrder`
+- [x] 42. Server pelanggan: katalog belanja, `createOrder` (voucher row-lock, harga otoritatif, tenggat bayar), `cancelOrder`
 - [ ] 43. Server pelanggan: unggah bukti transfer (Cloudinary) + helper kedaluwarsa lazy
 - [ ] 44. Server kasir: antrean pesanan + konfirmasi/tolak/selesai (konsumsi voucher atomik)
 - [ ] 45. Kontrak adapter pembayaran provider-agnostic (stub) + route webhook kosong

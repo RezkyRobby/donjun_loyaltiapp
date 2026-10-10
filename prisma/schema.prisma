@@ -57,6 +57,8 @@ enum RewardBenefitType {
 }
 
 /// Status siklus hidup pesanan belanja (PRD §7.6).
+/// CANCELED = dibatalkan pelanggan selama AWAITING_PAYMENT; voucher tidak
+/// dikonsumsi (tetap ACTIVE) dan bebas dipakai lagi.
 enum OrderStatus {
   AWAITING_PAYMENT
   AWAITING_CONFIRMATION
@@ -64,6 +66,7 @@ enum OrderStatus {
   COMPLETED
   REJECTED
   EXPIRED
+  CANCELED
 }
 
 /// Jenis rekening tujuan pembayaran (PRD §7.6).

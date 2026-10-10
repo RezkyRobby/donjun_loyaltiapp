@@ -44,7 +44,8 @@ export const REWARD_BENEFIT_TYPE_LABELS: Record<RewardBenefitType, string> = {
 };
 
 // Status pesanan belanja (PRD §5.4 fitur 7, §5.5, §7.6): ditampilkan pada
-// pelacakan pesanan pelanggan, antrean kasir, dan monitoring admin.
+// pelacakan pesanan pelanggan, antrean kasir, dan monitoring admin. CANCELED =
+// dibatalkan pelanggan selama AWAITING_PAYMENT.
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   AWAITING_PAYMENT: "Menunggu pembayaran",
   AWAITING_CONFIRMATION: "Menunggu konfirmasi",
@@ -52,6 +53,7 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   COMPLETED: "Selesai",
   REJECTED: "Ditolak",
   EXPIRED: "Kedaluwarsa",
+  CANCELED: "Dibatalkan",
 };
 
 // Jenis rekening tujuan pembayaran manual (PRD §5.3 fitur 9, §7.6).

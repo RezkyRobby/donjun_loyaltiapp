@@ -24,6 +24,7 @@
 | 2.3 | 2026-09-26 | design.md v1.0 diterbitkan (sistem desain visual final); status dokumen terkait diperbarui. |
 | 2.4 | 2026-10-07 | Penambahan field `domisili` pada data pengguna (User): wajib diisi saat registrasi email + kata sandi, dapat diubah di Pengaturan akun, dan tercatat pada data privasi. |
 | 2.5 | 2026-10-07 | Modul **Belanja** (katalog menu, opsi/tag, keranjang, checkout) dengan pembayaran transfer manual (bukti transfer + konfirmasi kasir), integrasi voucher bertipe (generik/produk/persen/nominal), kategori menu terkelola, batas waktu bayar 24 jam (auto-`EXPIRED`), dan entitas pembayaran provider-agnostic siap gateway daring (Midtrans). |
+| 2.6 | 2026-10-10 | Status pesanan baru `CANCELED` pada enum `OrderStatus` (§7.6): pembatalan pesanan oleh pelanggan selama `AWAITING_PAYMENT` (§8.7). Voucher yang tertempel tidak dikonsumsi (tetap `ACTIVE`) dan bebas dipakai lagi; aksi dicatat pada `AuditLog` sebagai `ORDER_CANCELED`. |
 
 ---
 
@@ -121,7 +122,7 @@ Solusi yang tepat adalah menghadirkan aplikasi web responsif (*Progressive Web A
 | 4 | **Checkout & Tempel Voucher** | Saat checkout, pelanggan **memilih outlet pengambilan**, **memilih rekening tujuan**, menambahkan catatan pesanan, dan **menempelkan maksimal 1 voucher aktif**. Voucher bertipe: `GENERIC` (tidak mengubah total), `PRODUCT` (otomatis menambah 1 item menu tertaut gratis), `PERCENT_DISCOUNT` (diskon persen), `AMOUNT_DISCOUNT` (diskon nominal). Seluruh harga dan potongan dihitung ulang di server. |
 | 5 | **Batas Waktu Pembayaran** | Setelah pesanan dibuat, pelanggan memiliki tenggat **24 jam** (dapat dikonfigurasi via `ORDER_PAYMENT_WINDOW_MINUTES`) untuk mengunggah bukti transfer. Tenggat ditampilkan dalam WITA. Pesanan yang melewati tenggat tanpa bukti berstatus `EXPIRED` (ditegakkan *lazy* saat data diakses); voucher yang tertempel **tidak dikonsumsi**. |
 | 6 | **Unggah Bukti Transfer** | Pelanggan mengunggah gambar bukti transfer (JPG/PNG/WebP, maksimal 5 MB). Setelah diunggah, status pesanan menjadi `AWAITING_CONFIRMATION`. Bila pesanan ditolak kasir, pelanggan dapat **mengunggah ulang** bukti selama belum melewati tenggat. |
-| 7 | **Pelacakan Status Pesanan** | Daftar dan detail pesanan menampilkan garis waktu fase: `AWAITING_PAYMENT` → `AWAITING_CONFIRMATION` → `IN_PROGRESS` → `COMPLETED`, besertastatus `REJECTED` (dapat diunggah ulang) dan `EXPIRED`. Pelanggan dapat **membatalkan** pesanan selama masih `AWAITING_PAYMENT`. |
+| 7 | **Pelacakan Status Pesanan** | Daftar dan detail pesanan menampilkan garis waktu fase: `AWAITING_PAYMENT` → `AWAITING_CONFIRMATION` → `IN_PROGRESS` → `COMPLETED`, besertastatus `REJECTED` (dapat diunggah ulang), `EXPIRED`, dan `CANCELED` (dibatalkan pelanggan). Pelanggan dapat **membatalkan** pesanan selama masih `AWAITING_PAYMENT` → status `CANCELED`. |
 
 ### 5.5 Modul Pesanan (Cashier Web App)
 
@@ -305,7 +306,7 @@ Order
 ├── orderCode (String, unique)        — Format "ORD-" + 10 karakter acak dari alfabet non-ambigu
 ├── customerId (FK → User)            — Pelanggan pemesan
 ├── outletId (FK → Outlet)            — Outlet pengambilan
-├── status (Enum: AWAITING_PAYMENT, AWAITING_CONFIRMATION, IN_PROGRESS, COMPLETED, REJECTED, EXPIRED)
+├── status (Enum: AWAITING_PAYMENT, AWAITING_CONFIRMATION, IN_PROGRESS, COMPLETED, REJECTED, EXPIRED, CANCELED)
 ├── subtotal (Int)                    — Total harga item sebelum potongan (Rupiah)
 ├── discountAmount (Int, default 0)   — Potongan dari voucher (Rupiah)
 ├── total (Int)                       — subtotal − discountAmount (≥ 0)
@@ -503,7 +504,7 @@ OrderPaymentProof
 - **Voucher sudah dipakai pesanan aktif lain:** penempelan ditolak; sistem menyarankan memilih voucher lain.
 - **Melewati tenggat tanpa bukti:** pesanan ditandai `EXPIRED` saat data diakses; voucher yang tertempel **tidak dikonsumsi** dan dapat dipakai lagi.
 - **Harga/opsi tidak valid atau diubah setelah keranjang:** server menghitung ulang berdasarkan data menu terkini; harga dari klien diabaikan.
-- **Pesanan dibatalkan pelanggan:** hanya dapat dilakukan selama status `AWAITING_PAYMENT`; voucher menjadi bebas kembali.
+- **Pesanan dibatalkan pelanggan:** hanya dapat dilakukan selama status `AWAITING_PAYMENT` → status `CANCELED`; voucher menjadi bebas kembali.
 - **Voucher dinonaktifkan setelah ditempel:** voucher yang sudah terbit (`ACTIVE`) tetap sah (manfaat tersnapshot).
 
 ### 8.8 Alur Konfirmasi / Penolakan Pesanan (Kasir)
@@ -661,7 +662,7 @@ Seluruh pembayaran melewati entitas `OrderPayment` yang provider-agnostic. Trans
 | **Cooldown** | Interval jeda minimal yang diberlakukan sistem sebelum pelanggan yang sama dapat menerima injeksi poin kembali, divalidasi di sisi server. |
 | **Outlet** | Gerai fisik Donjun Donat tempat transaksi berlangsung; poin dan voucher pelanggan berlaku global, namun setiap transaksi operasional dicatat per outlet. |
 | **Belanja** | Modul pemesanan menu Donjun Donat secara daring oleh pelanggan, untuk diambil di outlet terpilih. |
-| **Pesanan (Order)** | Satu transaksi belanja pelanggan yang berisi satu atau lebih item menu beserta opsi dan catatan, dengan status berfase (menunggu pembayaran, menunggu konfirmasi, diproses, selesai, ditolak, kedaluwarsa). |
+| **Pesanan (Order)** | Satu transaksi belanja pelanggan yang berisi satu atau lebih item menu beserta opsi dan catatan, dengan status berfase (menunggu pembayaran, menunggu konfirmasi, diproses, selesai, ditolak, kedaluwarsa, dibatalkan). |
 | **Bukti Transfer** | Gambar tangkapan pembayaran transfer manual yang diunggah pelanggan sebagai dasar konfirmasi kasir. |
 | **Kategori Menu** | Pengelompokan menu belanja (mis. "Donat", "Minuman") yang dikelola Super Admin dan dipakai untuk menyusun katalog. |
 | **Grup Opsi / Tag** | Kustomisasi pada menu belanja: grup opsi (mis. "Rasa") berisi tag pilihan (mis. "Coklat", "Keju"); bersifat opsional, multi-pilih, dan boleh menambah harga. |
