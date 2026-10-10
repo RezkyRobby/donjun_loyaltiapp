@@ -242,7 +242,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 45. Kontrak adapter pembayaran provider-agnostic (stub) + route webhook kosong
 - [x] 46. UI admin: kategori menu, menu + editor opsi/tag, rekening pembayaran, tipe voucher pada form reward
 - [x] 47. UI pelanggan: tombol melayang (FAB), katalog menu, detail + opsi, keranjang, checkout + tempel voucher, halaman pesanan + unggah bukti + tenggat
-- [ ] 48. UI kasir: antrean pesanan, detail, konfirmasi/tolak/selesai
+- [x] 48. UI kasir: antrean pesanan, detail, konfirmasi/tolak/selesai
 - [ ] 49. Test: unit (harga/potongan, tenggat, kode pesanan, skema admin) + integration (atomik pesanan, voucher single-use, kedaluwarsa) + E2E alur belanja
 
 ## Perintah Umum
