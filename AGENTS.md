@@ -239,7 +239,7 @@ Progress tracker lintas sesi: ubah `[ ]` menjadi `[x]` setiap task selesai.
 - [x] 42. Server pelanggan: katalog belanja, `createOrder` (voucher row-lock, harga otoritatif, tenggat bayar), `cancelOrder`
 - [x] 43. Server pelanggan: unggah bukti transfer (Cloudinary) + helper kedaluwarsa lazy
 - [x] 44. Server kasir: antrean pesanan + konfirmasi/tolak/selesai (konsumsi voucher atomik)
-- [ ] 45. Kontrak adapter pembayaran provider-agnostic (stub) + route webhook kosong
+- [x] 45. Kontrak adapter pembayaran provider-agnostic (stub) + route webhook kosong
 - [ ] 46. UI admin: kategori menu, menu + editor opsi/tag, rekening pembayaran, tipe voucher pada form reward
 - [ ] 47. UI pelanggan: tombol melayang (FAB), katalog menu, detail + opsi, keranjang, checkout + tempel voucher, halaman pesanan + unggah bukti + tenggat
 - [ ] 48. UI kasir: antrean pesanan, detail, konfirmasi/tolak/selesai
