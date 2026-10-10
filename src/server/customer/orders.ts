@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { AUDIT_ACTION, AUDIT_ENTITY } from "@/constants/audit";
 import { Prisma } from "@/generated/prisma/client";
 import {
+  OrderPaymentProofStatus,
   OrderStatus,
   PaymentMethod,
   PaymentStatus,
@@ -12,8 +13,10 @@ import {
   VoucherStatus,
 } from "@/generated/prisma/enums";
 import type { RewardBenefitType } from "@/generated/prisma/enums";
+import { uploadPaymentProof as uploadProofImage } from "@/lib/cloudinary";
+import { uploadPaymentProofSchema } from "@/lib/order";
 import { generateOrderCode } from "@/lib/order-code";
-import { getPaymentDueAt } from "@/lib/payment-window";
+import { getPaymentDueAt, isPaymentWindowExpired } from "@/lib/payment-window";
 import { prisma } from "@/lib/prisma";
 import { createRateLimiter, RATE_LIMITS } from "@/lib/rate-limit";
 import {
@@ -29,6 +32,7 @@ import {
 } from "@/lib/shop-pricing";
 import { recordAuditLog } from "@/server/admin/audit";
 import { getSession } from "@/server/auth/session";
+import { expireOrderIfDue } from "@/server/orders/expiry";
 
 // Server Action pembuatan & pembatalan pesanan belanja pelanggan (PRD §5.4,
 // §8.7). Seluruh harga dan potongan dihitung ulang dari data menu terkini —
@@ -46,6 +50,15 @@ export type CancelOrderResult =
   | { ok: true; message: string }
   | { ok: false; message: string };
 
+export type UploadPaymentProofPayload = {
+  orderCode: string;
+  file: File;
+};
+
+export type UploadPaymentProofResult =
+  | { ok: true; message: string }
+  | { ok: false; message: string; fieldErrors?: Record<string, string> };
+
 // Pesanan yang masih mengunci voucher: selama salah satu status ini aktif,
 // voucher tidak boleh ditempelkan ke pesanan lain (PRD §8.7 edge case).
 const ACTIVE_ORDER_STATUSES = [
@@ -54,12 +67,36 @@ const ACTIVE_ORDER_STATUSES = [
   OrderStatus.IN_PROGRESS,
 ];
 
+// Bukti transfer boleh diunggah saat menunggu pembayaran atau setelah ditolak
+// kasir (unggah ulang) — PRD §5.4 fitur 6 & §8.8.
+const PROOF_UPLOADABLE_STATUSES: OrderStatus[] = [
+  OrderStatus.AWAITING_PAYMENT,
+  OrderStatus.REJECTED,
+];
+
+// Pesan ramah untuk status pesanan yang tidak menerima unggahan bukti.
+const PROOF_STATUS_MESSAGES: Partial<Record<OrderStatus, string>> = {
+  AWAITING_CONFIRMATION: "Bukti transfer pesanan ini sedang ditinjau kasir.",
+  IN_PROGRESS: "Pesanan sudah diproses sehingga bukti tidak dapat diunggah.",
+  COMPLETED: "Pesanan sudah selesai.",
+  EXPIRED: "Tenggat pembayaran pesanan ini sudah lewat.",
+  CANCELED: "Pesanan sudah dibatalkan.",
+};
+
+const PROOF_STATUS_DEFAULT_MESSAGE =
+  "Bukti transfer tidak dapat diunggah pada status pesanan ini.";
+
 // Percobaan ulang untuk tabrakan kode pesanan (P2002) dan konflik transaksi
 // (P2034).
 const MAX_PERCOBAAN = 5;
 
 // Rate limit pembuatan pesanan: maks 10 per jam per pelanggan (NFR §9).
 const orderCreationLimiter = createRateLimiter(RATE_LIMITS.orderCreation);
+
+// Rate limit unggah bukti transfer: maks 10 per jam per pelanggan (NFR §9).
+const paymentProofUploadLimiter = createRateLimiter(
+  RATE_LIMITS.paymentProofUpload,
+);
 
 type LockedVoucher = {
   id: string;
@@ -431,6 +468,159 @@ export async function cancelOrder(
     return {
       ok: false,
       message: "Gagal membatalkan pesanan. Coba lagi sebentar lagi.",
+    };
+  }
+}
+
+export async function uploadPaymentProof(
+  payload: UploadPaymentProofPayload,
+): Promise<UploadPaymentProofResult> {
+  const session = await getSession();
+
+  if (!session || session.user.role !== UserRole.CUSTOMER) {
+    return {
+      ok: false,
+      message: "Sesi Anda telah berakhir. Silakan masuk kembali.",
+    };
+  }
+
+  const userId = session.user.id;
+
+  const rate = paymentProofUploadLimiter.consume(userId);
+
+  if (!rate.allowed) {
+    return {
+      ok: false,
+      message: "Anda terlalu sering mengunggah bukti. Coba lagi nanti.",
+    };
+  }
+
+  const parsed = uploadPaymentProofSchema.safeParse({
+    orderCode: payload.orderCode,
+  });
+
+  if (!parsed.success) {
+    return { ok: false, message: "Pesanan tidak valid." };
+  }
+
+  const { orderCode } = parsed.data;
+
+  const order = await prisma.order.findFirst({
+    where: { orderCode, customerId: userId },
+    select: { id: true },
+  });
+
+  if (!order) {
+    return { ok: false, message: "Pesanan tidak ditemukan." };
+  }
+
+  // Tegakkan kedaluwarsa lebih dulu: pesanan yang lewat tenggat tidak menerima
+  // bukti transfer (PRD §5.4 fitur 5).
+  const currentStatus = await expireOrderIfDue(order.id);
+
+  if (!currentStatus) {
+    return { ok: false, message: "Pesanan tidak ditemukan." };
+  }
+
+  if (!PROOF_UPLOADABLE_STATUSES.includes(currentStatus)) {
+    return {
+      ok: false,
+      message:
+        PROOF_STATUS_MESSAGES[currentStatus] ?? PROOF_STATUS_DEFAULT_MESSAGE,
+    };
+  }
+
+  // Unggah ke Cloudinary di luar transaksi (operasi jaringan); validasi tipe &
+  // ukuran dilakukan oleh helper server (NFR §9).
+  const upload = await uploadProofImage(payload.file);
+
+  if (!upload.ok) {
+    return {
+      ok: false,
+      message: upload.message,
+      fieldErrors: { file: upload.message },
+    };
+  }
+
+  try {
+    const result = await prisma.$transaction(
+      async (tx): Promise<UploadPaymentProofResult> => {
+        const fresh = await tx.order.findUnique({
+          where: { id: order.id },
+          select: { status: true, paymentDueAt: true },
+        });
+
+        if (!fresh) {
+          return { ok: false, message: "Pesanan tidak ditemukan." };
+        }
+
+        if (!PROOF_UPLOADABLE_STATUSES.includes(fresh.status)) {
+          return {
+            ok: false,
+            message:
+              PROOF_STATUS_MESSAGES[fresh.status] ??
+              PROOF_STATUS_DEFAULT_MESSAGE,
+          };
+        }
+
+        if (
+          fresh.status === OrderStatus.AWAITING_PAYMENT &&
+          isPaymentWindowExpired(fresh.paymentDueAt)
+        ) {
+          return {
+            ok: false,
+            message: "Tenggat pembayaran pesanan ini sudah lewat.",
+          };
+        }
+
+        // Riwayat bukti lama tetap tersimpan; unggahan baru ditambahkan sebagai
+        // bukti terbaru berstatus PENDING (PRD §8.8 edge case).
+        await tx.orderPaymentProof.create({
+          data: {
+            orderId: order.id,
+            imageUrl: upload.url,
+            status: OrderPaymentProofStatus.PENDING,
+          },
+        });
+
+        // Pembaruan kondisional status pesanan → AWAITING_CONFIRMATION.
+        const updated = await tx.order.updateMany({
+          where: { id: order.id, status: { in: PROOF_UPLOADABLE_STATUSES } },
+          data: { status: OrderStatus.AWAITING_CONFIRMATION },
+        });
+
+        if (updated.count === 0) {
+          return {
+            ok: false,
+            message: "Pesanan sudah diproses. Muat ulang halaman.",
+          };
+        }
+
+        // Pembayaran kembali menunggu tinjauan (mis. setelah ditolak kasir).
+        await tx.orderPayment.updateMany({
+          where: { orderId: order.id },
+          data: { status: PaymentStatus.PENDING },
+        });
+
+        return {
+          ok: true,
+          message: "Bukti transfer berhasil dikirim. Menunggu konfirmasi kasir.",
+        };
+      },
+    );
+
+    if (result.ok) {
+      revalidatePath("/pesanan");
+      revalidatePath(`/pesanan/${orderCode}`);
+    }
+
+    return result;
+  } catch (error) {
+    console.error("[belanja] gagal mengunggah bukti transfer", error);
+
+    return {
+      ok: false,
+      message: "Gagal mengirim bukti transfer. Coba lagi sebentar lagi.",
     };
   }
 }
