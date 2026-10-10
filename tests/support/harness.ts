@@ -4,6 +4,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 
 import { PrismaClient } from "@/generated/prisma/client";
 import {
+  RewardBenefitType,
   UserRole,
   VoucherStatus,
   type PointTransactionMethod,
@@ -25,6 +26,8 @@ export async function resetDatabase(): Promise<void> {
   await testPrisma.auditLog.deleteMany();
   await testPrisma.voucher.deleteMany();
   await testPrisma.rewardCatalog.deleteMany();
+  await testPrisma.menu.deleteMany();
+  await testPrisma.menuCategory.deleteMany();
   await testPrisma.session.deleteMany();
   await testPrisma.account.deleteMany();
   await testPrisma.verification.deleteMany();
@@ -68,6 +71,20 @@ export function createCustomer(input: {
   });
 }
 
+export function createMenu(input: {
+  name: string;
+  price: number;
+  isActive?: boolean;
+}) {
+  return testPrisma.menu.create({
+    data: {
+      name: input.name,
+      price: input.price,
+      isActive: input.isActive ?? true,
+    },
+  });
+}
+
 export function createReward(input: {
   pointsCost: number;
   quota?: number | null;
@@ -76,6 +93,10 @@ export function createReward(input: {
   startAt?: Date | null;
   endAt?: Date | null;
   title?: string;
+  benefitType?: RewardBenefitType;
+  linkedMenuId?: string | null;
+  discountPercent?: number | null;
+  discountAmount?: number | null;
 }) {
   return testPrisma.rewardCatalog.create({
     data: {
@@ -86,6 +107,10 @@ export function createReward(input: {
       isActive: input.isActive ?? true,
       startAt: input.startAt ?? null,
       endAt: input.endAt ?? null,
+      benefitType: input.benefitType ?? RewardBenefitType.GENERIC,
+      linkedMenuId: input.linkedMenuId ?? null,
+      discountPercent: input.discountPercent ?? null,
+      discountAmount: input.discountAmount ?? null,
     },
   });
 }

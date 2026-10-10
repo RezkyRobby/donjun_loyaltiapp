@@ -4,6 +4,7 @@ import { Prisma } from "@/generated/prisma/client";
 import {
   PointTransactionMethod,
   PointTransactionType,
+  RewardBenefitType,
   UserRole,
   VoucherStatus,
 } from "@/generated/prisma/enums";
@@ -13,6 +14,7 @@ import {
   getRewardAvailability,
   type RewardUnavailableReason,
 } from "@/lib/reward-availability";
+import { buildVoucherBenefitSnapshot } from "@/lib/voucher-benefit";
 import { generateVoucherCode } from "@/lib/voucher-code";
 import { getSession } from "@/server/auth/session";
 
@@ -167,6 +169,19 @@ export async function redeemReward(
             };
           }
 
+          // Snapshot manfaat voucher (AGENTS.md aturan 11): menu tertaut dibaca
+          // saat penukaran agar nama dan harganya ikut tersalin ke voucher.
+          const linkedMenu =
+            reward.benefitType === RewardBenefitType.PRODUCT &&
+            reward.linkedMenuId
+              ? await tx.menu.findUnique({
+                  where: { id: reward.linkedMenuId },
+                  select: { id: true, name: true, price: true },
+                })
+              : null;
+
+          const benefit = buildVoucherBenefitSnapshot(reward, linkedMenu);
+
           const voucher = await tx.voucher.create({
             data: {
               voucherCode,
@@ -175,6 +190,9 @@ export async function redeemReward(
               pointsSpent: reward.pointsCost,
               // Snapshot judul reward agar riwayat tetap utuh (PRD §5.3 fitur 2).
               rewardTitle: reward.title,
+              // Snapshot manfaat agar voucher tetap sah walau reward berubah
+              // setelah penukaran (PRD §7.3).
+              ...benefit,
               status: VoucherStatus.ACTIVE,
             },
             select: { id: true, voucherCode: true },

@@ -2,6 +2,7 @@ import { afterAll, describe, expect, it, vi } from "vitest";
 
 import {
   PointTransactionType,
+  RewardBenefitType,
   UserRole,
   VoucherStatus,
 } from "@/generated/prisma/enums";
@@ -9,6 +10,7 @@ import { redeemReward } from "@/server/rewards/redeem";
 
 import {
   createCustomer,
+  createMenu,
   createReward,
   hasTestDatabase,
   resetDatabase,
@@ -127,5 +129,72 @@ describe.skipIf(!hasTestDatabase)("integrasi penukaran poin", () => {
     expect(
       await testPrisma.voucher.count({ where: { userId: customer.id } }),
     ).toBe(0);
+  });
+
+  it("menyalin snapshot menu tertaut beserta harga saat penukaran", async () => {
+    await resetDatabase();
+
+    const menu = await createMenu({ name: "Donat Glaze Coklat", price: 8_000 });
+    const reward = await createReward({
+      pointsCost: 1,
+      benefitType: RewardBenefitType.PRODUCT,
+      linkedMenuId: menu.id,
+    });
+    const customer = await createCustomer({
+      username: "pelanggan.snapshot",
+      pointsBalance: 1,
+    });
+    setSession({ id: customer.id, role: UserRole.CUSTOMER });
+
+    const result = await redeemReward({ rewardId: reward.id });
+    expect(result.ok).toBe(true);
+
+    const voucher = await testPrisma.voucher.findFirstOrThrow({
+      where: { userId: customer.id },
+      select: {
+        benefitType: true,
+        linkedMenuId: true,
+        linkedMenuName: true,
+        linkedMenuPrice: true,
+        discountPercent: true,
+        discountAmount: true,
+      },
+    });
+
+    expect(voucher).toEqual({
+      benefitType: RewardBenefitType.PRODUCT,
+      linkedMenuId: menu.id,
+      linkedMenuName: "Donat Glaze Coklat",
+      linkedMenuPrice: 8_000,
+      discountPercent: null,
+      discountAmount: null,
+    });
+  });
+
+  it("menyalin persentase diskon ke snapshot voucher", async () => {
+    await resetDatabase();
+
+    const reward = await createReward({
+      pointsCost: 1,
+      benefitType: RewardBenefitType.PERCENT_DISCOUNT,
+      discountPercent: 25,
+    });
+    const customer = await createCustomer({
+      username: "pelanggan.diskon",
+      pointsBalance: 1,
+    });
+    setSession({ id: customer.id, role: UserRole.CUSTOMER });
+
+    const result = await redeemReward({ rewardId: reward.id });
+    expect(result.ok).toBe(true);
+
+    const voucher = await testPrisma.voucher.findFirstOrThrow({
+      where: { userId: customer.id },
+    });
+
+    expect(voucher.benefitType).toBe(RewardBenefitType.PERCENT_DISCOUNT);
+    expect(voucher.discountPercent).toBe(25);
+    expect(voucher.discountAmount).toBeNull();
+    expect(voucher.linkedMenuId).toBeNull();
   });
 });
