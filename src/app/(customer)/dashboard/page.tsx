@@ -1,4 +1,6 @@
+import { ChevronRight, PackageOpen } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { AccountQrCard } from "@/components/customer/account-qr-card";
@@ -36,6 +38,28 @@ export default async function CustomerDashboardPage() {
         Beranda
       </h1>
       <PointsBalanceCard pointsBalance={user.pointsBalance} />
+      <Link
+        href="/pesanan"
+        className="flex items-center justify-between gap-3 rounded-card border border-warm-border bg-card p-4 shadow-card transition-colors hover:bg-warm-neutral/60 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+      >
+        <span className="flex items-center gap-3">
+          <span
+            aria-hidden
+            className="flex size-10 items-center justify-center rounded-full bg-warm-neutral text-brand-orange-deep"
+          >
+            <PackageOpen className="size-5" />
+          </span>
+          <span className="flex flex-col">
+            <span className="font-display text-base font-semibold text-brand-brown-dark">
+              Pesanan saya
+            </span>
+            <span className="text-sm text-brand-brown-muted">
+              Pantau status pesanan belanja
+            </span>
+          </span>
+        </span>
+        <ChevronRight aria-hidden className="size-5 shrink-0 text-brand-brown-muted" />
+      </Link>
       <AccountQrCard username={user.username} />
     </section>
   );

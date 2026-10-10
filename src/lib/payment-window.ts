@@ -39,6 +39,22 @@ export function isPaymentWindowExpired(
   return now.getTime() > paymentDueAt.getTime();
 }
 
+// Ambang "mendekati tenggat" untuk penanda peringatan pada kartu pesanan
+// (design.md §9.7): kurang dari 6 jam tersisa ditampilkan dengan warna
+// peringatan disertai ikon dan teks.
+export const PAYMENT_DUE_SOON_THRESHOLD_MINUTES = 360;
+
+// `true` bila sisa waktu menuju tenggat kurang dari ambang peringatan.
+export function isPaymentDueSoon(
+  paymentDueAt: Date,
+  now: Date = new Date(),
+): boolean {
+  return (
+    paymentDueAt.getTime() - now.getTime() <
+    PAYMENT_DUE_SOON_THRESHOLD_MINUTES * MINUTES_PER_MS
+  );
+}
+
 // Pesanan hanya ditandai EXPIRED bila masih AWAITING_PAYMENT dan tenggatnya
 // sudah lewat (PRD §8.7). Status lanjutan tidak boleh diubah oleh penegakan lazy.
 export function shouldExpireOrder(

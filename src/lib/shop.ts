@@ -18,7 +18,7 @@ function optionalText(max: number, error: string) {
     .string({ error })
     .trim()
     .max(max, { error })
-    .optional()
+    .nullish()
     .transform((value) => (value && value.length > 0 ? value : null));
 }
 
@@ -62,7 +62,7 @@ export const createOrderSchema = z.object({
     .string({ error: "Voucher tidak valid." })
     .trim()
     .max(SHOP_ID_MAX, { error: "Voucher tidak valid." })
-    .optional()
+    .nullish()
     .transform((value) => (value && value.length > 0 ? value : null)),
   note: optionalText(
     ORDER_NOTE_MAX,

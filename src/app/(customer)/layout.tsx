@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { CustomerBottomNav } from "@/components/customer/customer-bottom-nav";
 import { CustomerHeader } from "@/components/customer/customer-header";
+import { ShopFab } from "@/components/customer/shop-fab";
 import { ConnectionStatus } from "@/components/shared/connection-status";
 import { InAppBrowserNotice } from "@/components/shared/in-app-browser-notice";
 import { PwaRegistration } from "@/components/shared/pwa-registration";
@@ -29,12 +30,13 @@ export default async function CustomerLayout({
       <CustomerHeader name={session.user.name} />
       <main
         id="konten"
-        className="mx-auto w-full max-w-md flex-1 px-4 pb-24 pt-4"
+        className="mx-auto w-full max-w-md flex-1 px-4 pb-36 pt-4"
       >
         <InAppBrowserNotice />
         {children}
       </main>
       <CustomerBottomNav />
+      <ShopFab />
       <ConnectionStatus />
       <PwaRegistration />
     </div>
