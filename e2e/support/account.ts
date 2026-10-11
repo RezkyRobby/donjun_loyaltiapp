@@ -1,13 +1,24 @@
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+
 import { expect, type Browser, type Page } from "@playwright/test";
 
 import { markEmailVerified, promoteToCashier, withE2eDb } from "./db";
-import { CASHIER_STATE_PATH, CUSTOMER_STATE_PATH } from "./env";
+import {
+  CASHIER_ACCOUNT_PATH,
+  CASHIER_STATE_PATH,
+  CUSTOMER_ACCOUNT_PATH,
+  CUSTOMER_STATE_PATH,
+} from "./env";
 import { E2E_OUTLET } from "./seed-data";
 
 // Helper alur E2E: pembuatan akun unik, registrasi via UI, login, dan penyiapan
 // sesi tersimpan. Akun pelanggan/kasir dibuat melalui registrasi publik agar
 // kredensial di-hash persis seperti produksi, lalu perannya disesuaikan lewat
 // basis data (akun kasir memang hanya dibuat Super Admin di produksi).
+//
+// Penyiapan bersifat idempoten: identitas akun disimpan di samping storageState
+// sehingga beberapa spec dapat memakai ulang akun yang sama tanpa registrasi
+// ulang, menjaga batas rate limit registrasi (maks 5/jam/IP).
 
 export type E2eAccount = {
   name: string;
@@ -16,6 +27,20 @@ export type E2eAccount = {
   password: string;
   domisili: string;
 };
+
+function readCachedAccount(path: string): E2eAccount | null {
+  if (!existsSync(path)) return null;
+
+  try {
+    return JSON.parse(readFileSync(path, "utf8")) as E2eAccount;
+  } catch {
+    return null;
+  }
+}
+
+function cacheAccount(path: string, account: E2eAccount): void {
+  writeFileSync(path, JSON.stringify(account), "utf8");
+}
 
 export function buildAccount(kind: "customer" | "cashier"): E2eAccount {
   const suffix = String(Date.now()).slice(-8);
@@ -68,6 +93,10 @@ export async function loginViaUi(
 export async function prepareCustomerSession(
   browser: Browser,
 ): Promise<E2eAccount> {
+  const cached = readCachedAccount(CUSTOMER_ACCOUNT_PATH);
+
+  if (cached && existsSync(CUSTOMER_STATE_PATH)) return cached;
+
   const account = buildAccount("customer");
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -77,6 +106,7 @@ export async function prepareCustomerSession(
     await withE2eDb((client) => markEmailVerified(client, account.email));
     await loginViaUi(page, account, /\/dashboard$/);
     await context.storageState({ path: CUSTOMER_STATE_PATH });
+    cacheAccount(CUSTOMER_ACCOUNT_PATH, account);
   } finally {
     await context.close();
   }
@@ -89,6 +119,10 @@ export async function prepareCustomerSession(
 export async function prepareCashierSession(
   browser: Browser,
 ): Promise<E2eAccount> {
+  const cached = readCachedAccount(CASHIER_ACCOUNT_PATH);
+
+  if (cached && existsSync(CASHIER_STATE_PATH)) return cached;
+
   const account = buildAccount("cashier");
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -100,6 +134,7 @@ export async function prepareCashierSession(
     );
     await loginViaUi(page, account, /\/kasir\/scan$/);
     await context.storageState({ path: CASHIER_STATE_PATH });
+    cacheAccount(CASHIER_ACCOUNT_PATH, account);
   } finally {
     await context.close();
   }

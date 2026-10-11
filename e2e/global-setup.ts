@@ -4,6 +4,7 @@ import {
   e2eDatabaseUrl,
   resetDatabase,
   seedOutletAndReward,
+  seedShopCatalog,
   withE2eDb,
 } from "./support/db";
 
@@ -29,5 +30,6 @@ export default async function globalSetup(): Promise<void> {
   await withE2eDb(async (client) => {
     await resetDatabase(client);
     await seedOutletAndReward(client);
+    await seedShopCatalog(client);
   });
 }
