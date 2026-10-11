@@ -39,6 +39,9 @@ import { setSession } from "../support/session";
 // status bersifat kondisional sehingga dua kasir tidak dapat memproses pesanan
 // yang sama dua kali. Penolakan/pembatalan tidak mengonsumsi voucher.
 vi.mock("@/server/auth/session", () => ({ getSession: vi.fn() }));
+// `revalidatePath` memerlukan request store Next.js; di uji integrasi ini
+// (dijalankan di luar HTTP) cukup dimock karena efek cache tidak diuji di sini.
+vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
 describe.skipIf(!hasTestDatabase)("integrasi aksi kasir atas pesanan", () => {
   afterAll(async () => {
@@ -182,7 +185,7 @@ describe.skipIf(!hasTestDatabase)("integrasi aksi kasir atas pesanan", () => {
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.message).toContain("voucher");
+      expect(result.message).toContain("tidak aktif");
     }
 
     const updated = await testPrisma.order.findUniqueOrThrow({

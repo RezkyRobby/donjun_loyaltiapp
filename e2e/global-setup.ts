@@ -1,4 +1,5 @@
 import { execSync } from "node:child_process";
+import { existsSync, rmSync } from "node:fs";
 
 import {
   e2eDatabaseUrl,
@@ -7,6 +8,12 @@ import {
   seedShopCatalog,
   withE2eDb,
 } from "./support/db";
+import {
+  CASHIER_ACCOUNT_PATH,
+  CASHIER_STATE_PATH,
+  CUSTOMER_ACCOUNT_PATH,
+  CUSTOMER_STATE_PATH,
+} from "./support/env";
 
 // Penyiapan global E2E (dijalankan sekali sebelum seluruh berkas spec). Menyink-
 // ronkan skema ke basis data uji lalu mengisi ulang data dasar. Bila
@@ -32,4 +39,16 @@ export default async function globalSetup(): Promise<void> {
     await seedOutletAndReward(client);
     await seedShopCatalog(client);
   });
+
+  // Basis data baru saja dikosongkan, sehingga sesi tersimpan dari run
+  // sebelumnya sudah tidak sah. Hapus artefak sesi agar spec menyiapkan akun
+  // baru sekali lagi (lalu dipakai ulang lintas spec pada run ini).
+  for (const path of [
+    CUSTOMER_STATE_PATH,
+    CASHIER_STATE_PATH,
+    CUSTOMER_ACCOUNT_PATH,
+    CASHIER_ACCOUNT_PATH,
+  ]) {
+    if (existsSync(path)) rmSync(path, { force: true });
+  }
 }

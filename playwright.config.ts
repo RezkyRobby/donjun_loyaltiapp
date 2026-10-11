@@ -17,6 +17,9 @@ export const hasE2eDatabase = Boolean(databaseUrl);
 export default defineConfig({
   testDir: "./e2e",
   outputDir: "./test-results",
+  // Server development meng-compile rute secara on-demand sehingga langkah
+  // pertama tiap alur bisa lambat; beri ruang lebih dari batas bawaan 30 detik.
+  timeout: 120_000,
   // Satu basis data bersama dipakai seluruh berkas; jalankan berurutan agar
   // penyiapan akun dan seed tidak saling mengganggu.
   fullyParallel: false,

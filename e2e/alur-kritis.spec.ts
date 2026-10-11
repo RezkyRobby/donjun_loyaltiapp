@@ -96,9 +96,13 @@ test.describe("alur kritis injeksi → tukar → validasi", () => {
       await cashierPage
         .getByRole("button", { name: "Validasi voucher lain" })
         .click();
-      await cashierPage
-        .getByRole("button", { name: "Input kode manual" })
-        .click();
+      // "Validasi voucher lain" mereset hasil tetapi mempertahankan mode input
+      // manual, sehingga form kode langsung tampil; klik pengalih hanya bila
+      // panel kembali ke mode pemindai.
+      const manualToggle = cashierPage.getByRole("button", {
+        name: "Input kode manual",
+      });
+      if (await manualToggle.isVisible()) await manualToggle.click();
       await cashierPage.getByLabel("Kode voucher").fill(voucherCode);
       await cashierPage.getByRole("button", { name: "Validasi kode" }).click();
       await expect(
@@ -108,7 +112,9 @@ test.describe("alur kritis injeksi → tukar → validasi", () => {
 
       // Pelanggan: voucher kini berstatus terpakai pada dompet voucher.
       await customerPage.goto("/voucher");
-      await expect(customerPage.getByText("Terpakai")).toBeVisible();
+      await expect(
+        customerPage.getByText("Terpakai", { exact: true }).first(),
+      ).toBeVisible();
     } finally {
       await cashierContext.close();
       await customerContext.close();

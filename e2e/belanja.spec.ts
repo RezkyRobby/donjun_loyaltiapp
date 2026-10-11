@@ -88,9 +88,12 @@ async function uploadProof(page: Page): Promise<void> {
     buffer: PNG_BUFFER,
   });
   await page.getByRole("button", { name: "Kirim bukti transfer" }).click();
-  await expect(page.getByText(/Bukti transfer berhasil dikirim/)).toBeVisible({
-    timeout: 20_000,
-  });
+  // Server Action memindahkan pesanan ke AWAITING_CONFIRMATION lalu memicu
+  // router.refresh(); form unggah (beserta pesan sukses) unmount sehingga
+  // pesannya hanya sekilas. Status hasilnya yang dijadikan penanda keberhasilan.
+  await expect(
+    page.getByText("Menunggu konfirmasi", { exact: true }),
+  ).toBeVisible({ timeout: 30_000 });
 }
 
 // Memindahkan pesanan ke AWAITING_CONFIRMATION: melalui unggahan nyata bila
