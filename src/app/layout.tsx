@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Baloo_2, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { getSiteUrl } from "@/lib/site-url";
 
 const baloo2 = Baloo_2({
   subsets: ["latin"],
@@ -14,7 +15,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 // Basis URL metadata untuk kanonik dan Open Graph (PRD Lampiran C).
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = getSiteUrl();
 
 const siteDescription =
   "Platform loyalitas pelanggan Donjun Donat: kumpulkan poin di setiap transaksi, tukarkan dengan voucher promo, dan kelola akun Anda secara mandiri.";
