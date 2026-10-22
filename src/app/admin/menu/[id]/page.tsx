@@ -46,7 +46,7 @@ export default async function AdminMenuEditPage({
           Perbarui detail menu, harga, dan pilihan opsinya.
         </p>
       </div>
-      <div className="rounded-card border border-border bg-card p-6">
+      <div className="rounded-card border border-warm-border bg-card p-6">
         <MenuForm
           mode="edit"
           categories={categories.map((category) => ({

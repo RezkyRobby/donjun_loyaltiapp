@@ -69,7 +69,7 @@ export function QuickAddButton({
         <span>{added ? "Ditambahkan" : "Tambah"}</span>
       </Button>
       {message ? (
-        <p role="alert" className="text-xs text-donut-berry-deep">
+        <p role="alert" className="text-caption text-donut-berry-deep">
           {message}
         </p>
       ) : null}

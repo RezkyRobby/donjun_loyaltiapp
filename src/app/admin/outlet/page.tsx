@@ -5,6 +5,7 @@ import Link from "next/link";
 import { OutletActions } from "@/components/admin/outlet-actions";
 import { OutletStatusBadge } from "@/components/admin/outlet-status-badge";
 import { Button } from "@/components/ui/button";
+import { EMPTY_VALUE_LABEL } from "@/constants/labels";
 import { formatCount } from "@/lib/format";
 import { getAdminOutlets } from "@/server/admin/outlet-list";
 
@@ -37,7 +38,7 @@ export default async function AdminOutletPage() {
       </div>
 
       {outlets.length === 0 ? (
-        <div className="flex flex-col items-center gap-3 rounded-card border border-border bg-card p-8 text-center">
+        <div className="flex flex-col items-center gap-3 rounded-card border border-warm-border bg-card p-8 text-center">
           <span
             aria-hidden
             className="flex size-12 items-center justify-center rounded-full bg-warm-neutral text-brand-brown-muted"
@@ -60,9 +61,9 @@ export default async function AdminOutletPage() {
         </div>
       ) : (
         <>
-          <div className="hidden overflow-hidden rounded-card border border-border lg:block">
+          <div className="hidden overflow-hidden rounded-card border border-warm-border lg:block">
             <table className="w-full border-collapse text-sm">
-              <thead className="bg-muted text-left text-xs uppercase tracking-wide text-brand-brown-muted">
+              <thead className="bg-warm-neutral text-left text-caption uppercase tracking-wide text-brand-brown-muted">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">
                     Outlet
@@ -81,19 +82,19 @@ export default async function AdminOutletPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border bg-card">
+              <tbody className="divide-y divide-warm-border bg-card">
                 {outlets.map((outlet) => (
                   <tr key={outlet.id} className="align-top">
                     <td className="px-4 py-3">
                       <p className="font-medium text-brand-brown-dark">
                         {outlet.name}
                       </p>
-                      <p className="max-w-md text-xs text-brand-brown-muted">
+                      <p className="max-w-md text-caption text-brand-brown-muted">
                         {outlet.address}
                       </p>
                     </td>
                     <td className="px-4 py-3 text-brand-brown-dark">
-                      {outlet.phone ?? "—"}
+                      {outlet.phone ?? EMPTY_VALUE_LABEL}
                     </td>
                     <td className="px-4 py-3 tabular-nums text-brand-brown-dark">
                       {formatCount(outlet.staffCount)}
@@ -118,7 +119,7 @@ export default async function AdminOutletPage() {
             {outlets.map((outlet) => (
               <li
                 key={outlet.id}
-                className="flex flex-col gap-3 rounded-card border border-border bg-card p-4"
+                className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4"
               >
                 <div className="flex items-start justify-between gap-3">
                   <p className="font-medium text-brand-brown-dark">
@@ -134,7 +135,7 @@ export default async function AdminOutletPage() {
                   <div>
                     <dt className="text-brand-brown-muted">Telepon</dt>
                     <dd className="text-brand-brown-dark">
-                      {outlet.phone ?? "—"}
+                      {outlet.phone ?? EMPTY_VALUE_LABEL}
                     </dd>
                   </div>
                   <div>

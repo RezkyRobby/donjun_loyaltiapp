@@ -19,7 +19,7 @@ export default async function AdminMenuCreatePage() {
           Buat menu baru beserta harga dan pilihan opsinya.
         </p>
       </div>
-      <div className="rounded-card border border-border bg-card p-6">
+      <div className="rounded-card border border-warm-border bg-card p-6">
         <MenuForm
           mode="create"
           categories={categories.map((category) => ({

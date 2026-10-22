@@ -107,7 +107,7 @@ export function UploadProofForm({ orderCode }: { orderCode: string }) {
       </label>
 
       {file ? (
-        <p className="text-xs text-brand-brown-muted">
+        <p className="text-caption text-brand-brown-muted">
           Berkas terpilih: {file.name}
         </p>
       ) : null}
@@ -127,11 +127,7 @@ export function UploadProofForm({ orderCode }: { orderCode: string }) {
 
       {message ? <FormAlert tone={message.tone}>{message.text}</FormAlert> : null}
 
-      <Button
-        type="submit"
-        disabled={isSubmitting || !file}
-        className="h-12 w-full"
-      >
+      <Button type="submit" disabled={isSubmitting} className="h-12 w-full">
         {isSubmitting ? (
           <LoaderCircle aria-hidden className="size-5 animate-spin" />
         ) : null}

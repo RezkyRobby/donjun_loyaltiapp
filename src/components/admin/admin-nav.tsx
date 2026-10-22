@@ -42,7 +42,7 @@ export function AdminNav() {
   return (
     <nav
       aria-label="Navigasi admin"
-      className="border-b border-border bg-card lg:w-56 lg:shrink-0 lg:border-b-0 lg:border-r"
+      className="border-b border-warm-border bg-card lg:w-56 lg:shrink-0 lg:border-b-0 lg:border-r"
     >
       <ul className="flex w-full items-stretch gap-1 overflow-x-auto px-2 lg:flex-col lg:gap-1 lg:overflow-visible lg:p-3">
         {ADMIN_NAV_ITEMS.map((item) => {
@@ -62,7 +62,7 @@ export function AdminNav() {
                   "flex min-h-12 items-center gap-2 whitespace-nowrap border-b-2 px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:min-h-11 lg:w-full lg:rounded-button lg:border-b-0",
                   isActive
                     ? "border-brand-orange text-brand-brown-dark lg:bg-brand-yellow"
-                    : "border-transparent text-brand-brown-muted hover:text-brand-brown-dark lg:hover:bg-muted",
+                    : "border-transparent text-brand-brown-muted hover:text-brand-brown-dark lg:hover:bg-warm-neutral",
                 )}
               >
                 {Icon ? <Icon aria-hidden className="size-4" /> : null}

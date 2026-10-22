@@ -3,6 +3,8 @@
 // sekali di tingkat modul karena Intl.NumberFormat relatif mahal untuk dibuat
 // berulang.
 
+import { EMPTY_VALUE_LABEL } from "@/constants/labels";
+
 const numberFormatter = new Intl.NumberFormat("id-ID");
 
 const percentFormatter = new Intl.NumberFormat("id-ID", {
@@ -37,9 +39,9 @@ export function formatRupiah(value: number): string {
 
 // Rasio ditampilkan sebagai persen id-ID, mis. 0,5 → "50%". Nilai `null`
 // berarti rasio belum dapat dihitung (mis. belum ada voucher diterbitkan) dan
-// ditampilkan sebagai tanda pisah, bukan "0%" yang menyesatkan.
+// ditampilkan lewat EMPTY_VALUE_LABEL, bukan "0%" yang menyesatkan.
 export function formatPercent(value: number | null): string {
-  if (value === null) return "—";
+  if (value === null) return EMPTY_VALUE_LABEL;
 
   return percentFormatter.format(value);
 }

@@ -16,7 +16,7 @@ export default function AdminOutletCreatePage() {
           Buat data outlet baru beserta alamat dan kontaknya.
         </p>
       </div>
-      <div className="rounded-card border border-border bg-card p-6">
+      <div className="rounded-card border border-warm-border bg-card p-6">
         <OutletForm mode="create" />
       </div>
     </section>

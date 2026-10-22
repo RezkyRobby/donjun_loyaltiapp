@@ -33,7 +33,7 @@ export default async function AdminRewardEditPage({
           voucher yang sudah terbit tetap utuh.
         </p>
       </div>
-      <div className="rounded-card border border-border bg-card p-6">
+      <div className="rounded-card border border-warm-border bg-card p-6">
         <RewardForm
           mode="edit"
           initial={{

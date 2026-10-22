@@ -64,11 +64,11 @@ function Field({
       <Label htmlFor={id}>{label}</Label>
       {children}
       {error ? (
-        <p id={`${id}-galat`} role="alert" className="text-xs text-donut-berry-deep">
+        <p id={`${id}-galat`} role="alert" className="text-caption text-donut-berry-deep">
           {error}
         </p>
       ) : hint ? (
-        <p id={`${id}-petunjuk`} className="text-xs text-brand-brown-muted">
+        <p id={`${id}-petunjuk`} className="text-caption text-brand-brown-muted">
           {hint}
         </p>
       ) : null}
@@ -275,7 +275,7 @@ export function PaymentAccountForm({
               alt="Pratinjau gambar rekening saat ini"
               width={120}
               height={120}
-              className="size-20 rounded-button border border-border object-contain"
+              className="size-20 rounded-button border border-warm-border object-contain"
             />
             {mode === "edit" ? (
               <label className="flex items-center gap-2 text-sm text-brand-brown-dark">
@@ -301,7 +301,7 @@ export function PaymentAccountForm({
           className="block w-full cursor-pointer rounded-lg border border-input bg-card text-sm text-brand-brown-muted file:mr-3 file:border-0 file:bg-warm-neutral file:px-4 file:py-3 file:text-sm file:font-medium file:text-brand-brown-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
         {image ? (
-          <p className="text-xs text-brand-brown-muted">
+          <p className="text-caption text-brand-brown-muted">
             Berkas dipilih: {image.name}
           </p>
         ) : null}

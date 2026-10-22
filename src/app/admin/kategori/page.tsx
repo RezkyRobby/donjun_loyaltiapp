@@ -36,7 +36,7 @@ export default async function AdminMenuCategoryPage() {
       </div>
 
       {categories.length === 0 ? (
-        <div className="flex flex-col items-center gap-3 rounded-card border border-border bg-card p-8 text-center">
+        <div className="flex flex-col items-center gap-3 rounded-card border border-warm-border bg-card p-8 text-center">
           <span
             aria-hidden
             className="flex size-12 items-center justify-center rounded-full bg-warm-neutral text-brand-brown-muted"
@@ -59,9 +59,9 @@ export default async function AdminMenuCategoryPage() {
         </div>
       ) : (
         <>
-          <div className="hidden overflow-hidden rounded-card border border-border lg:block">
+          <div className="hidden overflow-hidden rounded-card border border-warm-border lg:block">
             <table className="w-full border-collapse text-sm">
-              <thead className="bg-muted text-left text-xs uppercase tracking-wide text-brand-brown-muted">
+              <thead className="bg-warm-neutral text-left text-caption uppercase tracking-wide text-brand-brown-muted">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">
                     Kategori
@@ -80,7 +80,7 @@ export default async function AdminMenuCategoryPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border bg-card">
+              <tbody className="divide-y divide-warm-border bg-card">
                 {categories.map((category) => (
                   <tr key={category.id} className="h-14 align-middle">
                     <td className="px-4 py-2 font-medium text-brand-brown-dark">
@@ -111,7 +111,7 @@ export default async function AdminMenuCategoryPage() {
             {categories.map((category) => (
               <li
                 key={category.id}
-                className="flex flex-col gap-3 rounded-card border border-border bg-card p-4"
+                className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4"
               >
                 <div className="flex items-start justify-between gap-3">
                   <p className="font-medium text-brand-brown-dark">

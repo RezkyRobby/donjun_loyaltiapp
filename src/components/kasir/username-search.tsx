@@ -115,7 +115,7 @@ export function UsernameSearch({
         <p
           id="kasir-username-pesan"
           aria-live="polite"
-          className="text-xs text-brand-brown-muted"
+          className="text-caption text-brand-brown-muted"
         >
           {message}
         </p>
@@ -150,7 +150,7 @@ export function UsernameSearch({
               <button
                 type="button"
                 onClick={() => onSelect(customer)}
-                className="flex min-h-14 w-full items-center gap-3 rounded-card border border-border bg-card px-4 py-3 text-left transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="flex min-h-14 w-full items-center gap-3 rounded-card border border-warm-border bg-card px-4 py-3 text-left transition-colors hover:bg-warm-neutral focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <span
                   aria-hidden

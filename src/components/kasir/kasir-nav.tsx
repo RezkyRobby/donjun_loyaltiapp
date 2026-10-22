@@ -29,7 +29,7 @@ export function KasirNav() {
   return (
     <nav
       aria-label="Navigasi kasir"
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card pb-[env(safe-area-inset-bottom)]"
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-warm-border bg-card pb-[env(safe-area-inset-bottom)]"
     >
       <ul className="mx-auto flex w-full max-w-5xl items-stretch justify-between">
         {CASHIER_NAV_ITEMS.map((item) => {

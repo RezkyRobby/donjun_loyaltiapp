@@ -37,7 +37,7 @@ export function CustomerBottomNav() {
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "flex min-h-14 flex-col items-center justify-center gap-1 px-1 py-2 text-xs font-medium transition-colors",
+                  "flex min-h-14 flex-col items-center justify-center gap-1 px-1 py-2 text-caption font-medium transition-colors",
                   isActive ? "text-brand-orange-deep" : "text-brand-brown-muted",
                 )}
               >

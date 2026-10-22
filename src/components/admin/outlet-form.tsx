@@ -46,11 +46,11 @@ function Field({
       <Label htmlFor={id}>{label}</Label>
       {children}
       {error ? (
-        <p id={`${id}-galat`} role="alert" className="text-xs text-donut-berry-deep">
+        <p id={`${id}-galat`} role="alert" className="text-caption text-donut-berry-deep">
           {error}
         </p>
       ) : hint ? (
-        <p id={`${id}-petunjuk`} className="text-xs text-brand-brown-muted">
+        <p id={`${id}-petunjuk`} className="text-caption text-brand-brown-muted">
           {hint}
         </p>
       ) : null}

@@ -282,7 +282,7 @@ export function CartView({ options }: { options: ShopCheckoutOptions }) {
               </div>
 
               {item.options.length > 0 ? (
-                <p className="text-xs text-brand-brown-muted">
+                <p className="text-caption text-brand-brown-muted">
                   {item.options
                     .map((option) =>
                       option.priceDelta > 0
@@ -294,7 +294,7 @@ export function CartView({ options }: { options: ShopCheckoutOptions }) {
               ) : null}
 
               {item.note ? (
-                <p className="text-xs text-brand-brown-muted">
+                <p className="text-caption text-brand-brown-muted">
                   Catatan: {item.note}
                 </p>
               ) : null}
@@ -314,7 +314,7 @@ export function CartView({ options }: { options: ShopCheckoutOptions }) {
                     }
                     disabled={item.quantity <= 1}
                     aria-label={`Kurangi jumlah ${item.name}`}
-                    className="size-9"
+                    className="size-11"
                   >
                     <Minus aria-hidden className="size-4" />
                   </Button>
@@ -330,7 +330,7 @@ export function CartView({ options }: { options: ShopCheckoutOptions }) {
                     }
                     disabled={item.quantity >= CART_MAX_QUANTITY}
                     aria-label={`Tambah jumlah ${item.name}`}
-                    className="size-9"
+                    className="size-11"
                   >
                     <Plus aria-hidden className="size-4" />
                   </Button>
@@ -340,7 +340,7 @@ export function CartView({ options }: { options: ShopCheckoutOptions }) {
                   type="button"
                   variant="ghost"
                   onClick={() => removeCartItem(item.id)}
-                  className="h-9 px-2 text-donut-berry-deep hover:bg-donut-berry/10"
+                  className="h-11 px-3 text-donut-berry-deep hover:bg-donut-berry/10"
                 >
                   <Trash2 aria-hidden className="size-4" />
                   Hapus
@@ -387,7 +387,7 @@ export function CartView({ options }: { options: ShopCheckoutOptions }) {
                 <span className="text-sm text-brand-brown-muted">
                   {describeVoucher(voucher)}
                 </span>
-                <span className="font-mono text-xs uppercase tracking-[0.08em] text-brand-brown-muted">
+                <span className="font-mono text-caption uppercase tracking-[0.08em] text-brand-brown-muted">
                   {voucher.voucherCode}
                 </span>
               </RadioOption>
@@ -483,7 +483,7 @@ export function CartView({ options }: { options: ShopCheckoutOptions }) {
             placeholder="Contoh: ambil pukul 15.00 WITA"
             className="min-h-20 bg-card"
           />
-          <p className="text-xs text-brand-brown-muted">
+          <p className="text-caption text-brand-brown-muted">
             Opsional, maksimal {ORDER_NOTE_MAX} karakter ({note.length}/
             {ORDER_NOTE_MAX}).
           </p>
@@ -547,7 +547,7 @@ export function CartView({ options }: { options: ShopCheckoutOptions }) {
                   ? ` (${selectedAccount.accountHolder})`
                   : ""}
               </p>
-              <p className="text-xs text-brand-brown-muted">
+              <p className="text-caption text-brand-brown-muted">
                 Transfer sesuai total, lalu unggah bukti pada halaman pesanan.
               </p>
             </div>

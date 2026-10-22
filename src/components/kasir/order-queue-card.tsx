@@ -24,8 +24,8 @@ export function OrderQueueCard({ order }: { order: CashierOrderSummary }) {
     <Link
       href={`/kasir/pesanan/${order.id}`}
       className={cn(
-        "flex flex-col gap-3 rounded-card border bg-card p-4 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-        actionableBorder ?? "border-border",
+        "flex flex-col gap-3 rounded-card border bg-card p-4 transition-colors hover:bg-warm-neutral/40 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        actionableBorder ?? "border-warm-border",
       )}
     >
       <div className="flex items-start justify-between gap-3">
@@ -33,7 +33,7 @@ export function OrderQueueCard({ order }: { order: CashierOrderSummary }) {
           <span className="font-mono text-sm font-semibold uppercase tracking-[0.08em] text-brand-brown-dark">
             {order.orderCode}
           </span>
-          <span className="text-xs text-brand-brown-muted">
+          <span className="text-caption text-brand-brown-muted">
             {formatDateTimeWita(order.createdAt)} WITA
           </span>
         </div>
@@ -50,7 +50,7 @@ export function OrderQueueCard({ order }: { order: CashierOrderSummary }) {
             </span>
           ) : null}
         </p>
-        <p className="flex items-center gap-1.5 text-xs text-brand-brown-muted">
+        <p className="flex items-center gap-1.5 text-caption text-brand-brown-muted">
           <Images aria-hidden className="size-3.5 shrink-0" />
           {formatCount(order.itemCount)} jenis menu ·{" "}
           {formatCount(order.proofCount)} bukti transfer
@@ -61,7 +61,7 @@ export function OrderQueueCard({ order }: { order: CashierOrderSummary }) {
         <PaymentDeadline paymentDueAt={order.paymentDueAt} />
       ) : null}
 
-      <div className="flex items-center justify-between gap-3 border-t border-border pt-3">
+      <div className="flex items-center justify-between gap-3 border-t border-warm-border pt-3">
         <span className="text-sm text-brand-brown-muted">Total</span>
         <span className="flex items-center gap-1 font-display text-lg font-bold tabular-nums text-brand-brown-dark">
           {formatRupiah(order.total)}

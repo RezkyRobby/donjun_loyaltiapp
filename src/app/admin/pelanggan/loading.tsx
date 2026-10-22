@@ -16,7 +16,7 @@ export default function AdminCustomerLoading() {
         {[0, 1, 2, 3].map((index) => (
           <li
             key={index}
-            className="h-20 animate-pulse rounded-card border border-border bg-card motion-reduce:animate-none"
+            className="h-20 animate-pulse rounded-card border border-warm-border bg-card motion-reduce:animate-none"
           />
         ))}
       </ul>

@@ -57,7 +57,7 @@ export default async function AdminCustomerPage({
       </div>
 
       {result.total === 0 ? (
-        <div className="flex flex-col items-center gap-3 rounded-card border border-border bg-card p-8 text-center">
+        <div className="flex flex-col items-center gap-3 rounded-card border border-warm-border bg-card p-8 text-center">
           <span
             aria-hidden
             className="flex size-12 items-center justify-center rounded-full bg-warm-neutral text-brand-brown-muted"
@@ -80,9 +80,9 @@ export default async function AdminCustomerPage({
             {query ? ` untuk "${query}"` : ""}.
           </p>
 
-          <div className="hidden overflow-hidden rounded-card border border-border lg:block">
+          <div className="hidden overflow-hidden rounded-card border border-warm-border lg:block">
             <table className="w-full border-collapse text-sm">
-              <thead className="bg-muted text-left text-xs uppercase tracking-wide text-brand-brown-muted">
+              <thead className="bg-warm-neutral text-left text-caption uppercase tracking-wide text-brand-brown-muted">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">
                     Pelanggan
@@ -101,7 +101,7 @@ export default async function AdminCustomerPage({
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border bg-card">
+              <tbody className="divide-y divide-warm-border bg-card">
                 {result.customers.map((customer) => (
                   <tr key={customer.id} className="h-14 align-middle">
                     <td className="px-4 py-2">
@@ -109,14 +109,14 @@ export default async function AdminCustomerPage({
                         {customer.name}
                       </p>
                       {customer.username ? (
-                        <p className="text-xs text-brand-brown-muted">
+                        <p className="text-caption text-brand-brown-muted">
                           @{customer.username}
                         </p>
                       ) : null}
                     </td>
                     <td className="px-4 py-2">
                       <p className="text-brand-brown-dark">{customer.email}</p>
-                      <p className="text-xs text-brand-brown-muted">
+                      <p className="text-caption text-brand-brown-muted">
                         {customer.phone ?? "Tanpa nomor telepon"}
                       </p>
                     </td>
@@ -143,7 +143,7 @@ export default async function AdminCustomerPage({
             {result.customers.map((customer) => (
               <li
                 key={customer.id}
-                className="flex flex-col gap-3 rounded-card border border-border bg-card p-4"
+                className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -151,7 +151,7 @@ export default async function AdminCustomerPage({
                       {customer.name}
                     </p>
                     {customer.username ? (
-                      <p className="text-xs text-brand-brown-muted">
+                      <p className="text-caption text-brand-brown-muted">
                         @{customer.username}
                       </p>
                     ) : null}

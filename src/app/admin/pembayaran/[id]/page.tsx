@@ -41,7 +41,7 @@ export default async function AdminPaymentAccountEditPage({
           Perbarui detail rekening, urutan tampil, dan status aktif.
         </p>
       </div>
-      <div className="rounded-card border border-border bg-card p-6">
+      <div className="rounded-card border border-warm-border bg-card p-6">
         <PaymentAccountForm
           mode="edit"
           initial={{

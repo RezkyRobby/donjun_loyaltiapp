@@ -39,7 +39,7 @@ export function LoyalCustomersCard({
             Belum ada injeksi poin untuk filter ini.
           </p>
         ) : (
-          <ol className="flex flex-col divide-y divide-border">
+          <ol className="flex flex-col divide-y divide-warm-border">
             {customers.map((customer, index) => (
               <li
                 key={customer.id}
@@ -48,7 +48,7 @@ export function LoyalCustomersCard({
                 <div className="flex min-w-0 items-center gap-3">
                   <span
                     aria-hidden
-                    className="flex size-7 shrink-0 items-center justify-center rounded-full bg-warm-neutral text-xs font-semibold tabular-nums text-brand-brown-muted"
+                    className="flex size-7 shrink-0 items-center justify-center rounded-full bg-warm-neutral text-caption font-semibold tabular-nums text-brand-brown-muted"
                   >
                     {index + 1}
                   </span>
@@ -57,7 +57,7 @@ export function LoyalCustomersCard({
                       {customer.name}
                     </p>
                     {customer.username ? (
-                      <p className="truncate text-xs text-brand-brown-muted">
+                      <p className="truncate text-caption text-brand-brown-muted">
                         @{customer.username}
                       </p>
                     ) : null}

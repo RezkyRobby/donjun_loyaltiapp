@@ -58,7 +58,7 @@ export function StaffOutletSelect({
         ))}
       </select>
       {error ? (
-        <span role="alert" className="text-xs text-donut-berry-deep">
+        <span role="alert" className="text-caption text-donut-berry-deep">
           {error}
         </span>
       ) : null}

@@ -94,7 +94,7 @@ export function VoucherCard({ voucher }: { voucher: CustomerVoucher }) {
         </h3>
         <span
           className={cn(
-            "inline-flex shrink-0 items-center gap-1 rounded-badge border px-3 py-1 text-xs font-medium",
+            "inline-flex shrink-0 items-center gap-1 rounded-badge border px-3 py-1 text-caption font-medium",
             status.className,
           )}
         >
@@ -143,7 +143,7 @@ export function VoucherCard({ voucher }: { voucher: CustomerVoucher }) {
         </p>
       )}
 
-      <p className="text-center text-xs text-brand-brown-muted">
+      <p className="text-center text-caption text-brand-brown-muted">
         Ditukar pada {formatDateTimeWita(voucher.claimedAt)}
       </p>
 

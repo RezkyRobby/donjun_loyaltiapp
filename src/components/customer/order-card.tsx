@@ -22,7 +22,7 @@ export function OrderCard({ order }: { order: CustomerOrderSummary }) {
           <span className="font-mono text-sm font-semibold uppercase tracking-[0.08em] text-brand-brown-dark">
             {order.orderCode}
           </span>
-          <span className="text-xs text-brand-brown-muted">
+          <span className="text-caption text-brand-brown-muted">
             {formatDateTimeWita(order.createdAt)} WITA
           </span>
         </div>

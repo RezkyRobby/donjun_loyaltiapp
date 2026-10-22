@@ -76,7 +76,7 @@ export function AuditFilterForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-4 rounded-card border border-border bg-card p-4"
+      className="flex flex-col gap-4 rounded-card border border-warm-border bg-card p-4"
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div className="flex flex-col gap-1.5">
@@ -170,7 +170,7 @@ export function AuditFilterForm({
         </Button>
       </div>
 
-      <p className="text-xs text-brand-brown-muted">
+      <p className="text-caption text-brand-brown-muted">
         Filter outlet hanya berlaku untuk transaksi poin; aksi administratif tidak
         terikat outlet tertentu.
       </p>

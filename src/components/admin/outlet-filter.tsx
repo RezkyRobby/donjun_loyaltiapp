@@ -35,7 +35,7 @@ export function OutletFilter({
     <div className="flex flex-col gap-1.5">
       <label
         htmlFor="filter-outlet"
-        className="text-xs font-medium text-brand-brown-muted"
+        className="text-caption font-medium text-brand-brown-muted"
       >
         Filter outlet
       </label>

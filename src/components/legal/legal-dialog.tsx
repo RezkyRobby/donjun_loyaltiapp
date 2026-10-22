@@ -57,7 +57,7 @@ export function LegalDialog({
             <dialog
               ref={dialogRef}
               aria-labelledby={titleId}
-              className="m-auto w-[min(42rem,calc(100%-2rem))] rounded-card border border-border bg-card p-0 text-brand-brown-dark backdrop:bg-brand-brown-dark/60"
+              className="m-auto w-[min(42rem,calc(100%-2rem))] rounded-card border border-warm-border bg-card p-0 text-brand-brown-dark backdrop:bg-brand-brown-dark/60"
             >
               <div className="flex max-h-[85dvh] flex-col">
                 <div className="flex shrink-0 items-start justify-between gap-4 border-b border-warm-border p-4">
@@ -71,7 +71,7 @@ export function LegalDialog({
                     type="button"
                     onClick={close}
                     aria-label={`Tutup ${title}`}
-                    className="-mr-1 -mt-1 inline-flex size-9 shrink-0 items-center justify-center rounded-button text-brand-brown-muted hover:bg-muted hover:text-brand-brown-dark"
+                    className="-mr-1 -mt-1 inline-flex size-9 shrink-0 items-center justify-center rounded-button text-brand-brown-muted hover:bg-warm-neutral hover:text-brand-brown-dark"
                   >
                     <X aria-hidden className="size-5" />
                   </button>

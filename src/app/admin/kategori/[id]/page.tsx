@@ -41,7 +41,7 @@ export default async function AdminMenuCategoryEditPage({
           Perbarui nama, urutan tampil, dan status kategori.
         </p>
       </div>
-      <div className="rounded-card border border-border bg-card p-6">
+      <div className="rounded-card border border-warm-border bg-card p-6">
         <MenuCategoryForm
           mode="edit"
           initial={{

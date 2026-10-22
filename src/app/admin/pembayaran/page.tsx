@@ -5,7 +5,10 @@ import Link from "next/link";
 import { ActiveStatusBadge } from "@/components/admin/active-status-badge";
 import { PaymentAccountActions } from "@/components/admin/payment-account-actions";
 import { Button } from "@/components/ui/button";
-import { PAYMENT_ACCOUNT_TYPE_LABELS } from "@/constants/labels";
+import {
+  EMPTY_VALUE_LABEL,
+  PAYMENT_ACCOUNT_TYPE_LABELS,
+} from "@/constants/labels";
 import { formatCount } from "@/lib/format";
 import {
   getAdminPaymentAccounts,
@@ -22,7 +25,7 @@ function numberText(account: AdminPaymentAccount): string {
   if (account.accountNumber) return account.accountNumber;
   if (account.imageUrl) return "Gambar QRIS";
 
-  return "—";
+  return EMPTY_VALUE_LABEL;
 }
 
 export default async function AdminPaymentAccountPage() {
@@ -49,7 +52,7 @@ export default async function AdminPaymentAccountPage() {
       </div>
 
       {accounts.length === 0 ? (
-        <div className="flex flex-col items-center gap-3 rounded-card border border-border bg-card p-8 text-center">
+        <div className="flex flex-col items-center gap-3 rounded-card border border-warm-border bg-card p-8 text-center">
           <span
             aria-hidden
             className="flex size-12 items-center justify-center rounded-full bg-warm-neutral text-brand-brown-muted"
@@ -72,9 +75,9 @@ export default async function AdminPaymentAccountPage() {
         </div>
       ) : (
         <>
-          <div className="hidden overflow-hidden rounded-card border border-border lg:block">
+          <div className="hidden overflow-hidden rounded-card border border-warm-border lg:block">
             <table className="w-full border-collapse text-sm">
-              <thead className="bg-muted text-left text-xs uppercase tracking-wide text-brand-brown-muted">
+              <thead className="bg-warm-neutral text-left text-caption uppercase tracking-wide text-brand-brown-muted">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">
                     Rekening
@@ -96,14 +99,14 @@ export default async function AdminPaymentAccountPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border bg-card">
+              <tbody className="divide-y divide-warm-border bg-card">
                 {accounts.map((account) => (
                   <tr key={account.id} className="h-14 align-middle">
                     <td className="px-4 py-2">
                       <p className="font-medium text-brand-brown-dark">
                         {account.providerName}
                       </p>
-                      <p className="text-xs text-brand-brown-muted">
+                      <p className="text-caption text-brand-brown-muted">
                         {PAYMENT_ACCOUNT_TYPE_LABELS[account.type]}
                       </p>
                     </td>
@@ -111,7 +114,7 @@ export default async function AdminPaymentAccountPage() {
                       {numberText(account)}
                     </td>
                     <td className="px-4 py-2 text-brand-brown-dark">
-                      {account.accountHolder ?? "—"}
+                      {account.accountHolder ?? EMPTY_VALUE_LABEL}
                     </td>
                     <td className="px-4 py-2 tabular-nums text-brand-brown-dark">
                       {formatCount(account.paymentCount)}
@@ -136,14 +139,14 @@ export default async function AdminPaymentAccountPage() {
             {accounts.map((account) => (
               <li
                 key={account.id}
-                className="flex flex-col gap-3 rounded-card border border-border bg-card p-4"
+                className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="font-medium text-brand-brown-dark">
                       {account.providerName}
                     </p>
-                    <p className="text-xs text-brand-brown-muted">
+                    <p className="text-caption text-brand-brown-muted">
                       {PAYMENT_ACCOUNT_TYPE_LABELS[account.type]}
                     </p>
                   </div>
@@ -159,7 +162,7 @@ export default async function AdminPaymentAccountPage() {
                   <div>
                     <dt className="text-brand-brown-muted">Atas nama</dt>
                     <dd className="text-brand-brown-dark">
-                      {account.accountHolder ?? "—"}
+                      {account.accountHolder ?? EMPTY_VALUE_LABEL}
                     </dd>
                   </div>
                   <div>

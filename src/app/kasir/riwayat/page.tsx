@@ -49,7 +49,7 @@ export default async function KasirRiwayatPage({
       </div>
 
       {total === 0 ? (
-        <div className="flex flex-col items-center gap-3 rounded-card border border-border bg-card p-6 text-center">
+        <div className="flex flex-col items-center gap-3 rounded-card border border-warm-border bg-card p-6 text-center">
           <span
             aria-hidden
             className="flex size-12 items-center justify-center rounded-full bg-warm-neutral text-brand-brown-muted"
@@ -70,7 +70,7 @@ export default async function KasirRiwayatPage({
             {injections.map((injection) => (
               <li
                 key={injection.id}
-                className="flex items-center justify-between gap-4 rounded-card border border-border bg-card px-4 py-3"
+                className="flex items-center justify-between gap-4 rounded-card border border-warm-border bg-card px-4 py-3"
               >
                 <div className="min-w-0">
                   <p className="truncate font-medium text-brand-brown-dark">
@@ -82,7 +82,7 @@ export default async function KasirRiwayatPage({
                       </span>
                     ) : null}
                   </p>
-                  <p className="mt-0.5 truncate text-xs text-brand-brown-muted">
+                  <p className="mt-0.5 truncate text-caption text-brand-brown-muted">
                     {formatTimeWita(injection.createdAt)} WITA
                     {injection.method
                       ? ` · ${POINT_TRANSACTION_METHOD_LABELS[injection.method]}`

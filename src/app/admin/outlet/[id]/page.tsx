@@ -41,7 +41,7 @@ export default async function AdminOutletEditPage({
           Perbarui nama, alamat, kontak, atau status outlet.
         </p>
       </div>
-      <div className="rounded-card border border-border bg-card p-6">
+      <div className="rounded-card border border-warm-border bg-card p-6">
         <OutletForm
           mode="edit"
           initial={{

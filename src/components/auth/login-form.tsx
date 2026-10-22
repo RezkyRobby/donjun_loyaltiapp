@@ -134,7 +134,7 @@ export function LoginForm() {
         />
         <Link
           href="/lupa-sandi"
-          className="self-end text-xs font-medium text-brand-orange-deep underline"
+          className="self-end text-caption font-medium text-brand-orange-deep underline"
         >
           Lupa kata sandi?
         </Link>
@@ -144,7 +144,7 @@ export function LoginForm() {
         {isSubmitting ? "Memproses..." : "Masuk"}
       </Button>
 
-      <div className="flex items-center gap-3 text-xs text-brand-brown-muted">
+      <div className="flex items-center gap-3 text-caption text-brand-brown-muted">
         <span className="h-px flex-1 bg-warm-border" />
         atau
         <span className="h-px flex-1 bg-warm-border" />

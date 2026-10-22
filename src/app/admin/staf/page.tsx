@@ -40,7 +40,7 @@ export default async function AdminStaffPage() {
       </div>
 
       {staff.length === 0 ? (
-        <div className="flex flex-col items-center gap-3 rounded-card border border-border bg-card p-8 text-center">
+        <div className="flex flex-col items-center gap-3 rounded-card border border-warm-border bg-card p-8 text-center">
           <span
             aria-hidden
             className="flex size-12 items-center justify-center rounded-full bg-warm-neutral text-brand-brown-muted"
@@ -63,9 +63,9 @@ export default async function AdminStaffPage() {
         </div>
       ) : (
         <>
-          <div className="hidden overflow-hidden rounded-card border border-border lg:block">
+          <div className="hidden overflow-hidden rounded-card border border-warm-border lg:block">
             <table className="w-full border-collapse text-sm">
-              <thead className="bg-muted text-left text-xs uppercase tracking-wide text-brand-brown-muted">
+              <thead className="bg-warm-neutral text-left text-caption uppercase tracking-wide text-brand-brown-muted">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">
                     Nama &amp; email
@@ -81,14 +81,14 @@ export default async function AdminStaffPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border bg-card">
+              <tbody className="divide-y divide-warm-border bg-card">
                 {staff.map((row) => (
                   <tr key={row.id} className="align-middle">
                     <td className="px-4 py-3">
                       <p className="font-medium text-brand-brown-dark">
                         {row.name}
                       </p>
-                      <p className="text-xs text-brand-brown-muted">
+                      <p className="text-caption text-brand-brown-muted">
                         {row.email}
                       </p>
                     </td>
@@ -122,11 +122,11 @@ export default async function AdminStaffPage() {
             {staff.map((row) => (
               <li
                 key={row.id}
-                className="flex flex-col gap-3 rounded-card border border-border bg-card p-4"
+                className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4"
               >
                 <div className="flex flex-col gap-1">
                   <p className="font-medium text-brand-brown-dark">{row.name}</p>
-                  <p className="text-xs text-brand-brown-muted">{row.email}</p>
+                  <p className="text-caption text-brand-brown-muted">{row.email}</p>
                 </div>
                 <StaffStatusBadge
                   isActive={row.isActive}

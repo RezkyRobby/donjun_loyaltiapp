@@ -11,12 +11,12 @@ export default function AdminAuditLoading() {
         <div className="h-8 w-48 animate-pulse rounded-button bg-warm-neutral motion-reduce:animate-none" />
         <div className="h-5 w-96 animate-pulse rounded-button bg-warm-neutral motion-reduce:animate-none" />
       </div>
-      <div className="h-40 animate-pulse rounded-card border border-border bg-card motion-reduce:animate-none" />
+      <div className="h-40 animate-pulse rounded-card border border-warm-border bg-card motion-reduce:animate-none" />
       <ul className="flex flex-col gap-3">
         {[0, 1, 2, 3, 4].map((index) => (
           <li
             key={index}
-            className="h-16 animate-pulse rounded-card border border-border bg-card motion-reduce:animate-none"
+            className="h-16 animate-pulse rounded-card border border-warm-border bg-card motion-reduce:animate-none"
           />
         ))}
       </ul>

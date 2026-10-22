@@ -86,7 +86,7 @@ export function StaffForm({ outlets }: { outlets: OutletOption[] }) {
           className="h-12 bg-card"
         />
         {fieldErrors.name ? (
-          <p id="name-galat" role="alert" className="text-xs text-donut-berry-deep">
+          <p id="name-galat" role="alert" className="text-caption text-donut-berry-deep">
             {fieldErrors.name}
           </p>
         ) : null}
@@ -107,11 +107,11 @@ export function StaffForm({ outlets }: { outlets: OutletOption[] }) {
           className="h-12 bg-card"
         />
         {fieldErrors.email ? (
-          <p id="email-galat" role="alert" className="text-xs text-donut-berry-deep">
+          <p id="email-galat" role="alert" className="text-caption text-donut-berry-deep">
             {fieldErrors.email}
           </p>
         ) : (
-          <p id="email-petunjuk" className="text-xs text-brand-brown-muted">
+          <p id="email-petunjuk" className="text-caption text-brand-brown-muted">
             Undangan aktivasi dikirim ke email ini. Satu email hanya untuk satu
             akun.
           </p>
@@ -144,7 +144,7 @@ export function StaffForm({ outlets }: { outlets: OutletOption[] }) {
           <p
             id="outletId-galat"
             role="alert"
-            className="text-xs text-donut-berry-deep"
+            className="text-caption text-donut-berry-deep"
           >
             {fieldErrors.outletId}
           </p>

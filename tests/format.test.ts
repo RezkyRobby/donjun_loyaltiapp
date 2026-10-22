@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { EMPTY_VALUE_LABEL } from "@/constants/labels";
 import { formatCount, formatPercent, formatPoints, formatRupiah } from "@/lib/format";
 
 describe("formatPoints", () => {
@@ -45,7 +46,7 @@ describe("formatPercent", () => {
     expect(formatPercent(0.125)).toBe("12,5%");
   });
 
-  it("menampilkan tanda pisah saat rasio belum dapat dihitung", () => {
-    expect(formatPercent(null)).toBe("—");
+  it("memakai label nilai kosong saat rasio belum dapat dihitung", () => {
+    expect(formatPercent(null)).toBe(EMPTY_VALUE_LABEL);
   });
 });

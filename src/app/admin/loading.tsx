@@ -15,11 +15,11 @@ export default function AdminAnalyticsLoading() {
         {[0, 1, 2].map((index) => (
           <div
             key={index}
-            className="h-32 animate-pulse rounded-card border border-border bg-card motion-reduce:animate-none"
+            className="h-32 animate-pulse rounded-card border border-warm-border bg-card motion-reduce:animate-none"
           />
         ))}
       </div>
-      <div className="h-64 animate-pulse rounded-card border border-border bg-card motion-reduce:animate-none" />
+      <div className="h-64 animate-pulse rounded-card border border-warm-border bg-card motion-reduce:animate-none" />
     </section>
   );
 }

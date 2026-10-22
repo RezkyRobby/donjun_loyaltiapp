@@ -59,7 +59,7 @@ function RewardThumbnail({ reward }: { reward: AdminReward }) {
       alt={`Gambar promo ${reward.title}`}
       width={64}
       height={48}
-      className="h-12 w-16 shrink-0 rounded-button border border-border object-cover"
+      className="h-12 w-16 shrink-0 rounded-button border border-warm-border object-cover"
     />
   );
 }
@@ -88,7 +88,7 @@ export default async function AdminRewardPage() {
       </div>
 
       {rewards.length === 0 ? (
-        <div className="flex flex-col items-center gap-3 rounded-card border border-border bg-card p-8 text-center">
+        <div className="flex flex-col items-center gap-3 rounded-card border border-warm-border bg-card p-8 text-center">
           <span
             aria-hidden
             className="flex size-12 items-center justify-center rounded-full bg-warm-neutral text-brand-brown-muted"
@@ -111,9 +111,9 @@ export default async function AdminRewardPage() {
       ) : (
         <>
           {/* Tabel padat untuk layar lebar (design.md §10: 1024px+). */}
-          <div className="hidden overflow-hidden rounded-card border border-border lg:block">
+          <div className="hidden overflow-hidden rounded-card border border-warm-border lg:block">
             <table className="w-full border-collapse text-sm">
-              <thead className="bg-muted text-left text-xs uppercase tracking-wide text-brand-brown-muted">
+              <thead className="bg-warm-neutral text-left text-caption uppercase tracking-wide text-brand-brown-muted">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">
                     Promo
@@ -138,7 +138,7 @@ export default async function AdminRewardPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border bg-card">
+              <tbody className="divide-y divide-warm-border bg-card">
                 {rewards.map((reward) => (
                   <tr key={reward.id} className="h-14 align-middle">
                     <td className="px-4 py-2">
@@ -149,7 +149,7 @@ export default async function AdminRewardPage() {
                             {reward.title}
                           </p>
                           {reward.description ? (
-                            <p className="max-w-xs truncate text-xs text-brand-brown-muted">
+                            <p className="max-w-xs truncate text-caption text-brand-brown-muted">
                               {reward.description}
                             </p>
                           ) : null}
@@ -189,7 +189,7 @@ export default async function AdminRewardPage() {
             {rewards.map((reward) => (
               <li
                 key={reward.id}
-                className="flex flex-col gap-3 rounded-card border border-border bg-card p-4"
+                className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4"
               >
                 <div className="flex items-start gap-3">
                   <RewardThumbnail reward={reward} />

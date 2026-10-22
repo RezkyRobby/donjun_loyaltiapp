@@ -178,7 +178,7 @@ export function OrderDecisionActions({
           if (isPending) event.preventDefault();
         }}
         aria-labelledby="tolak-bukti-judul"
-        className="m-auto w-[calc(100%-2rem)] max-w-md rounded-card border border-border bg-card p-5 text-brand-brown-dark [&::backdrop]:bg-brand-brown-dark/70"
+        className="m-auto w-[calc(100%-2rem)] max-w-md rounded-card border border-warm-border bg-card p-5 text-brand-brown-dark [&::backdrop]:bg-brand-brown-dark/70"
       >
         <form onSubmit={handleReject} className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">
@@ -216,7 +216,7 @@ export function OrderDecisionActions({
               <p
                 id="alasan-penolakan-error"
                 role="alert"
-                className="flex items-center gap-1.5 text-xs text-donut-berry-deep"
+                className="flex items-center gap-1.5 text-caption text-donut-berry-deep"
               >
                 <CircleAlert aria-hidden className="size-4 shrink-0" />
                 {reasonError}
@@ -224,7 +224,7 @@ export function OrderDecisionActions({
             ) : (
               <p
                 id="alasan-penolakan-hint"
-                className="text-xs text-brand-brown-muted"
+                className="text-caption text-brand-brown-muted"
               >
                 Minimal {ORDER_REJECTION_REASON_MIN} karakter, maksimal{" "}
                 {ORDER_REJECTION_REASON_MAX}. Alasan ditampilkan ke pelanggan.

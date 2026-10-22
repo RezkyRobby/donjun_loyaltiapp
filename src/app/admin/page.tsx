@@ -73,7 +73,7 @@ export default async function AdminAnalyticsPage({
         />
       </div>
 
-      <p className="text-xs text-brand-brown-muted">
+      <p className="text-caption text-brand-brown-muted">
         Anggota dan poin bersifat global lintas outlet; filter outlet memengaruhi
         laporan operasional pada daftar pelanggan paling loyal.
       </p>

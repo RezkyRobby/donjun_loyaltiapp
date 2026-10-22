@@ -16,7 +16,7 @@ export default function AdminPaymentAccountCreatePage() {
           Buat rekening tujuan transfer manual untuk pelanggan.
         </p>
       </div>
-      <div className="rounded-card border border-border bg-card p-6">
+      <div className="rounded-card border border-warm-border bg-card p-6">
         <PaymentAccountForm mode="create" />
       </div>
     </section>

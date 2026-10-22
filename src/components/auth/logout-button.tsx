@@ -51,7 +51,7 @@ export function LogoutButton({
           {isPending ? "Keluar..." : "Keluar"}
         </Button>
         {error ? (
-          <p role="alert" className="text-xs text-donut-berry-deep">
+          <p role="alert" className="text-caption text-donut-berry-deep">
             {error}
           </p>
         ) : null}

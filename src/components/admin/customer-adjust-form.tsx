@@ -100,11 +100,11 @@ export function CustomerAdjustForm({
           placeholder="Contoh: 5 atau -3"
         />
         {fieldErrors.amount ? (
-          <p id="amount-galat" role="alert" className="text-xs text-donut-berry-deep">
+          <p id="amount-galat" role="alert" className="text-caption text-donut-berry-deep">
             {fieldErrors.amount}
           </p>
         ) : (
-          <p id="amount-petunjuk" className="text-xs text-brand-brown-muted">
+          <p id="amount-petunjuk" className="text-caption text-brand-brown-muted">
             Positif menambah saldo, negatif mengurangi. Maksimal {formatPoints(MAX_ADJUST_AMOUNT)}.
           </p>
         )}
@@ -125,11 +125,11 @@ export function CustomerAdjustForm({
           placeholder="Contoh: Koreksi karena kesalahan injeksi poin ganda"
         />
         {fieldErrors.note ? (
-          <p id="note-galat" role="alert" className="text-xs text-donut-berry-deep">
+          <p id="note-galat" role="alert" className="text-caption text-donut-berry-deep">
             {fieldErrors.note}
           </p>
         ) : (
-          <p id="note-petunjuk" className="text-xs text-brand-brown-muted">
+          <p id="note-petunjuk" className="text-caption text-brand-brown-muted">
             Catatan tersimpan pada riwayat poin dan audit log.
           </p>
         )}

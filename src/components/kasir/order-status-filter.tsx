@@ -51,7 +51,7 @@ export function OrderStatusFilter({
                   "inline-flex min-h-11 items-center rounded-badge border px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
                   isActive
                     ? "border-brand-orange bg-brand-orange text-brand-brown-dark"
-                    : "border-border bg-card text-brand-brown-muted hover:bg-muted hover:text-brand-brown-dark",
+                    : "border-warm-border bg-card text-brand-brown-muted hover:bg-warm-neutral hover:text-brand-brown-dark",
                 )}
               >
                 {option.label}

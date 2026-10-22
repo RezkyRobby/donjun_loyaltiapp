@@ -197,7 +197,7 @@ export function RegisterForm() {
           </span>
         </label>
         {fieldErrors.consent ? (
-          <p id="consent-galat" role="alert" className="text-xs text-donut-berry-deep">
+          <p id="consent-galat" role="alert" className="text-caption text-donut-berry-deep">
             {fieldErrors.consent}
           </p>
         ) : null}
@@ -207,7 +207,7 @@ export function RegisterForm() {
         {isSubmitting ? "Mendaftarkan akun..." : "Daftar"}
       </Button>
 
-      <div className="flex items-center gap-3 text-xs text-brand-brown-muted">
+      <div className="flex items-center gap-3 text-caption text-brand-brown-muted">
         <span className="h-px flex-1 bg-warm-border" />
         atau
         <span className="h-px flex-1 bg-warm-border" />

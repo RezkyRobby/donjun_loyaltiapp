@@ -20,7 +20,7 @@ export default async function AdminStaffCreatePage() {
           Buat akun kasir baru beserta penugasan outletnya.
         </p>
       </div>
-      <div className="rounded-card border border-border bg-card p-6">
+      <div className="rounded-card border border-warm-border bg-card p-6">
         <StaffForm outlets={outlets} />
       </div>
     </section>

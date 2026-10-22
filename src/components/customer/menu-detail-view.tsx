@@ -148,7 +148,7 @@ export function MenuDetailView({ menu }: { menu: ShopCatalogMenu }) {
               <legend className="font-display text-base font-semibold text-brand-brown-dark">
                 {group.name}
               </legend>
-              <p className="text-xs text-brand-brown-muted">
+              <p className="text-caption text-brand-brown-muted">
                 Opsional, boleh pilih lebih dari satu
               </p>
               <div className="flex flex-wrap gap-2">
@@ -173,7 +173,7 @@ export function MenuDetailView({ menu }: { menu: ShopCatalogMenu }) {
                       {delta ? (
                         <span
                           className={cn(
-                            "text-xs tabular-nums",
+                            "text-caption tabular-nums",
                             isSelected
                               ? "text-brand-brown-dark/80"
                               : "text-brand-brown-muted",
@@ -201,7 +201,7 @@ export function MenuDetailView({ menu }: { menu: ShopCatalogMenu }) {
           placeholder="Contoh: tanpa gula, potong kecil"
           className="min-h-20 bg-card"
         />
-        <p className="text-xs text-brand-brown-muted">
+        <p className="text-caption text-brand-brown-muted">
           Opsional, maksimal {ORDER_NOTE_MAX} karakter ({note.length}/
           {ORDER_NOTE_MAX}).
         </p>

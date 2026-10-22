@@ -63,7 +63,7 @@ export function OrderStatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center gap-1 rounded-badge border px-3 py-1 text-xs font-medium",
+        "inline-flex shrink-0 items-center gap-1 rounded-badge border px-3 py-1 text-caption font-medium",
         statusClassName,
         className,
       )}

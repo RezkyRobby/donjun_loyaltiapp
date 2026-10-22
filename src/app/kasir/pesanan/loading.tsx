@@ -25,7 +25,7 @@ export default function KasirPesananLoading() {
         {[0, 1, 2, 3].map((index) => (
           <li
             key={index}
-            className="flex h-32 animate-pulse flex-col gap-3 rounded-card border border-border bg-card p-4 motion-reduce:animate-none"
+            className="flex h-32 animate-pulse flex-col gap-3 rounded-card border border-warm-border bg-card p-4 motion-reduce:animate-none"
           >
             <div className="flex items-center justify-between gap-3">
               <div className="h-4 w-40 rounded-button bg-warm-neutral" />

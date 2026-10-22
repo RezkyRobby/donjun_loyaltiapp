@@ -95,7 +95,7 @@ function PaymentInstructions({
           />
         </div>
       ) : null}
-      <p className="text-xs text-brand-brown-muted">
+      <p className="text-caption text-brand-brown-muted">
         Transfer sesuai total, lalu unggah bukti transfer pada halaman ini.
       </p>
     </div>
@@ -231,7 +231,7 @@ export default async function CustomerOrderDetailPage({
                 <span className="text-sm font-medium text-brand-brown-dark">
                   {item.menuName}
                   {item.isFree ? (
-                    <span className="ml-2 rounded-badge bg-donut-matcha/15 px-2 py-0.5 text-xs font-medium text-donut-matcha-deep">
+                    <span className="ml-2 rounded-badge bg-donut-matcha/15 px-2 py-0.5 text-caption font-medium text-donut-matcha-deep">
                       Gratis
                     </span>
                   ) : null}
@@ -244,7 +244,7 @@ export default async function CustomerOrderDetailPage({
                 </span>
               </div>
               {item.options.length > 0 ? (
-                <p className="text-xs text-brand-brown-muted">
+                <p className="text-caption text-brand-brown-muted">
                   {item.options
                     .map((option) =>
                       option.priceDelta > 0
@@ -255,7 +255,7 @@ export default async function CustomerOrderDetailPage({
                 </p>
               ) : null}
               {item.note ? (
-                <p className="text-xs text-brand-brown-muted">
+                <p className="text-caption text-brand-brown-muted">
                   Catatan: {item.note}
                 </p>
               ) : null}
@@ -270,7 +270,7 @@ export default async function CustomerOrderDetailPage({
               <span className="font-medium text-brand-brown-dark">
                 {order.voucher.rewardTitle}
               </span>
-              <span className="text-xs text-brand-brown-muted">
+              <span className="text-caption text-brand-brown-muted">
                 {REWARD_BENEFIT_TYPE_LABELS[order.voucher.benefitType]} ·{" "}
                 {order.voucher.voucherCode}
               </span>
@@ -365,19 +365,19 @@ export default async function CustomerOrderDetailPage({
                   <div className="flex flex-wrap items-center gap-2">
                     <span
                       className={cn(
-                        "inline-flex items-center gap-1 rounded-badge border px-3 py-1 text-xs font-medium",
+                        "inline-flex items-center gap-1 rounded-badge border px-3 py-1 text-caption font-medium",
                         status.className,
                       )}
                     >
                       <StatusIcon aria-hidden className="size-4" />
                       {ORDER_PAYMENT_PROOF_STATUS_LABELS[proof.status]}
                     </span>
-                    <span className="text-xs text-brand-brown-muted">
+                    <span className="text-caption text-brand-brown-muted">
                       {formatDateTimeWita(proof.uploadedAt)} WITA
                     </span>
                   </div>
                   {proof.rejectionReason ? (
-                    <p className="text-xs text-donut-berry-deep">
+                    <p className="text-caption text-donut-berry-deep">
                       Alasan penolakan: {proof.rejectionReason}
                     </p>
                   ) : null}

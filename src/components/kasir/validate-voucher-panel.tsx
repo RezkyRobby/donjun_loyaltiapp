@@ -1,6 +1,13 @@
 "use client";
 
-import { CircleCheck, CircleX, Keyboard, RotateCcw, ScanLine } from "lucide-react";
+import {
+  CircleAlert,
+  CircleCheck,
+  CircleX,
+  Keyboard,
+  RotateCcw,
+  ScanLine,
+} from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
 import { CodeScanner } from "@/components/kasir/code-scanner";
@@ -39,6 +46,7 @@ function describeFailure(response: Extract<ValidateVoucherResult, { ok: false }>
 export function ValidateVoucherPanel() {
   const [mode, setMode] = useState<"scan" | "manual">("scan");
   const [code, setCode] = useState("");
+  const [codeError, setCodeError] = useState<string | null>(null);
   const [result, setResult] = useState<ValidationResult>({ kind: "none" });
   const busyRef = useRef(false);
 
@@ -79,6 +87,7 @@ export function ValidateVoucherPanel() {
   const reset = useCallback(() => {
     busyRef.current = false;
     setCode("");
+    setCodeError(null);
     setResult({ kind: "none" });
   }, []);
 
@@ -98,7 +107,14 @@ export function ValidateVoucherPanel() {
             <form
               onSubmit={(event) => {
                 event.preventDefault();
-                if (code.trim().length > 0) void handleCode(code);
+
+                if (code.trim().length === 0) {
+                  setCodeError("Masukkan kode voucher terlebih dahulu.");
+                  return;
+                }
+
+                setCodeError(null);
+                void handleCode(code);
               }}
               className="flex flex-col gap-2"
             >
@@ -107,7 +123,10 @@ export function ValidateVoucherPanel() {
                 id="kasir-kode-voucher"
                 name="kasir-kode-voucher"
                 value={code}
-                onChange={(event) => setCode(event.target.value.toUpperCase())}
+                onChange={(event) => {
+                  setCode(event.target.value.toUpperCase());
+                  if (codeError) setCodeError(null);
+                }}
                 autoComplete="off"
                 autoCapitalize="characters"
                 autoCorrect="off"
@@ -115,10 +134,24 @@ export function ValidateVoucherPanel() {
                 placeholder="DJN-XXXXXXXXXXXXXXXX"
                 className="h-12 bg-card font-mono text-base tracking-wider"
                 disabled={result.kind === "loading"}
+                aria-invalid={codeError ? true : undefined}
+                aria-describedby={
+                  codeError ? "kasir-kode-voucher-galat" : undefined
+                }
               />
+              {codeError ? (
+                <p
+                  id="kasir-kode-voucher-galat"
+                  role="alert"
+                  className="flex items-center gap-1.5 text-caption text-donut-berry-deep"
+                >
+                  <CircleAlert aria-hidden className="size-4 shrink-0" />
+                  {codeError}
+                </p>
+              ) : null}
               <Button
                 type="submit"
-                disabled={result.kind === "loading" || code.trim().length === 0}
+                disabled={result.kind === "loading"}
                 className="h-12 w-full"
               >
                 Validasi kode
@@ -152,7 +185,7 @@ export function ValidateVoucherPanel() {
 
       <div aria-live="polite">
         {result.kind === "loading" ? (
-          <p className="flex items-center justify-center gap-2 rounded-card border border-border bg-card px-4 py-3 text-sm text-brand-brown-muted">
+          <p className="flex items-center justify-center gap-2 rounded-card border border-warm-border bg-card px-4 py-3 text-sm text-brand-brown-muted">
             <span
               aria-hidden
               className="size-5 animate-spin rounded-full border-2 border-brand-brown-muted border-t-transparent motion-reduce:animate-none"

@@ -130,7 +130,7 @@ export function ScanPanel() {
 
       <div aria-live="polite">
         {result.kind === "loading" ? (
-          <p className="flex items-center justify-center gap-2 rounded-card border border-border bg-card px-4 py-3 text-sm text-brand-brown-muted">
+          <p className="flex items-center justify-center gap-2 rounded-card border border-warm-border bg-card px-4 py-3 text-sm text-brand-brown-muted">
             <span
               aria-hidden
               className="size-5 animate-spin rounded-full border-2 border-brand-brown-muted border-t-transparent motion-reduce:animate-none"

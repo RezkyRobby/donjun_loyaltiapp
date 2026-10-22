@@ -101,11 +101,11 @@ function Field({
       <Label htmlFor={id}>{label}</Label>
       {children}
       {error ? (
-        <p id={`${id}-galat`} role="alert" className="text-xs text-donut-berry-deep">
+        <p id={`${id}-galat`} role="alert" className="text-caption text-donut-berry-deep">
           {error}
         </p>
       ) : hint ? (
-        <p id={`${id}-petunjuk`} className="text-xs text-brand-brown-muted">
+        <p id={`${id}-petunjuk`} className="text-caption text-brand-brown-muted">
           {hint}
         </p>
       ) : null}
@@ -360,13 +360,13 @@ export function MenuForm({
         />
       </Field>
 
-      <div className="flex flex-col gap-4 rounded-button border border-border bg-muted/40 p-4">
+      <div className="flex flex-col gap-4 rounded-button border border-warm-border bg-warm-neutral/40 p-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="flex flex-col gap-1">
             <h2 className="text-sm font-medium text-brand-brown-dark">
               Grup opsi &amp; tag
             </h2>
-            <p className="max-w-md text-xs text-brand-brown-muted">
+            <p className="max-w-md text-caption text-brand-brown-muted">
               Opsional. Contoh grup &quot;Rasa&quot; dengan tag &quot;Coklat&quot;
               yang menambah harga. Tag bersifat multi-pilih saat pelanggan
               memesan.
@@ -394,7 +394,7 @@ export function MenuForm({
             {optionGroups.map((group, groupIndex) => (
               <li
                 key={groupIndex}
-                className="flex flex-col gap-3 rounded-button border border-border bg-card p-3"
+                className="flex flex-col gap-3 rounded-button border border-warm-border bg-card p-3"
               >
                 <div className="flex items-end gap-2">
                   <div className="flex-1">
@@ -434,7 +434,7 @@ export function MenuForm({
                   </Button>
                 </div>
 
-                <div className="flex flex-col gap-3 border-l-2 border-border pl-3">
+                <div className="flex flex-col gap-3 border-l-2 border-warm-border pl-3">
                   {group.tags.map((tag, tagIndex) => {
                     const tagKey = `${groupIndex}-${tagIndex}`;
 
@@ -534,7 +534,7 @@ export function MenuForm({
               alt="Pratinjau gambar menu saat ini"
               width={160}
               height={120}
-              className="h-20 w-32 rounded-button border border-border object-cover"
+              className="h-20 w-32 rounded-button border border-warm-border object-cover"
             />
             {mode === "edit" ? (
               <label className="flex items-center gap-2 text-sm text-brand-brown-dark">
@@ -560,7 +560,7 @@ export function MenuForm({
           className="block w-full cursor-pointer rounded-lg border border-input bg-card text-sm text-brand-brown-muted file:mr-3 file:border-0 file:bg-warm-neutral file:px-4 file:py-3 file:text-sm file:font-medium file:text-brand-brown-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
         {image ? (
-          <p className="text-xs text-brand-brown-muted">
+          <p className="text-caption text-brand-brown-muted">
             Berkas dipilih: {image.name}
           </p>
         ) : null}

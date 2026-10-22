@@ -15,6 +15,7 @@ import { CustomerSuspendAction } from "@/components/admin/customer-suspend-actio
 import { PaginationNav } from "@/components/shared/pagination-nav";
 import { Button } from "@/components/ui/button";
 import {
+  EMPTY_VALUE_LABEL,
   POINT_TRANSACTION_METHOD_LABELS,
   POINT_TRANSACTION_TYPE_LABELS,
 } from "@/constants/labels";
@@ -95,7 +96,7 @@ export default async function AdminCustomerDetailPage({
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="flex flex-col gap-6">
-          <div className="rounded-card border border-border bg-card p-5">
+          <div className="rounded-card border border-warm-border bg-card p-5">
             <h2 className="font-display text-lg font-semibold text-brand-brown-dark">
               Profil &amp; Saldo
             </h2>
@@ -103,7 +104,7 @@ export default async function AdminCustomerDetailPage({
               <div className="flex items-start gap-2">
                 <Mail aria-hidden className="mt-0.5 size-4 text-brand-brown-muted" />
                 <div className="min-w-0">
-                  <dt className="text-xs text-brand-brown-muted">Email</dt>
+                  <dt className="text-caption text-brand-brown-muted">Email</dt>
                   <dd className="break-words text-brand-brown-dark">
                     {customer.email}
                   </dd>
@@ -112,7 +113,7 @@ export default async function AdminCustomerDetailPage({
               <div className="flex items-start gap-2">
                 <Phone aria-hidden className="mt-0.5 size-4 text-brand-brown-muted" />
                 <div className="min-w-0">
-                  <dt className="text-xs text-brand-brown-muted">
+                  <dt className="text-caption text-brand-brown-muted">
                     Nomor telepon
                   </dt>
                   <dd className="text-brand-brown-dark">
@@ -126,7 +127,7 @@ export default async function AdminCustomerDetailPage({
                   className="mt-0.5 size-4 text-brand-brown-muted"
                 />
                 <div>
-                  <dt className="text-xs text-brand-brown-muted">
+                  <dt className="text-caption text-brand-brown-muted">
                     Status email
                   </dt>
                   <dd className="text-brand-brown-dark">
@@ -135,13 +136,13 @@ export default async function AdminCustomerDetailPage({
                 </div>
               </div>
               <div>
-                <dt className="text-xs text-brand-brown-muted">Bergabung</dt>
+                <dt className="text-caption text-brand-brown-muted">Bergabung</dt>
                 <dd className="text-brand-brown-dark">
                   {formatDateTimeWita(customer.createdAt)} WITA
                 </dd>
               </div>
               <div className="rounded-button bg-warm-neutral px-4 py-3">
-                <dt className="text-xs text-brand-brown-muted">Saldo poin</dt>
+                <dt className="text-caption text-brand-brown-muted">Saldo poin</dt>
                 <dd className="font-display text-2xl font-bold tabular-nums text-brand-brown-dark">
                   {formatPoints(customer.pointsBalance)}
                 </dd>
@@ -149,7 +150,7 @@ export default async function AdminCustomerDetailPage({
             </dl>
           </div>
 
-          <div className="rounded-card border border-border bg-card p-5">
+          <div className="rounded-card border border-warm-border bg-card p-5">
             <h2 className="font-display text-lg font-semibold text-brand-brown-dark">
               Koreksi Saldo
             </h2>
@@ -174,8 +175,8 @@ export default async function AdminCustomerDetailPage({
         </div>
 
         <div className="flex flex-col gap-6 lg:col-span-2">
-          <div className="rounded-card border border-border bg-card">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-5 py-4">
+          <div className="rounded-card border border-warm-border bg-card">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-warm-border px-5 py-4">
               <h2 className="font-display text-lg font-semibold text-brand-brown-dark">
                 Riwayat Poin
               </h2>
@@ -191,7 +192,7 @@ export default async function AdminCustomerDetailPage({
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse text-sm">
-                  <thead className="bg-muted text-left text-xs uppercase tracking-wide text-brand-brown-muted">
+                  <thead className="bg-warm-neutral text-left text-caption uppercase tracking-wide text-brand-brown-muted">
                     <tr>
                       <th scope="col" className="px-5 py-3 font-medium">
                         Waktu (WITA)
@@ -207,7 +208,7 @@ export default async function AdminCustomerDetailPage({
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border">
+                  <tbody className="divide-y divide-warm-border">
                     {history.entries.map((entry) => (
                       <tr key={entry.id} className="align-top">
                         <td className="whitespace-nowrap px-5 py-3 text-brand-brown-muted">
@@ -230,17 +231,17 @@ export default async function AdminCustomerDetailPage({
                           <p className="text-brand-brown-muted">
                             {entry.method
                               ? POINT_TRANSACTION_METHOD_LABELS[entry.method]
-                              : "—"}
+                              : EMPTY_VALUE_LABEL}
                             {entry.outletName ? ` · ${entry.outletName}` : ""}
                             {entry.cashierName ? ` · ${entry.cashierName}` : ""}
                           </p>
                           {entry.voucherCode ? (
-                            <p className="font-mono text-xs text-brand-brown-dark">
+                            <p className="font-mono text-caption text-brand-brown-dark">
                               {entry.voucherCode}
                             </p>
                           ) : null}
                           {entry.note ? (
-                            <p className="mt-0.5 text-xs text-brand-brown-muted">
+                            <p className="mt-0.5 text-caption text-brand-brown-muted">
                               Catatan: {entry.note}
                             </p>
                           ) : null}
@@ -253,7 +254,7 @@ export default async function AdminCustomerDetailPage({
             )}
 
             {history.totalPages > 1 ? (
-              <div className="border-t border-border px-5 py-4">
+              <div className="border-t border-warm-border px-5 py-4">
                 <PaginationNav
                   page={history.page}
                   totalPages={history.totalPages}
@@ -264,7 +265,7 @@ export default async function AdminCustomerDetailPage({
             ) : null}
           </div>
 
-          <div className="rounded-card border border-border bg-card p-5">
+          <div className="rounded-card border border-warm-border bg-card p-5">
             <h2 className="font-display text-lg font-semibold text-brand-brown-dark">
               Voucher Pelanggan
             </h2>
@@ -273,7 +274,7 @@ export default async function AdminCustomerDetailPage({
                 Belum ada voucher yang ditukarkan.
               </p>
             ) : (
-              <ul className="mt-3 flex flex-col divide-y divide-border">
+              <ul className="mt-3 flex flex-col divide-y divide-warm-border">
                 {vouchers.map((voucher) => (
                   <li
                     key={voucher.id}
@@ -288,12 +289,12 @@ export default async function AdminCustomerDetailPage({
                         <p className="truncate text-sm font-medium text-brand-brown-dark">
                           {voucher.rewardTitle}
                         </p>
-                        <p className="font-mono text-xs text-brand-brown-muted">
+                        <p className="font-mono text-caption text-brand-brown-muted">
                           {voucher.voucherCode}
                         </p>
                       </div>
                     </div>
-                    <span className="text-xs text-brand-brown-muted">
+                    <span className="text-caption text-brand-brown-muted">
                       {voucher.usedAt
                         ? `Terpakai ${formatDateTimeWita(voucher.usedAt)}`
                         : `Ditukar ${formatDateTimeWita(voucher.claimedAt)}`}

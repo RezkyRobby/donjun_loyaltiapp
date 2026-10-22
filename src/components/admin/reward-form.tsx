@@ -69,7 +69,7 @@ function FieldMessage({
 }) {
   if (error) {
     return (
-      <p id={`${id}-galat`} role="alert" className="text-xs text-donut-berry-deep">
+      <p id={`${id}-galat`} role="alert" className="text-caption text-donut-berry-deep">
         {error}
       </p>
     );
@@ -77,7 +77,7 @@ function FieldMessage({
 
   if (hint) {
     return (
-      <p id={`${id}-petunjuk`} className="text-xs text-brand-brown-muted">
+      <p id={`${id}-petunjuk`} className="text-caption text-brand-brown-muted">
         {hint}
       </p>
     );
@@ -350,7 +350,7 @@ export function RewardForm({
         />
       </Field>
 
-      <fieldset className="flex flex-col gap-5 rounded-button border border-border bg-muted/40 p-4">
+      <fieldset className="flex flex-col gap-5 rounded-button border border-warm-border bg-warm-neutral/40 p-4">
         <legend className="px-1 text-sm font-medium text-brand-brown-dark">
           Tipe manfaat voucher
         </legend>
@@ -484,7 +484,7 @@ export function RewardForm({
               alt="Pratinjau gambar promo saat ini"
               width={160}
               height={120}
-              className="h-20 w-32 rounded-button border border-border object-cover"
+              className="h-20 w-32 rounded-button border border-warm-border object-cover"
             />
             {mode === "edit" ? (
               <label className="flex items-center gap-2 text-sm text-brand-brown-dark">
@@ -510,7 +510,7 @@ export function RewardForm({
           className="block w-full cursor-pointer rounded-lg border border-input bg-card text-sm text-brand-brown-muted file:mr-3 file:border-0 file:bg-warm-neutral file:px-4 file:py-3 file:text-sm file:font-medium file:text-brand-brown-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
         {image ? (
-          <p className="text-xs text-brand-brown-muted">
+          <p className="text-caption text-brand-brown-muted">
             Berkas dipilih: {image.name}
           </p>
         ) : null}

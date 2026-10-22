@@ -69,7 +69,7 @@ function PaymentAccountCard({
   return (
     <section
       aria-labelledby="tujuan-transfer-judul"
-      className="flex flex-col gap-3 rounded-card border border-border bg-card p-4"
+      className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4"
     >
       <h2
         id="tujuan-transfer-judul"
@@ -98,7 +98,7 @@ function PaymentAccountCard({
           ) : null}
         </dl>
         {account.imageUrl ? (
-          <div className="relative mx-auto mt-1 aspect-square w-full max-w-56 overflow-hidden rounded-button border border-border bg-brand-white">
+          <div className="relative mx-auto mt-1 aspect-square w-full max-w-56 overflow-hidden rounded-button border border-warm-border bg-brand-white">
             <Image
               src={account.imageUrl}
               alt={`Kode QRIS ${account.providerName}`}
@@ -131,7 +131,7 @@ export default async function KasirPesananDetailPage({
       <section className="flex flex-col gap-6">
         <Link
           href="/kasir/pesanan"
-          className="inline-flex h-11 w-fit items-center gap-1 rounded-button px-2 text-sm font-medium text-brand-orange-deep transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="inline-flex h-11 w-fit items-center gap-1 rounded-button px-2 text-sm font-medium text-brand-orange-deep transition-colors hover:bg-warm-neutral focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           <ChevronLeft aria-hidden className="size-4" />
           Antrean pesanan
@@ -159,7 +159,7 @@ export default async function KasirPesananDetailPage({
     <section className="flex flex-col gap-6">
       <Link
         href="/kasir/pesanan"
-        className="inline-flex h-11 w-fit items-center gap-1 rounded-button px-2 text-sm font-medium text-brand-orange-deep transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+        className="inline-flex h-11 w-fit items-center gap-1 rounded-button px-2 text-sm font-medium text-brand-orange-deep transition-colors hover:bg-warm-neutral focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
       >
         <ChevronLeft aria-hidden className="size-4" />
         Antrean pesanan
@@ -229,7 +229,7 @@ export default async function KasirPesananDetailPage({
 
       <section
         aria-labelledby="informasi-judul"
-        className="flex flex-col gap-3 rounded-card border border-border bg-card p-4"
+        className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4"
       >
         <h2
           id="informasi-judul"
@@ -258,7 +258,7 @@ export default async function KasirPesananDetailPage({
 
       <section
         aria-labelledby="rincian-judul"
-        className="flex flex-col gap-3 rounded-card border border-border bg-card p-4"
+        className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4"
       >
         <h2
           id="rincian-judul"
@@ -273,7 +273,7 @@ export default async function KasirPesananDetailPage({
                 <span className="text-sm font-medium text-brand-brown-dark">
                   {item.menuName}
                   {item.isFree ? (
-                    <span className="ml-2 rounded-badge bg-donut-matcha/15 px-2 py-0.5 text-xs font-medium text-donut-matcha-deep">
+                    <span className="ml-2 rounded-badge bg-donut-matcha/15 px-2 py-0.5 text-caption font-medium text-donut-matcha-deep">
                       Gratis
                     </span>
                   ) : null}
@@ -284,7 +284,7 @@ export default async function KasirPesananDetailPage({
                 </span>
               </div>
               {item.options.length > 0 ? (
-                <p className="text-xs text-brand-brown-muted">
+                <p className="text-caption text-brand-brown-muted">
                   {item.options
                     .map((option) =>
                       option.priceDelta > 0
@@ -295,7 +295,7 @@ export default async function KasirPesananDetailPage({
                 </p>
               ) : null}
               {item.note ? (
-                <p className="text-xs text-brand-brown-muted">
+                <p className="text-caption text-brand-brown-muted">
                   Catatan: {item.note}
                 </p>
               ) : null}
@@ -304,7 +304,7 @@ export default async function KasirPesananDetailPage({
         </ul>
 
         {order.voucher ? (
-          <div className="flex items-start gap-2 rounded-button border border-border bg-warm-neutral/60 p-3 text-sm">
+          <div className="flex items-start gap-2 rounded-button border border-warm-border bg-warm-neutral/60 p-3 text-sm">
             <Ticket
               aria-hidden
               className="mt-0.5 size-4 shrink-0 text-brand-orange-deep"
@@ -313,7 +313,7 @@ export default async function KasirPesananDetailPage({
               <span className="font-medium text-brand-brown-dark">
                 {order.voucher.rewardTitle}
               </span>
-              <span className="text-xs text-brand-brown-muted">
+              <span className="text-caption text-brand-brown-muted">
                 {REWARD_BENEFIT_TYPE_LABELS[order.voucher.benefitType]} ·{" "}
                 {order.voucher.voucherCode}
               </span>
@@ -327,7 +327,7 @@ export default async function KasirPesananDetailPage({
           </p>
         ) : null}
 
-        <dl className="flex flex-col gap-2 border-t border-border pt-3 text-sm">
+        <dl className="flex flex-col gap-2 border-t border-warm-border pt-3 text-sm">
           <div className="flex items-center justify-between gap-3">
             <dt className="text-brand-brown-muted">Subtotal</dt>
             <dd className="font-medium tabular-nums text-brand-brown-dark">
@@ -342,7 +342,7 @@ export default async function KasirPesananDetailPage({
               </dd>
             </div>
           ) : null}
-          <div className="flex items-center justify-between gap-3 border-t border-border pt-2">
+          <div className="flex items-center justify-between gap-3 border-t border-warm-border pt-2">
             <dt className="font-medium text-brand-brown-dark">Total bayar</dt>
             <dd className="font-display text-xl font-bold tabular-nums text-brand-brown-dark">
               {formatRupiah(order.total)}
@@ -358,7 +358,7 @@ export default async function KasirPesananDetailPage({
       {order.proofs.length > 0 ? (
         <section
           aria-labelledby="bukti-judul"
-          className="flex flex-col gap-3 rounded-card border border-border bg-card p-4"
+          className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4"
         >
           <h2
             id="bukti-judul"
@@ -373,7 +373,7 @@ export default async function KasirPesananDetailPage({
 
               return (
                 <li key={proof.id} className="flex flex-col gap-2">
-                  <div className="relative aspect-[3/4] w-full max-w-56 overflow-hidden rounded-button border border-border bg-brand-white">
+                  <div className="relative aspect-[3/4] w-full max-w-56 overflow-hidden rounded-button border border-warm-border bg-brand-white">
                     <Image
                       src={proof.imageUrl}
                       alt={
@@ -389,20 +389,20 @@ export default async function KasirPesananDetailPage({
                   <div className="flex flex-wrap items-center gap-2">
                     <span
                       className={cn(
-                        "inline-flex items-center gap-1 rounded-badge border px-3 py-1 text-xs font-medium",
+                        "inline-flex items-center gap-1 rounded-badge border px-3 py-1 text-caption font-medium",
                         proofStatus.className,
                       )}
                     >
                       <ProofIcon aria-hidden className="size-4" />
                       {ORDER_PAYMENT_PROOF_STATUS_LABELS[proof.status]}
                     </span>
-                    <span className="text-xs text-brand-brown-muted">
+                    <span className="text-caption text-brand-brown-muted">
                       {formatDateTimeWita(proof.uploadedAt)} WITA
                       {index === 0 ? " · terbaru" : ""}
                     </span>
                   </div>
                   {proof.rejectionReason ? (
-                    <p className="text-xs text-donut-berry-deep">
+                    <p className="text-caption text-donut-berry-deep">
                       Alasan penolakan: {proof.rejectionReason}
                     </p>
                   ) : null}
@@ -412,7 +412,7 @@ export default async function KasirPesananDetailPage({
           </ul>
         </section>
       ) : order.status === OrderStatus.AWAITING_CONFIRMATION ? (
-        <div className="flex items-start gap-2 rounded-card border border-border bg-card p-4 text-sm text-brand-brown-muted">
+        <div className="flex items-start gap-2 rounded-card border border-warm-border bg-card p-4 text-sm text-brand-brown-muted">
           <Images aria-hidden className="mt-0.5 size-4 shrink-0" />
           <span>
             Belum ada bukti transfer yang terlampir pada pesanan ini.
@@ -422,7 +422,7 @@ export default async function KasirPesananDetailPage({
 
       <section
         aria-labelledby="keputusan-judul"
-        className="flex flex-col gap-3 rounded-card border border-border bg-card p-4"
+        className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4"
       >
         <h2
           id="keputusan-judul"

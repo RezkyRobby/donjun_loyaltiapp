@@ -6,7 +6,7 @@ import { CircleCheck, CircleSlash } from "lucide-react";
 export function CustomerStatusBadge({ isActive }: { isActive: boolean }) {
   if (isActive) {
     return (
-      <span className="inline-flex items-center gap-1 rounded-badge bg-donut-matcha/15 px-2.5 py-1 text-xs font-medium text-donut-matcha-deep">
+      <span className="inline-flex items-center gap-1 rounded-badge bg-donut-matcha/15 px-2.5 py-1 text-caption font-medium text-donut-matcha-deep">
         <CircleCheck aria-hidden className="size-3.5" />
         Aktif
       </span>
@@ -14,7 +14,7 @@ export function CustomerStatusBadge({ isActive }: { isActive: boolean }) {
   }
 
   return (
-    <span className="inline-flex items-center gap-1 rounded-badge bg-donut-berry/15 px-2.5 py-1 text-xs font-medium text-donut-berry-deep">
+    <span className="inline-flex items-center gap-1 rounded-badge bg-donut-berry/15 px-2.5 py-1 text-caption font-medium text-donut-berry-deep">
       <CircleSlash aria-hidden className="size-3.5" />
       Ditangguhkan
     </span>

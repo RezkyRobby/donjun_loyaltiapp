@@ -40,7 +40,7 @@ export function CustomerSearchForm({ value }: { value: string }) {
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="cari-pelanggan"
-          className="text-xs font-medium text-brand-brown-muted"
+          className="text-caption font-medium text-brand-brown-muted"
         >
           Cari pelanggan
         </label>

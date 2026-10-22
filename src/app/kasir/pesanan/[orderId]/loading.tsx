@@ -12,10 +12,10 @@ export default function KasirPesananDetailLoading() {
         <div className="h-6 w-44 animate-pulse rounded-button bg-warm-neutral motion-reduce:animate-none" />
         <div className="h-4 w-52 animate-pulse rounded-button bg-warm-neutral motion-reduce:animate-none" />
       </div>
-      <div className="h-20 animate-pulse rounded-card border border-border bg-card motion-reduce:animate-none" />
-      <div className="h-40 animate-pulse rounded-card border border-border bg-card motion-reduce:animate-none" />
-      <div className="h-64 animate-pulse rounded-card border border-border bg-card motion-reduce:animate-none" />
-      <div className="h-28 animate-pulse rounded-card border border-border bg-card motion-reduce:animate-none" />
+      <div className="h-20 animate-pulse rounded-card border border-warm-border bg-card motion-reduce:animate-none" />
+      <div className="h-40 animate-pulse rounded-card border border-warm-border bg-card motion-reduce:animate-none" />
+      <div className="h-64 animate-pulse rounded-card border border-warm-border bg-card motion-reduce:animate-none" />
+      <div className="h-28 animate-pulse rounded-card border border-warm-border bg-card motion-reduce:animate-none" />
     </section>
   );
 }

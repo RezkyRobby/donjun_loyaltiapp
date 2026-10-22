@@ -20,7 +20,7 @@ export default async function AdminRewardCreatePage() {
           Buat promo baru untuk katalog penukaran poin pelanggan.
         </p>
       </div>
-      <div className="rounded-card border border-border bg-card p-6">
+      <div className="rounded-card border border-warm-border bg-card p-6">
         <RewardForm
           mode="create"
           menus={menus.map((menu) => ({ id: menu.id, name: menu.name }))}

@@ -282,7 +282,7 @@ export function CodeScanner({
     return (
       <div
         role="alert"
-        className="flex flex-col items-center gap-3 rounded-card border border-border bg-card p-6 text-center"
+        className="flex flex-col items-center gap-3 rounded-card border border-warm-border bg-card p-6 text-center"
       >
         <span
           aria-hidden
@@ -314,7 +314,7 @@ export function CodeScanner({
   }
 
   return (
-    <div className="relative overflow-hidden rounded-card border border-border bg-brand-brown-dark">
+    <div className="relative overflow-hidden rounded-card border border-warm-border bg-brand-brown-dark">
       <div
         id={containerId}
         className="[&_video]:block [&_video]:w-full"

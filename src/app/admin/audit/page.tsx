@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import {
   AUDIT_ACTION_LABELS,
   AUDIT_SOURCE_LABELS,
+  EMPTY_VALUE_LABEL,
   POINT_TRANSACTION_TYPE_LABELS,
 } from "@/constants/labels";
 import {
@@ -44,7 +45,7 @@ function SourceBadge({ source }: { source: AuditLogEntry["source"] }) {
 
   return (
     <span
-      className={`mt-1 inline-flex items-center rounded-badge px-2 py-0.5 text-xs font-medium ${
+      className={`mt-1 inline-flex items-center rounded-badge px-2 py-0.5 text-caption font-medium ${
         isPoint
           ? "bg-sky-pastel/70 text-brand-brown-dark"
           : "bg-warm-neutral text-brand-brown-muted"
@@ -56,7 +57,8 @@ function SourceBadge({ source }: { source: AuditLogEntry["source"] }) {
 }
 
 function AmountCell({ amount }: { amount: number | null }) {
-  if (amount === null) return <span className="text-brand-brown-muted">—</span>;
+  if (amount === null)
+    return <span className="text-brand-brown-muted">{EMPTY_VALUE_LABEL}</span>;
 
   return (
     <span
@@ -74,16 +76,16 @@ function EntryDetail({ entry }: { entry: AuditLogEntry }) {
   if (entry.source === "ADMIN") {
     return (
       <div className="min-w-0">
-        <p className="break-words font-mono text-xs text-brand-brown-muted">
+        <p className="break-words font-mono text-caption text-brand-brown-muted">
           {entry.entity}
           {entry.entityId ? ` · ${entry.entityId}` : ""}
         </p>
         {entry.metadata !== null && entry.metadata !== undefined ? (
           <details className="mt-1">
-            <summary className="cursor-pointer text-xs text-brand-brown-muted">
+            <summary className="cursor-pointer text-caption text-brand-brown-muted">
               Detail perubahan
             </summary>
-            <pre className="mt-1 max-w-xs overflow-x-auto rounded-button bg-warm-neutral p-2 text-xs text-brand-brown-dark">
+            <pre className="mt-1 max-w-xs overflow-x-auto rounded-button bg-warm-neutral p-2 text-caption text-brand-brown-dark">
               {JSON.stringify(entry.metadata, null, 2)}
             </pre>
           </details>
@@ -94,12 +96,12 @@ function EntryDetail({ entry }: { entry: AuditLogEntry }) {
 
   return (
     <div className="min-w-0">
-      <p className="text-xs text-brand-brown-muted">
-        {getAuditMethodLabel(entry.method) || "—"}
+      <p className="text-caption text-brand-brown-muted">
+        {getAuditMethodLabel(entry.method) || EMPTY_VALUE_LABEL}
         {entry.voucherCode ? ` · ${entry.voucherCode}` : ""}
       </p>
       {entry.note ? (
-        <p className="mt-0.5 text-xs text-brand-brown-muted">
+        <p className="mt-0.5 text-caption text-brand-brown-muted">
           Catatan: {entry.note}
         </p>
       ) : null}
@@ -114,13 +116,14 @@ function PersonCell({
   name: string | null;
   username: string | null;
 }) {
-  if (!name) return <span className="text-brand-brown-muted">—</span>;
+  if (!name)
+    return <span className="text-brand-brown-muted">{EMPTY_VALUE_LABEL}</span>;
 
   return (
     <div className="min-w-0">
       <p className="text-brand-brown-dark">{name}</p>
       {username ? (
-        <p className="text-xs text-brand-brown-muted">@{username}</p>
+        <p className="text-caption text-brand-brown-muted">@{username}</p>
       ) : null}
     </div>
   );
@@ -201,7 +204,7 @@ export default async function AdminAuditPage({
       />
 
       {result.total === 0 ? (
-        <div className="flex flex-col items-center gap-3 rounded-card border border-border bg-card p-8 text-center">
+        <div className="flex flex-col items-center gap-3 rounded-card border border-warm-border bg-card p-8 text-center">
           <span
             aria-hidden
             className="flex size-12 items-center justify-center rounded-full bg-warm-neutral text-brand-brown-muted"
@@ -226,9 +229,9 @@ export default async function AdminAuditPage({
             .
           </p>
 
-          <div className="hidden overflow-x-auto rounded-card border border-border lg:block">
+          <div className="hidden overflow-x-auto rounded-card border border-warm-border lg:block">
             <table className="w-full border-collapse text-sm">
-              <thead className="bg-muted text-left text-xs uppercase tracking-wide text-brand-brown-muted">
+              <thead className="bg-warm-neutral text-left text-caption uppercase tracking-wide text-brand-brown-muted">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">
                     Waktu (WITA)
@@ -253,7 +256,7 @@ export default async function AdminAuditPage({
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border bg-card">
+              <tbody className="divide-y divide-warm-border bg-card">
                 {result.entries.map((entry) => (
                   <tr key={`${entry.source}-${entry.id}`} className="align-top">
                     <td className="whitespace-nowrap px-4 py-3 text-brand-brown-muted">
@@ -269,7 +272,7 @@ export default async function AdminAuditPage({
                       {entry.actorName ?? "Sistem"}
                     </td>
                     <td className="px-4 py-3 text-brand-brown-dark">
-                      {entry.outletName ?? "—"}
+                      {entry.outletName ?? EMPTY_VALUE_LABEL}
                     </td>
                     <td className="px-4 py-3">
                       <PersonCell
@@ -293,7 +296,7 @@ export default async function AdminAuditPage({
             {result.entries.map((entry) => (
               <li
                 key={`${entry.source}-${entry.id}`}
-                className="flex flex-col gap-3 rounded-card border border-border bg-card p-4"
+                className="flex flex-col gap-3 rounded-card border border-warm-border bg-card p-4"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
@@ -302,7 +305,7 @@ export default async function AdminAuditPage({
                     </p>
                     <SourceBadge source={entry.source} />
                   </div>
-                  <span className="shrink-0 text-xs text-brand-brown-muted">
+                  <span className="shrink-0 text-caption text-brand-brown-muted">
                     {formatDateTimeWita(entry.createdAt)}
                   </span>
                 </div>
@@ -316,13 +319,13 @@ export default async function AdminAuditPage({
                   <div>
                     <dt className="text-brand-brown-muted">Outlet</dt>
                     <dd className="text-brand-brown-dark">
-                      {entry.outletName ?? "—"}
+                      {entry.outletName ?? EMPTY_VALUE_LABEL}
                     </dd>
                   </div>
                   <div>
                     <dt className="text-brand-brown-muted">Pelanggan</dt>
                     <dd className="text-brand-brown-dark">
-                      {entry.customerName ?? "—"}
+                      {entry.customerName ?? EMPTY_VALUE_LABEL}
                     </dd>
                   </div>
                   <div>

@@ -47,7 +47,7 @@ export function GoogleAuthButton({
         {isLoading ? "Menghubungkan ke Google..." : label}
       </Button>
       {error ? (
-        <p role="alert" className="text-xs text-donut-berry-deep">
+        <p role="alert" className="text-caption text-donut-berry-deep">
           {error}
         </p>
       ) : null}

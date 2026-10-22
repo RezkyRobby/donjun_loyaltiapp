@@ -2,7 +2,9 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+/* Artefak laporan desain di .commandcode/design memakai kelas Tailwind untuk
+   tata letaknya sendiri; jangan sampai kelas itu ikut masuk bundel CSS aplikasi. */
+@source not "../../.commandcode";
 
 :root {
   /* ---- Warna brand (design.md §3) ---- */
@@ -46,21 +48,6 @@
   --input: var(--brand-brown-muted);
   --ring: var(--brand-brown-dark);
 
-  /* ---- Sidebar & chart: diturunkan dari palet brand, bukan warna baru ---- */
-  --sidebar: var(--brand-white);
-  --sidebar-foreground: var(--brand-brown-dark);
-  --sidebar-primary: var(--brand-orange);
-  --sidebar-primary-foreground: var(--brand-brown-dark);
-  --sidebar-accent: var(--brand-yellow);
-  --sidebar-accent-foreground: var(--brand-brown-dark);
-  --sidebar-border: var(--warm-border);
-  --sidebar-ring: var(--brand-brown-dark);
-  --chart-1: var(--brand-orange);
-  --chart-2: var(--brand-yellow);
-  --chart-3: var(--donut-matcha);
-  --chart-4: var(--donut-berry);
-  --chart-5: var(--brand-brown-muted);
-
   /* ---- Radius (design.md §6) ---- */
   --radius: 1.25rem;
   --radius-badge: 9999px;
@@ -84,6 +71,27 @@
   --font-body: var(--font-plus-jakarta-sans), system-ui, sans-serif;
   --font-heading: var(--font-baloo-2), system-ui, sans-serif;
   --font-display: var(--font-baloo-2), system-ui, sans-serif;
+
+  /* ---- Skala tipografi (design.md §5): satu langkah per peran, dipakai
+     sebagai nama kelas (text-h1, text-caption, dst.) agar tidak ada ukuran
+     ad-hoc yang tersebar di komponen. ---- */
+  --text-display: 2.5rem;
+  --text-display--line-height: 1.1;
+  --text-h1: 1.75rem;
+  --text-h1--line-height: 1.2;
+  --text-h2: 1.375rem;
+  --text-h2--line-height: 1.25;
+  --text-h3: 1.125rem;
+  --text-h3--line-height: 1.3;
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.5;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.4;
+  --text-voucher-code: 1.125rem;
+  --text-voucher-code--line-height: 1.3;
+  --text-voucher-code--letter-spacing: 0.08em;
 
   /* Warna semantik komponen shadcn/ui */
   --color-background: var(--background);
@@ -109,20 +117,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-
   /* Palet brand untuk pemakaian langsung (bg-brand-yellow, text-brand-orange-deep, dst.) */
   --color-brand-yellow: var(--brand-yellow);
   --color-brand-yellow-light: var(--brand-yellow-light);

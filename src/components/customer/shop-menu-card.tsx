@@ -51,7 +51,7 @@ export function ShopMenuCard({ menu }: { menu: ShopCatalogMenu }) {
 
       <div className="px-3 pb-3">
         {hasOptions ? (
-          <p className="flex h-10 items-center text-xs text-brand-brown-muted">
+          <p className="flex h-10 items-center text-caption text-brand-brown-muted">
             Pilih {optionHint} di detail menu
           </p>
         ) : (

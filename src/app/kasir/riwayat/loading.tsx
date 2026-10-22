@@ -15,7 +15,7 @@ export default function KasirRiwayatLoading() {
         {[0, 1, 2, 3].map((index) => (
           <li
             key={index}
-            className="flex h-16 animate-pulse items-center justify-between gap-4 rounded-card border border-border bg-card px-4 motion-reduce:animate-none"
+            className="flex h-16 animate-pulse items-center justify-between gap-4 rounded-card border border-warm-border bg-card px-4 motion-reduce:animate-none"
           >
             <div className="flex flex-col gap-2">
               <div className="h-4 w-40 rounded-button bg-warm-neutral" />

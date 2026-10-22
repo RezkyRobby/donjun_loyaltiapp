@@ -92,7 +92,7 @@ export default async function KasirPesananPage({
       <OrderStatusFilter active={statusFilter} />
 
       {total === 0 ? (
-        <div className="flex flex-col items-center gap-3 rounded-card border border-border bg-card p-6 text-center">
+        <div className="flex flex-col items-center gap-3 rounded-card border border-warm-border bg-card p-6 text-center">
           <span
             aria-hidden
             className="flex size-12 items-center justify-center rounded-full bg-warm-neutral text-brand-brown-muted"

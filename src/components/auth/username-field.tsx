@@ -168,7 +168,7 @@ export function UsernameField({
         id={`${id}-pesan`}
         aria-live="polite"
         className={cn(
-          "flex items-start gap-1.5 text-xs",
+          "flex items-start gap-1.5 text-caption",
           tone === "error" && "text-donut-berry-deep",
           tone === "success" && "text-donut-matcha-deep",
           tone === "muted" && "text-brand-brown-muted",

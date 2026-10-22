@@ -34,7 +34,7 @@ export function MetricCard({
           {value}
         </p>
         {description ? (
-          <p className="text-xs text-brand-brown-muted">{description}</p>
+          <p className="text-caption text-brand-brown-muted">{description}</p>
         ) : null}
       </CardContent>
     </Card>

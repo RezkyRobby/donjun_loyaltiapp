@@ -141,3 +141,7 @@ export const AUDIT_ACTION_LABELS: Record<AuditAction, string> = {
   ORDER_EXPIRED: "Pesanan kedaluwarsa",
 };
 
+// Penanda nilai kosong pada tabel dan ringkasan (design.md §5 melarang em dash).
+// Dipakai kata, bukan tanda pisah, agar pembaca layar mengumumkan maknanya.
+export const EMPTY_VALUE_LABEL = "Tidak ada";
+

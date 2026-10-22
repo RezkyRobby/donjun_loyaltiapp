@@ -80,7 +80,7 @@ export default async function CustomerSettingsPage() {
             </dd>
           </div>
         </dl>
-        <p className="text-xs text-brand-brown-muted">
+        <p className="text-caption text-brand-brown-muted">
           Username dan email bersifat permanen dan tidak dapat diubah.
         </p>
       </section>

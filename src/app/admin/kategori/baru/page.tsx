@@ -16,7 +16,7 @@ export default function AdminMenuCategoryCreatePage() {
           Buat kategori baru untuk mengelompokkan menu belanja.
         </p>
       </div>
-      <div className="rounded-card border border-border bg-card p-6">
+      <div className="rounded-card border border-warm-border bg-card p-6">
         <MenuCategoryForm mode="create" />
       </div>
     </section>
