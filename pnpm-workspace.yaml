@@ -4,3 +4,10 @@ allowBuilds:
   prisma: true
   sharp: false
   unrs-resolver: false
+
+overrides:
+  '@modelcontextprotocol/sdk': '>=1.32.1'
+  hono: '>=4.13.13'
+  sharp: '>=0.35.5'
+  source-map-js: '>=1.2.2'
+  vite: '>=8.3.5'
