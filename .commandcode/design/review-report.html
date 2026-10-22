@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Donjun Donat Loyalty - Review Report</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<style>
+		body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+		.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+		.report-section { border: 1px solid #222226; background: #0a0a0b; position: relative; }
+		.corner-box { position: absolute; width: 20px; height: 20px; border: 1px solid #222226; background: #000; }
+	</style>
+</head>
+<body class="bg-black text-[#fafafa]">
+	<main class="mx-auto w-full max-w-6xl px-5 py-8 md:px-10 md:py-12">
+		<header class="report-section mb-8 p-6 md:p-8">
+			<div class="corner-box left-0 top-0 -translate-x-1/2 -translate-y-1/2"></div>
+			<div class="corner-box right-0 top-0 translate-x-1/2 -translate-y-1/2"></div>
+			<div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+				<div>
+					<div class="mono mb-2 text-xs tracking-widest text-[#666]">// REVIEW</div>
+					<h1 class="text-4xl font-bold tracking-tight md:text-6xl">Donjun Donat Loyalty</h1>
+					<div class="mono mt-3 text-xs text-[#666]">surface: seluruh antarmuka (public &middot; auth &middot; customer &middot; kasir &middot; admin) &middot; register: brand + product</div>
+				</div>
+				<div class="mono text-left text-xs text-[#666] md:text-right">
+					<div>COMMANDCODE REPORT</div>
+					<div class="text-[#444]">2026-10-15</div>
+				</div>
+			</div>
+		</header>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="corner-box left-0 top-0 -translate-x-1/2 -translate-y-1/2"></div>
+			<div class="corner-box right-0 top-0 translate-x-1/2 -translate-y-1/2"></div>
+			<div class="grid gap-8 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+				<div>
+					<div class="mono mb-2 text-xs tracking-widest text-[#666]">// OVERALL</div>
+					<div class="text-6xl font-bold tracking-tight md:text-7xl">37</div>
+					<div class="mt-1 text-lg text-[#666]">/ 50</div>
+					<div class="mt-4 inline-flex border border-[#ef4444]/30 bg-[#ef4444]/10 px-3 py-1 text-sm text-[#ef4444]">BLOCK</div>
+				</div>
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">// TL;DR</div>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Ini produk yang punya sudut pandang. Aturan desain ditulis sebagai sumber kebenaran lalu benar-benar ditegakkan di kode: palet diukur kontrasnya, status selalu warna + ikon + label, motion dibatasi transform/opacity dan dibungkus motion-safe:, copy spesifik, dan setiap permukaan membawa artefak domain nyata (kartu QR, barcode Code 128, kartu saldo, antrean pesanan, tenggat WITA).</p>
+					<p class="text-sm leading-6 text-[#a0a0a0] mt-3">Satu temuan HIGH berdiri dan memblokir: tombol submit dimatikan selama input belum valid di dua form, yang justru mematikan jalur galat yang sudah ditulis di kode itu sendiri. Satu MEDIUM pada tipografi: skala design.md &sect;5 tidak pernah dijadikan token.</p>
+					<p class="mt-4 text-sm leading-6 text-[#ef4444]">FIX: aktifkan tombol submit dan tampilkan galat inline (/design a11y), lalu /design typeset untuk skala tipe, dan /design tokenize untuk primitive serta alias token.</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// LENS SCORES</div>
+			<div class="overflow-x-auto">
+				<table class="w-full min-w-[720px] border-collapse text-sm">
+					<thead>
+						<tr class="border-b border-[#222226] text-left mono text-xs text-[#666]">
+							<th class="py-3 pr-4 font-normal">#</th>
+							<th class="py-3 pr-4 font-normal">LENS</th>
+							<th class="py-3 pr-4 font-normal">SCORE</th>
+							<th class="py-3 font-normal">KEY FINDING</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">1</td>
+							<td class="py-4 pr-4 text-[#fafafa]">First impression</td>
+							<td class="py-4 pr-4 text-[#34d399]">8 / 10</td>
+							<td class="py-4 text-[#a0a0a0]">Hero asimetris dengan pratinjau voucher nyata (barcode + kode alfabet non-ambigu, page.tsx:26,175) dan kartu saldo poin. Kategori langsung terbaca. Punggung yang jelas: cincin donat + palet hangat.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">2</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Hierarchy</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">7 / 10</td>
+							<td class="py-4 text-[#a0a0a0]">Pola tetap judul &rarr; subjudul &rarr; konten; hasil validasi voucher tampil besar dan seketika (validate-voucher-panel.tsx:164). Titik lemah: beranda pelanggan menumpuk tiga blok berbobot mirip tanpa penekanan artefak utama (dashboard/page.tsx:36).</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">3</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Color voice</td>
+							<td class="py-4 pr-4 text-[#34d399]">9 / 10</td>
+							<td class="py-4 text-[#a0a0a0]">Warna dijalankan sebagai sistem: token dengan tabel kontras terukur (design.md &sect;3.4), status tidak pernah warna saja (order-status-badge.tsx:71, voucher-card.tsx:101), tenggat memakai ikon + teks (payment-deadline.tsx:28). Nol hue AI di seluruh src/.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">4</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Type voice</td>
+							<td class="py-4 pr-4 text-[#ef4444]">6 / 10</td>
+							<td class="py-4 text-[#a0a0a0]">Pasangan Baloo 2 + Plus Jakarta Sans disengaja dan pas. Tetapi skala design.md &sect;5 tidak diimplementasikan: globals.css tidak mendefinisikan satu pun token --text-*, dan langkah caption dirender text-xs 12px, bukan text-caption 0.8125rem (128 kemunculan di 54 file).</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">5</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Interaction feel</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">7 / 10</td>
+							<td class="py-4 text-[#a0a0a0]">Keadaan lengkap dan matang: skeleton untuk setiap pemuatan, galat kamera terklasifikasi (code-scanner.tsx:43), dialog native dengan fokus ke aksi paling tidak berbahaya (inject-points-dialog.tsx:211), cooldown dengan hitung mundur. Dirusak temuan HIGH di bawah.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]"></td>
+							<td class="py-4 pr-4 font-semibold text-[#fafafa]">Total</td>
+							<td class="py-4 pr-4 font-semibold text-[#fbbf24]">37 / 50</td>
+							<td class="py-4 text-[#a0a0a0]">Arah kuat dan konsisten; yang gagal adalah satu aturan affordance formulir yang diulang, plus skala tipe yang tidak diimplementasikan.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// FINDINGS</div>
+			<div class="overflow-x-auto">
+				<table class="w-full min-w-[900px] border-collapse text-sm">
+					<thead>
+						<tr class="border-b border-[#222226] text-left mono text-xs text-[#666]">
+							<th class="py-3 pr-4 font-normal">#</th>
+							<th class="py-3 pr-4 font-normal">SEVERITY</th>
+							<th class="py-3 pr-4 font-normal">DISCIPLINE</th>
+							<th class="py-3 pr-4 font-normal">LOCATION</th>
+							<th class="py-3 pr-4 font-normal">BEFORE</th>
+							<th class="py-3 font-normal">AFTER</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">1</td>
+							<td class="py-4 pr-4 text-[#ef4444]">HIGH</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Accessibility</td>
+							<td class="mono py-4 pr-4 text-[#a0a0a0]">customer/upload-proof-form.tsx:132, kasir/validate-voucher-panel.tsx:121</td>
+							<td class="py-4 pr-4 text-[#a0a0a0]">Tombol submit dimatikan selama input belum valid: disabled={isSubmitting || !file} dan disabled={result.kind === "loading" || code.trim().length === 0}</td>
+							<td class="py-4 text-[#a0a0a0]">Biarkan tombol aktif; validasi saat submit dan tampilkan galat inline yang sudah ada (FormAlert pada unggah bukti, pesan galat pada panel validasi)</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">2</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">MEDIUM</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Type</td>
+							<td class="mono py-4 pr-4 text-[#a0a0a0]">app/globals.css (nol token --text-*), customer/order-card.tsx:25, kasir/order-queue-card.tsx:36, kasir/riwayat/page.tsx:85, admin/audit/page.tsx:305, +50 file</td>
+							<td class="py-4 pr-4 text-[#a0a0a0]">Skala tipe design.md &sect;5 tidak diwakili di CSS; komponen memakai ukuran Tailwind ad-hoc. Metadata dan tanggal dirender text-xs 12px, sedangkan token caption berlaku 0.8125rem (13px)</td>
+							<td class="py-4 text-[#a0a0a0]">Definisikan skala sebagai token pada @theme (--text-display, --text-caption, dst.) dan ganti text-xs pada metadata/tanggal dengan langkah caption</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">3</td>
+							<td class="py-4 pr-4 text-[#34d399]">LOW</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Writing</td>
+							<td class="mono py-4 pr-4 text-[#a0a0a0]">lib/format.ts:42, admin/audit/page.tsx:59,98,117,272,319,325, admin/outlet/page.tsx:96,137, admin/pembayaran/page.tsx:25,114,162, admin/pelanggan/[id]/page.tsx:233</td>
+							<td class="py-4 pr-4 text-[#a0a0a0]">Em dash dipakai sebagai penanda nilai kosong di teks yang dirender</td>
+							<td class="py-4 text-[#a0a0a0]">Ganti dengan kata ("Tidak ada", "Tidak tersedia") atau penanda non-dash</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">4</td>
+							<td class="py-4 pr-4 text-[#34d399]">LOW</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Surface</td>
+							<td class="mono py-4 pr-4 text-[#a0a0a0]">126 kemunculan border-border / bg-muted / divide-border di 56 file, mis. admin/audit/page.tsx:229,256, kasir/kasir-nav.tsx:32</td>
+							<td class="py-4 pr-4 text-[#a0a0a0]">Dua kosakata token untuk nilai yang identik (globals.css:45 menetapkan --border: var(--warm-border))</td>
+							<td class="py-4 text-[#a0a0a0]">Pilih satu nama per nilai (arahkan ke --warm-border / --warm-neutral) di seluruh komponen</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="mt-5 text-sm leading-6 text-[#a0a0a0]"><span class="mono text-[#666]">WHY #1 &middot;</span> design.md &sect;8 eksplisit: "Jangan mematikan tombol submit hanya karena formulir belum valid." Bukti terkuatnya, jalur galat sudah ditulis dan menjadi kode mati: upload-proof-form.tsx:59 memeriksa if (!file) setMessage(...) dan validate-voucher-panel.tsx:101 memeriksa if (code.trim().length &gt; 0), keduanya tidak pernah tercapai karena tombolnya mati.</p>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// COGNITIVE LOAD / RISK</div>
+			<div class="grid gap-6 md:grid-cols-2">
+				<div>
+					<div class="mb-3 text-xl font-semibold">RENDAH</div>
+					<ul class="space-y-3 text-sm text-[#a0a0a0]">
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Status dan galat tidak pernah mengandalkan warna; kamus label terpusat, ikon selalu hadir (form-alert.tsx:19, order-status-badge.tsx:71)</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Keadaan lengkap: skeleton untuk setiap pemuatan, empty state yang mengajari, galat kamera terklasifikasi</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Motion hanya transform/opacity dan dibungkus motion-safe:/motion-reduce:</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Komposisi mengikuti pola kerja: antrean Monitor, kamera Operate, form Configure</li>
+						<li><span class="mono mr-2 text-[#fbbf24]">WATCH</span>Tombol submit yang mati selama input belum valid, dan jalur galat di kode menjadi tidak terjangkau</li>
+						<li><span class="mono mr-2 text-[#fbbf24]">WATCH</span>Skala tipe tidak ditokenkan; langkah caption jatuh ke 12px</li>
+						<li><span class="mono mr-2 text-[#ef4444]">FAIL</span>Skor First impression berasal dari struktur kode, bukan render. Tidak ada peramban di sesi ini</li>
+					</ul>
+				</div>
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">// NEXT MODES</div>
+					<div class="flex flex-wrap gap-2">
+						<span class="border border-[#333] px-3 py-1 text-sm text-[#a0a0a0]">/design a11y</span>
+						<span class="border border-[#333] px-3 py-1 text-sm text-[#a0a0a0]">/design typeset</span>
+						<span class="border border-[#333] px-3 py-1 text-sm text-[#a0a0a0]">/design tokenize</span>
+						<span class="border border-[#333] px-3 py-1 text-sm text-[#a0a0a0]">/design writing</span>
+					</div>
+					<p class="mt-4 text-sm leading-6 text-[#a0a0a0]">a11y untuk temuan HIGH, typeset untuk skala tipe, tokenize untuk menyatukan primitive shadcn dan alias token sekaligus, writing untuk penanda nilai kosong.</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// WHAT'S WORKING</div>
+			<div class="grid gap-4 md:grid-cols-3">
+				<article class="border border-[#1f1f24] p-4">
+					<h2 class="mb-2 text-sm font-semibold">Artefak domain sebagai bukti</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Kartu QR, barcode Code 128 dengan kode teks untuk input manual kasir (voucher-card.tsx:46,121), kartu saldo poin, tenggat pembayaran WITA (payment-deadline.tsx:29). Tidak satu pun bisa dipindahkan ke produk lain tanpa menjadi salah.</p>
+				</article>
+				<article class="border border-[#1f1f24] p-4">
+					<h2 class="mb-2 text-sm font-semibold">Komposisi mengikuti pekerjaan</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Antrean kasir memakai border penuh bernuansa status untuk memindai cepat (order-queue-card.tsx:15), kamera penuh lebar dengan senter di zona jempol (code-scanner.tsx:334), "Input kode manual" selalu terlihat saat kamera ditolak.</p>
+				</article>
+				<article class="border border-[#1f1f24] p-4">
+					<h2 class="mb-2 text-sm font-semibold">Copy dan jalur pemulihan</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Teks pemuatan menyebut pekerjaan nyata ("Memeriksa QR...", "Memvalidasi voucher..."), satu kata kerja per tombol, tanpa tanda seru. Dialog injeksi memisahkan idle/pending/success/cooldown/error dan menahan Escape saat proses berjalan (inject-points-dialog.tsx:94).</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// PRIORITY ISSUES</div>
+			<div class="space-y-5">
+				<article class="border border-[#2a1d22] bg-[#110b0d] p-5">
+					<div class="mono mb-2 text-xs text-[#ef4444]">HIGH &middot; ACCESSIBILITY</div>
+					<h2 class="mb-2 text-lg font-semibold">Tombol submit yang mati selama input belum valid</h2>
+					<p class="mb-4 text-sm leading-6 text-[#a0a0a0]">EVIDENCE: upload-proof-form.tsx:132 disabled={isSubmitting || !file}; validate-voucher-panel.tsx:121 disabled={result.kind === "loading" || code.trim().length === 0}. Konsekuensinya, jalur galat yang sudah dirancang menjadi kode mati (upload-proof-form.tsx:59, validate-voucher-panel.tsx:101). Satu-satunya hal yang menahan persetujuan, dan perbaikannya kecil. Dua lokasi berada pada momen kasir paling tertekan: jalur cadangan saat kamera ditolak atau barcode rusak, dan unggah bukti transfer.</p>
+					<p class="mb-4 text-sm leading-6 text-[#a0a0a0]">MITIGASI: instruksi unggah tercetak di atas tombol dan input kosong terlihat tepat di atasnya, sehingga dampak rasanya lebih ringan daripada label HIGH. Aturannya tertulis eksplisit dan berpola, dan ia mematikan jalur galat yang sudah dirancang, jadi saya tidak menurunkannya.</p>
+					<div class="border-l border-[#ef4444] pl-4 text-sm leading-6 text-[#ef4444]">FIX (/design a11y): aktifkan tombol submit; validasi saat submit dan tampilkan galat inline yang sudah tersedia.</div>
+				</article>
+				<article class="border border-[#2a241d] bg-[#0f0d0b] p-5">
+					<div class="mono mb-2 text-xs text-[#fbbf24]">MEDIUM &middot; TYPE</div>
+					<h2 class="mb-2 text-lg font-semibold">Skala tipe design.md &sect;5 tidak diimplementasikan</h2>
+					<p class="mb-4 text-sm leading-6 text-[#a0a0a0]">EVIDENCE: globals.css hanya mendefinisikan font, warna, radius, shadow, dan motion; tidak ada satu pun token --text-*. Komponen memakai ukuran Tailwind ad-hoc (text-2xl, text-lg, text-sm) dan langkah caption dirender text-xs 12px (128 kemunculan di 54 file), sedangkan design.md &sect;5 menetapkan text-caption 0.8125rem untuk "Label kecil, metadata tanggal". Perbaikan di akar token akan merapikan seluruh permukaan sekaligus, termasuk hierarki judul yang kini ad-hoc.</p>
+					<div class="border-l border-[#fbbf24] pl-4 text-sm leading-6 text-[#fbbf24]">FIX (/design typeset): definisikan skala sebagai token @theme dan ganti pemakaian text-xs pada metadata/tanggal dengan langkah caption.</div>
+				</article>
+				<article class="border border-[#1f1f24] p-5">
+					<div class="mono mb-2 text-xs text-[#34d399]">LOW &middot; WRITING + SURFACE</div>
+					<h2 class="mb-2 text-lg font-semibold">Dua kebersihan yang bisa digabung</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Em dash sebagai penanda nilai kosong (13 lokasi dirender, akar di lib/format.ts:42) dan alias token untuk nilai identik (126 kemunculan di 56 file, globals.css:45). Keduanya murah, keduanya menutup celah antara dokumen dan kode. Temuan MEDIUM dari laporan smell sebelumnya juga masih terbuka: primitive src/components/ui/* belum disesuaikan ke design.md &sect;8, jadi jalankan /design tokenize.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// CONSIDERED BUT REJECTED</div>
+			<div class="overflow-x-auto">
+				<table class="w-full min-w-[760px] border-collapse text-sm">
+					<thead>
+						<tr class="border-b border-[#222226] text-left mono text-xs text-[#666]">
+							<th class="py-3 pr-4 font-normal">LOCATION</th>
+							<th class="py-3 pr-4 font-normal">CANDIDATE</th>
+							<th class="py-3 font-normal">REJECTED BECAUSE</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">customer/cart-view.tsx:562</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Tombol "Buat pesanan" mati saat belum ada outlet/rekening</td>
+							<td class="py-4 text-[#a0a0a0]">Pemicunya prasyarat sistem yang tidak dapat diperbaiki pelanggan dengan mengetik, dan alasannya tampil di FormAlert tepat di atas tombol. Berbeda dari temuan HIGH yang mati karena input pengguna sendiri</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">(customer)/dashboard/page.tsx:36</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Tiga blok berbobot mirip di beranda</td>
+							<td class="py-4 text-[#a0a0a0]">Setiap blok punya peran berbeda (saldo, pintu ke pelacakan, artefak utama); kartu QR adalah blok terbesar, terakhir, dan paling beraksi. Ditandai sebagai pelemah skor Hierarchy, bukan temuan</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">customer/customer-bottom-nav.tsx:40</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Label navigasi text-xs</td>
+							<td class="py-4 text-[#a0a0a0]">design.md &sect;10 mengunci maksimal 4 item pada target &ge; 48px di lebar 375px; memperbesar label akan memaksa salah satunya keluar</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">(auth)/layout.tsx:8, not-found.tsx:14</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Komposisi terpusat pada form auth dan 404</td>
+							<td class="py-4 text-[#a0a0a0]">Artefak tunggal berfokus; simetri adalah jawaban yang benar di sini, dan halaman lain tetap asimetris</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">design.md:53</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Palet hangat oranye sebagai refleks pertama kategori makanan</td>
+							<td class="py-4 text-[#a0a0a0]">Nilai diambil apa adanya dari sumber kebenaran brand. Perbaikannya arah seni (/design voice), bukan penggantian token</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 mono text-xs text-[#a0a0a0]">kasir/validate-voucher-panel.tsx:45</td>
+							<td class="py-4 pr-4 text-[#fafafa]">busyRef tidak direset pada jalur format kode salah</td>
+							<td class="py-4 text-[#a0a0a0]">Terpulihkan: hasil invalid menampilkan tombol "Validasi voucher lain" yang memanggil reset(). Bukan jalan buntu, dan bukan temuan desain</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// VERIFICATION</div>
+			<div class="grid gap-6 md:grid-cols-2">
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">CHECKED (SOURCE)</div>
+					<ul class="space-y-3 text-sm text-[#a0a0a0]">
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>Membaca dengan nomor baris: layout.tsx, not-found.tsx, globals.css, lib/format.ts, (public)/page.tsx, (auth)/{layout,masuk/page,login-form,text-field,form-alert}.tsx, (customer)/{layout,dashboard,promo,belanja,pesanan}/page.tsx, 16 komponen customer, 8 komponen kasir, kasir/{layout,riwayat/page}.tsx, admin/{page,audit/page}.tsx, 4 komponen admin, 5 primitive ui/*.tsx</li>
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>Grep disabled pada src/components: 8 kemunculan, diklasifikasi menjadi 2 pelanggaran validitas input, 3 prasyarat sistem, 3 batas aturan bisnis yang sah</li>
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>Grep em dash: 126 kemunculan; dipisahkan menjadi komentar kode dan 13 kemunculan di teks yang dirender</li>
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>Grep alias token: 126 kemunculan di 56 file. Grep text-xs: 128 kemunculan di 54 file. Grep --text-/font-size pada globals.css: 0 hasil</li>
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>Grep hue AI dan tema gelap: 0 hasil, tanpa mekanisme tema gelap</li>
+					</ul>
+				</div>
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">NOT VERIFIED</div>
+					<ul class="space-y-3 text-sm text-[#a0a0a0]">
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>First impression tidak dilihat sebagai render; skor 8/10 dan penyebutan cincin donat + palet hangat berasal dari struktur JSX dan nilai token, bukan tangkapan layar. Ini pelemah terbesar laporan ini</li>
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>Reflow 320px, zoom 200%, dan perilaku saat teks diperbesar</li>
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>Kontras terukur dengan alat, bukan estimasi dari tabel design.md &sect;3.4</li>
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>Kenampakan nyata cincin fokus, urutan tab, dan langkah keyboard pada alur injeksi, validasi, serta checkout</li>
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>Pengumuman pembaca layar atas aria-live pada hasil validasi dan cooldown injeksi</li>
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>Motion yang sebenarnya berjalan; kelas motion-safe: belum dilihat bergerak</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="corner-box left-0 top-0 -translate-x-1/2 -translate-y-1/2"></div>
+			<div class="corner-box right-0 top-0 translate-x-1/2 -translate-y-1/2"></div>
+			<div class="mono mb-3 text-xs tracking-widest text-[#666]">// VERDICT</div>
+			<div class="flex flex-wrap items-center gap-3">
+				<span class="border border-[#ef4444]/30 bg-[#ef4444]/10 px-3 py-1 text-sm text-[#ef4444]">BLOCK &middot; 37/50</span>
+			</div>
+			<p class="mt-4 text-sm leading-6 text-[#a0a0a0]">Ada satu temuan HIGH yang masih berdiri: dua tombol submit yang dimatikan selama input belum valid, yang sekaligus mematikan jalur galat yang sudah dirancang di kode. Selama itu belum diperbaiki, persetujuan tidak diberikan. Sisa pekerjaan adalah MEDIUM (skala tipe dan primitive generator) dan dua LOW (em dash, alias token).</p>
+			<p class="mt-4 text-sm leading-6 text-[#a0a0a0]">Saran urutan: /design a11y untuk temuan HIGH, lalu /design typeset, lalu /design tokenize untuk menyatukan primitive dan alias token sekaligus, dan /design writing untuk penanda nilai kosong. Mode ini tidak mengubah kode dan hanya membuat dua artefak laporan.</p>
+		</section>
+
+		<footer class="mono py-8 text-center text-xs tracking-widest text-[#444]">
+			Generated with CommandCode - 2026-10-15
+		</footer>
+	</main>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Donjun Donat Loyalty - Checkup Report</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<style>
+		body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+		.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+		.report-section { border: 1px solid #222226; background: #0a0a0b; position: relative; }
+		.corner-box { position: absolute; width: 20px; height: 20px; border: 1px solid #222226; background: #000; }
+	</style>
+</head>
+<body class="bg-black text-[#fafafa]">
+	<main class="mx-auto w-full max-w-6xl px-5 py-8 md:px-10 md:py-12">
+		<header class="report-section mb-8 p-6 md:p-8">
+			<div class="corner-box left-0 top-0 -translate-x-1/2 -translate-y-1/2"></div>
+			<div class="corner-box right-0 top-0 translate-x-1/2 -translate-y-1/2"></div>
+			<div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+				<div>
+					<div class="mono mb-2 text-xs tracking-widest text-[#666]">// CHECKUP</div>
+					<h1 class="text-4xl font-bold tracking-tight md:text-6xl">Donjun Donat Loyalty</h1>
+					<div class="mono mt-3 text-xs text-[#666]">surface: seluruh antarmuka (public &middot; auth &middot; customer &middot; kasir &middot; admin) &middot; register: brand + product</div>
+				</div>
+				<div class="mono text-left text-xs text-[#666] md:text-right">
+					<div>COMMANDCODE REPORT</div>
+					<div class="text-[#444]">2026-10-15</div>
+				</div>
+			</div>
+		</header>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="corner-box left-0 top-0 -translate-x-1/2 -translate-y-1/2"></div>
+			<div class="corner-box right-0 top-0 translate-x-1/2 -translate-y-1/2"></div>
+			<div class="grid gap-8 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+				<div>
+					<div class="mono mb-2 text-xs tracking-widest text-[#666]">// OVERALL</div>
+					<div class="text-6xl font-bold tracking-tight md:text-7xl">40</div>
+					<div class="mt-1 text-lg text-[#666]">/ 60</div>
+					<div class="mt-4 inline-flex border border-[#fbbf24]/30 bg-[#fbbf24]/10 px-3 py-1 text-sm text-[#fbbf24]">PROCEED WITH FIXES</div>
+				</div>
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">// TL;DR</div>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Tidak ada vital Critical. Sehat pada hal yang paling sering rusak: setiap status membawa warna + ikon + label, tidak ada placeholder yang menggantikan label, semua input memakai 16px pada layar kecil sehingga tidak memicu zoom iOS, area aman perangkat dihormati, dan setiap rute pemuatan data punya skeleton.</p>
+					<p class="mt-4 text-sm leading-6 text-[#fbbf24]">PRESKRIPSI: aktifkan tombol submit dan tampilkan galat inline (/design a11y), naikkan target sentuh keranjang ke 44px, dan sesuaikan primitive src/components/ui/* ke design.md &sect;8 (/design tokenize).</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// VITAL SIGNS</div>
+			<div class="overflow-x-auto">
+				<table class="w-full min-w-[720px] border-collapse text-sm">
+					<thead>
+						<tr class="border-b border-[#222226] text-left mono text-xs text-[#666]">
+							<th class="py-3 pr-4 font-normal">#</th>
+							<th class="py-3 pr-4 font-normal">VITAL</th>
+							<th class="py-3 pr-4 font-normal">STATUS</th>
+							<th class="py-3 pr-4 font-normal">SCORE</th>
+							<th class="py-3 font-normal">KEY FINDING</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">1</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Intentionality</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">WATCH</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">5 / 10</td>
+							<td class="py-4 text-[#a0a0a0]">Permukaan terlihat dipilih: token terdokumentasi, motion dijaga, copy spesifik. Pengecualiannya komponen bersama: ui/card.tsx:14 masih rounded-xl ring-1 ring-foreground/10 (tanpa warm-border, tanpa shadow-card), ui/button.tsx:8 h-8, ui/input.tsx:10 h-8, ui/textarea.tsx:9 rounded-lg, semuanya dengan scaffolding dark: tanpa tema gelap (globals.css:5,50). Setiap pemanggil menambal manual, mis. (auth)/masuk/page.tsx:24 menempel shadow-card.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">2</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Readability</td>
+							<td class="py-4 pr-4 text-[#34d399]">HEALTHY</td>
+							<td class="py-4 pr-4 text-[#34d399]">10 / 10</td>
+							<td class="py-4 text-[#a0a0a0]">Isi 1rem, pasangan kontras AA terukur dan terdokumentasi (design.md &sect;3.4), angka tabular-nums, tidak ada teks di atas latar yang gagal kontras menurut tabel tersebut. Catatan: langkah caption dirender 12px sedangkan token menetapkan 13px; masih terbaca, dilaporkan sebagai temuan Type di review-report.md.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">3</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Usability</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">WATCH</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">5 / 10</td>
+							<td class="py-4 text-[#a0a0a0]">Tugas inti selesai di semua alur. Cacatnya: dua tombol submit mati selama input belum valid (upload-proof-form.tsx:132, validate-voucher-panel.tsx:121), dan keduanya mematikan jalur galat yang sudah ditulis (upload-proof-form.tsx:59, validate-voucher-panel.tsx:101). Temuan HIGH yang sama dari review-report.md.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">4</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Responsiveness</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">WATCH</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">5 / 10</td>
+							<td class="py-4 text-[#a0a0a0]">Terverifikasi baik: seluruh input/select/textarea memakai 16px pada layar di bawah 640px (ui/input.tsx:10, ui/textarea.tsx:9, reward-form.tsx:41) sehingga tidak memicu zoom otomatis iOS; viewportFit cover dan env(safe-area-inset-*) dipakai di nav bawah, header, dan dialog. Belum: reflow 320px dan zoom 200%.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">5</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Speed</td>
+							<td class="py-4 pr-4 text-[#34d399]">HEALTHY</td>
+							<td class="py-4 pr-4 text-[#34d399]">10 / 10</td>
+							<td class="py-4 text-[#a0a0a0]">Fondasi benar: next/font self-hosted tanpa layout shift (layout.tsx:7,12), skeleton untuk setiap rute pemuatan (15 loading.tsx), Image dengan sizes dan priority pada hero detail menu, Cloudinary f_auto,q_auto. Tidak ada pengukuran Lighthouse di sesi ini, dicatat sebagai gap.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">6</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Accessibility</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">WATCH</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">5 / 10</td>
+							<td class="py-4 text-[#a0a0a0]">Terverifikasi baik: warna tidak pernah sendiri, focus-visible selalu ada saat outline-none dipakai, dialog native dengan fokus ke aksi paling tidak berbahaya, motion-reduce: dijaga, role="alert"/aria-live untuk galat dan proses, skip link di area pelanggan dan kasir. Lemah: target sentuh keranjang 36px (cart-view.tsx:317,333,343) di bawah lantai 44px; langkah keyboard belum ditelusuri di peramban.</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]"></td>
+							<td class="py-4 pr-4 font-semibold text-[#fafafa]">Total</td>
+							<td class="py-4 pr-4 font-semibold text-[#fbbf24]">4 WATCH</td>
+							<td class="py-4 pr-4 font-semibold text-[#fbbf24]">40 / 60</td>
+							<td class="py-4 text-[#a0a0a0]">Enam vital dikali 10 poin: Healthy 10, Watch 5, Critical 0. Tidak ada vital Critical.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// PRESCRIPTIONS</div>
+			<div class="overflow-x-auto">
+				<table class="w-full min-w-[900px] border-collapse text-sm">
+					<thead>
+						<tr class="border-b border-[#222226] text-left mono text-xs text-[#666]">
+							<th class="py-3 pr-4 font-normal">#</th>
+							<th class="py-3 pr-4 font-normal">VITAL</th>
+							<th class="py-3 pr-4 font-normal">SEVERITY</th>
+							<th class="py-3 pr-4 font-normal">LOCATION</th>
+							<th class="py-3 pr-4 font-normal">BEFORE</th>
+							<th class="py-3 font-normal">AFTER</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">1</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Usability</td>
+							<td class="py-4 pr-4 text-[#ef4444]">HIGH</td>
+							<td class="mono py-4 pr-4 text-[#a0a0a0]">customer/upload-proof-form.tsx:132, kasir/validate-voucher-panel.tsx:121</td>
+							<td class="py-4 pr-4 text-[#a0a0a0]">Submit mati selama input belum valid: disabled={isSubmitting || !file}, disabled={result.kind === "loading" || code.trim().length === 0}</td>
+							<td class="py-4 text-[#a0a0a0]">Aktifkan tombol; validasi saat submit dan tampilkan galat inline yang sudah tersedia. Jalankan /design a11y</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">2</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Accessibility</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">MEDIUM</td>
+							<td class="mono py-4 pr-4 text-[#a0a0a0]">customer/cart-view.tsx:317,333,343</td>
+							<td class="py-4 pr-4 text-[#a0a0a0]">Tombol jumlah size-9 (36px) dan tombol hapus h-9 (36px)</td>
+							<td class="py-4 text-[#a0a0a0]">Naikkan ke size-11 / h-11 (44px), sama seperti kontrol setara di menu-detail-view.tsx:230</td>
+						</tr>
+						<tr class="border-b border-[#1a1a1e]">
+							<td class="py-4 pr-4 text-[#555]">3</td>
+							<td class="py-4 pr-4 text-[#fafafa]">Intentionality</td>
+							<td class="py-4 pr-4 text-[#fbbf24]">MEDIUM</td>
+							<td class="mono py-4 pr-4 text-[#a0a0a0]">ui/card.tsx:14, ui/button.tsx:7-34, ui/input.tsx:10, ui/textarea.tsx:9, app/globals.css:5,50-62</td>
+							<td class="py-4 pr-4 text-[#a0a0a0]">Primitive default generator (radius rounded-xl, ring foreground/10, tinggi h-8) plus scaffolding dark: tanpa tema gelap</td>
+							<td class="py-4 text-[#a0a0a0]">Sesuaikan ke design.md &sect;8 dan hapus scaffolding mati. Jalankan /design tokenize</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="mt-5 text-sm leading-6 text-[#a0a0a0]"><span class="mono text-[#666]">WHY #1 &middot;</span> design.md &sect;8 melarang mematikan tombol submit karena formulir belum valid, dan kedua lokasi mematikan jalur galat yang sudah ditulis di kode (upload-proof-form.tsx:59, validate-voucher-panel.tsx:101). Preskripsi diperbaiki lewat /design a11y.</p>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// COGNITIVE LOAD / RISK</div>
+			<div class="grid gap-6 md:grid-cols-2">
+				<div>
+					<div class="mb-3 text-xl font-semibold">RENDAH</div>
+					<ul class="space-y-3 text-sm text-[#a0a0a0]">
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Tidak ada escalation trigger dari severity.md: warna tidak pernah sendiri, tidak ada placeholder yang menggantikan label, motion menghormati prefers-reduced-motion</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Input 16px pada layar di bawah 640px, jadi tidak memicu zoom otomatis iOS</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Area aman perangkat dan viewportFit cover dipakai di nav, header, dan dialog layar penuh</li>
+						<li><span class="mono mr-2 text-[#34d399]">PASS</span>Skeleton tersedia untuk setiap rute pemuatan; next/font tanpa layout shift</li>
+						<li><span class="mono mr-2 text-[#fbbf24]">WATCH</span>Dua tombol submit mati selama input belum valid, jalur galat di kode menjadi tidak terjangkau</li>
+						<li><span class="mono mr-2 text-[#fbbf24]">WATCH</span>Target sentuh keranjang 36px di bawah lantai 44px design.md &sect;8</li>
+						<li><span class="mono mr-2 text-[#fbbf24]">WATCH</span>Reflow 320px, zoom 200%, langkah keyboard, dan kontras terukur belum diverifikasi</li>
+					</ul>
+				</div>
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">// NEXT MODES</div>
+					<div class="flex flex-wrap gap-2">
+						<span class="border border-[#333] px-3 py-1 text-sm text-[#a0a0a0]">/design a11y</span>
+						<span class="border border-[#333] px-3 py-1 text-sm text-[#a0a0a0]">/design tokenize</span>
+						<span class="border border-[#333] px-3 py-1 text-sm text-[#a0a0a0]">/design typeset</span>
+					</div>
+					<p class="mt-4 text-sm leading-6 text-[#a0a0a0]">a11y untuk tombol submit dan target sentuh; tokenize untuk menyatukan primitive ke design.md &sect;8; typeset untuk skala tipe yang belum ditokenkan.</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// WHAT'S WORKING</div>
+			<div class="grid gap-4 md:grid-cols-3">
+				<article class="border border-[#1f1f24] p-4">
+					<h2 class="mb-2 text-sm font-semibold">Status dan galat tidak pernah warna saja</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Setiap status pesanan dan voucher membawa ikon + label dari kamus terpusat (order-status-badge.tsx:71, voucher-card.tsx:101). FormAlert memakai role alert/status dengan ikon (form-alert.tsx:19).</p>
+				</article>
+				<article class="border border-[#1f1f24] p-4">
+					<h2 class="mb-2 text-sm font-semibold">Siap untuk perangkat nyata</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Input 16px di layar kecil, env(safe-area-inset-*) di nav/header/dialog layar penuh, target 44 hingga 56px di area kasir, dan penanganan kegagalan kamera yang terklasifikasi per penyebab (code-scanner.tsx:43).</p>
+				</article>
+				<article class="border border-[#1f1f24] p-4">
+					<h2 class="mb-2 text-sm font-semibold">Keadaan terisi, bukan hanya keadaan istirahat</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Skeleton untuk setiap rute pemuatan, empty state yang menjelaskan isi ruang dan aksi pengisinya, galat yang menyebut langkah berikutnya, dan fase proses yang eksplisit pada dialog injeksi.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// PRIORITY ISSUES</div>
+			<div class="space-y-5">
+				<article class="border border-[#2a1d22] bg-[#110b0d] p-5">
+					<div class="mono mb-2 text-xs text-[#ef4444]">HIGH &middot; USABILITY</div>
+					<h2 class="mb-2 text-lg font-semibold">Tombol submit yang mati selama input belum valid</h2>
+					<p class="mb-4 text-sm leading-6 text-[#a0a0a0]">EVIDENCE: upload-proof-form.tsx:132 dan validate-voucher-panel.tsx:121. Tugas inti tetap selesai, tetapi jalur galat yang sudah dirancang menjadi kode mati. Perbaikan kecil dengan dampak besar pada momen kasir paling tertekan.</p>
+					<div class="border-l border-[#ef4444] pl-4 text-sm leading-6 text-[#ef4444]">FIX (/design a11y): aktifkan tombol, validasi saat submit, tampilkan galat inline yang sudah tersedia.</div>
+				</article>
+				<article class="border border-[#1f1f24] p-5">
+					<div class="mono mb-2 text-xs text-[#fbbf24]">MEDIUM &middot; ACCESSIBILITY + INTENTIONALITY</div>
+					<h2 class="mb-2 text-lg font-semibold">Target sentuh 36px dan primitive generator</h2>
+					<p class="text-sm leading-6 text-[#a0a0a0]">Tombol jumlah dan hapus di keranjang berukuran 36px (cart-view.tsx:317,333,343), di bawah lantai 44px. Empat dari lima primitive src/components/ui/* masih default generator dan merender radius serta garis tepi yang berbeda dari token kartu di 6 layar auth dan 4 kartu admin. Keduanya sudah punya preskripsi di tabel di atas.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="mono mb-6 text-xs tracking-widest text-[#666]">// VERIFICATION</div>
+			<div class="grid gap-6 md:grid-cols-2">
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">CHECKED (SOURCE)</div>
+					<ul class="space-y-3 text-sm text-[#a0a0a0]">
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>Membaca dengan nomor baris: layout.tsx, globals.css, ui/{card,button,input,textarea,label}.tsx, (public)/page.tsx, (auth)/layout.tsx, (customer)/{layout,dashboard}/page.tsx, 8 komponen customer, 6 komponen kasir, kasir/{layout,riwayat/page}.tsx, admin/{page,audit/page}.tsx, 2 komponen admin</li>
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>Ukuran font input di layar kecil: text-base md:text-sm pada ui/input.tsx:10, ui/textarea.tsx:9, reward-form.tsx:41, artinya 16px di bawah 640px</li>
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>Target sentuh: size-9/h-9 (36px) di cart-view.tsx:317,333,343; size-11 (44px) di menu-detail-view.tsx:230; h-12/h-14 pada tombol submit dan aksi kasir</li>
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>Escalation trigger severity.md: tidak ditemukan pada kode</li>
+						<li><span class="mono mr-2 text-[#34d399]">DONE</span>@variant dark di node_modules/shadcn/dist/tailwind.css:576 hanya butuh varian dark bawaan Tailwind, bukan override kelas .dark</li>
+					</ul>
+				</div>
+				<div>
+					<div class="mono mb-3 text-xs tracking-widest text-[#666]">NOT VERIFIED</div>
+					<ul class="space-y-3 text-sm text-[#a0a0a0]">
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>Reflow 320px dan zoom 200%</li>
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>Langkah keyboard dan pengumuman pembaca layar pada alur injeksi, validasi voucher, dan checkout</li>
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>Kontras terukur dengan alat; penilaian Readability memakai tabel design.md &sect;3.4</li>
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>Lighthouse dan skor performa nyata</li>
+						<li><span class="mono mr-2 text-[#ef4444]">GAP</span>Tampilan terender sebagai gambar; semua status berasal dari kode</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<section class="report-section mb-8 p-6 md:p-8">
+			<div class="corner-box left-0 top-0 -translate-x-1/2 -translate-y-1/2"></div>
+			<div class="corner-box right-0 top-0 translate-x-1/2 -translate-y-1/2"></div>
+			<div class="mono mb-3 text-xs tracking-widest text-[#666]">// VERDICT</div>
+			<div class="flex flex-wrap items-center gap-3">
+				<span class="border border-[#fbbf24]/30 bg-[#fbbf24]/10 px-3 py-1 text-sm text-[#fbbf24]">PROCEED WITH FIXES &middot; 40/60</span>
+			</div>
+			<p class="mt-4 text-sm leading-6 text-[#a0a0a0]">Tidak ada yang memblokir rilis pada tingkat vital. Empat Watch sudah punya preskripsi konkret, dan ketiganya (submit yang mati, target sentuh keranjang, primitive generator) adalah perbaikan kecil berdampak besar. Laporan ini tidak mengubah kode; ia melengkapi smell-report.md dan review-report.md.</p>
+		</section>
+
+		<footer class="mono py-8 text-center text-xs tracking-widest text-[#444]">
+			Generated with CommandCode - 2026-10-15
+		</footer>
+	</main>
+</body>
+</html>
